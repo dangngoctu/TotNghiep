@@ -18,7 +18,7 @@ class CreateUsersTable extends Migration
         Schema::dropIfExists('config_language');
         Schema::enableForeignKeyConstraints();
 
-        Schema::create('m_users', function (Blueprint $table) {
+        Schema::create('m_user', function (Blueprint $table) {
             $table->increments('id');
             $table->string('phone', 20)->unique();
             $table->string('password', 128);

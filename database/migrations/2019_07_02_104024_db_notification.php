@@ -86,7 +86,7 @@ class DbNotification extends Migration
         });
 
         Schema::table('m_notification', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('m_users');
+            $table->foreign('user_id')->references('id')->on('m_user');
             $table->foreign('device_id')->references('id')->on('m_device');
             $table->foreign('category_id')->references('id')->on('m_categories');
             $table->foreign('falure_id')->references('id')->on('m_falure_mode');
@@ -94,7 +94,7 @@ class DbNotification extends Migration
         });
 
         Schema::table('m_check_status', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('m_users');
+            $table->foreign('user_id')->references('id')->on('m_user');
             $table->foreign('notification_id')->references('id')->on('m_notification');
         });
 
@@ -104,7 +104,7 @@ class DbNotification extends Migration
 
         Schema::table('m_notification_action', function (Blueprint $table) {
             $table->foreign('notification_id')->references('id')->on('m_notification');
-            $table->foreign('user_id')->references('id')->on('m_users');
+            $table->foreign('user_id')->references('id')->on('m_user');
         });
 
         Schema::table('m_notification_action_image', function (Blueprint $table) {
@@ -112,7 +112,7 @@ class DbNotification extends Migration
         });
 
         Schema::table('m_notification_time', function (Blueprint $table) {
-            $table->foreign('user_id')->references('id')->on('m_users');
+            $table->foreign('user_id')->references('id')->on('m_user');
             $table->foreign('notification_id')->references('id')->on('m_notification');
         });
     }

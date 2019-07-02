@@ -32,7 +32,7 @@ class Category extends Migration
 
         Schema::create('m_categories_translation', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('description', 255)->comment('Mô tả');
+            $table->string('description', 255)->nullable()->comment('Mô tả');
             $table->string('name', 255)->nullable()->comment('name of category');
             $table->integer('translation_id')->nullable()->unsigned();
             $table->integer('language_id')->unsigned();

@@ -14,9 +14,17 @@ class Setting extends Migration
     public function up()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('m_setting_translation');
         Schema::dropIfExists('m_setting');
         Schema::enableForeignKeyConstraints();
+        Schema::create('m_setting', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('default_password', 255)->nullable();
+            $table->tinyInteger('limit_upload')->default(3)->comment('MB');
+            $table->string('phone', 20)->unique()->comment('Phone hotline');
+            $table->string('GG_KEY_MAP', 255)->comment('Google key map');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+        });
     }
 
     /**
@@ -27,14 +35,8 @@ class Setting extends Migration
     public function down()
     {
         //
-        Schema::create('m_setting', function (Blueprint $table) {
-            $table->increments('id');
-            $table->string('default_password', 255)->nullable();
-            $table->tinyInteger('limit_upload')->default(3)->comment('MB');
-            $table->string('phone', 20)->unique()->comment('Phone hotline');
-            $table->string('GG_KEY_MAP', 255)->comment('Google key map');
-            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
-            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-        });
+        Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('m_setting');
+        Schema::enableForeignKeyConstraints();
     }
 }
