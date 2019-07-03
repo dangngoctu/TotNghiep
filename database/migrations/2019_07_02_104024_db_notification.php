@@ -20,6 +20,7 @@ class DbNotification extends Migration
         Schema::dropIfExists('m_notification_time');
         Schema::dropIfExists('m_check_status');
         Schema::dropIfExists('m_notification');
+        Schema::dropIfExists('system_management');
         Schema::enableForeignKeyConstraints();
         
         Schema::create('m_notification', function (Blueprint $table) {
@@ -115,6 +116,24 @@ class DbNotification extends Migration
             $table->foreign('user_id')->references('id')->on('m_user');
             $table->foreign('notification_id')->references('id')->on('m_notification');
         });
+
+        Schema::create('system_management', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('site_id')->nullable()->unsigned();
+            $table->integer('device_id')->nullable()->unsigned();
+            $table->integer('area_id')->nullable()->unsigned();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->softDeletes();
+        });
+
+        Schema::table('system_management', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('m_user');
+            $table->foreign('area_id')->references('id')->on('m_area');
+            $table->foreign('site_id')->references('id')->on('m_site');
+            $table->foreign('device_id')->references('id')->on('m_device');
+        });
     }
 
     /**
@@ -132,6 +151,7 @@ class DbNotification extends Migration
         Schema::dropIfExists('m_notification_time');
         Schema::dropIfExists('m_check_status');
         Schema::dropIfExists('m_notification');
+        Schema::dropIfExists('system_management');
         Schema::enableForeignKeyConstraints();
     }
 }
