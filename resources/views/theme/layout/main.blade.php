@@ -9,8 +9,8 @@
    @include('theme.layout.main_css')
   </head>
   <body class="slim-sticky-header">
-    <!-- @include('theme.layout.header') -->
-    <!-- @include('theme.layout.navbar') -->
+    @include('theme.layout.header')
+    @include('theme.layout.navbar')
     <div class="slim-mainpanel">
       <div class="container">
         @yield('page_header')
