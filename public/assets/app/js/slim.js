@@ -1,6 +1,11 @@
 $(function(){
   'use strict';
 
+  $.ajaxSetup({
+    headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+    }
+  });
   // showing 2nd level sub menu while hiding others
   $('.sidebar-nav-link').on('click', function(e){
     var subMenu = $(this).next();

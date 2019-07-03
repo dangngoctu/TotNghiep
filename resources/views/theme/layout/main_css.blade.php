@@ -9,6 +9,7 @@
 <link href="{{asset('assets/app/lib/jt.timepicker/css/jquery.timepicker.css')}}" rel="stylesheet">
 <link href="{{asset('assets/app/lib/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
 <link href="{{asset('assets/app/lib/lightbox2/css/lightbox.css')}}" rel="stylesheet">
+<link href="{{asset('assets/app/lib/lobibox/css/lobibox.css')}}" rel="stylesheet">
 <link rel="stylesheet" href="{{asset('assets/app/lib/fileuploader/css/font-roboto/font-roboto.css')}}">
 <link rel="stylesheet" href="{{asset('assets/app/lib/fileuploader/css/font-material-icons/font-material-icons.css')}}">
 <link rel="stylesheet" href="{{asset('assets/app/lib/fileuploader/css/font/font-fileuploader.css')}}">

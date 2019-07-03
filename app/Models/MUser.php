@@ -6,7 +6,7 @@
  */
 
 namespace App\Models;
-
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -36,7 +36,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class MUser extends Eloquent
+class MUser extends Authenticatable
 {
 	use \Illuminate\Database\Eloquent\SoftDeletes;
 	protected $table = 'm_user';
