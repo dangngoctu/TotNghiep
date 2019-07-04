@@ -1,20 +1,24 @@
 <?php
 
 /**
- * Created by Reliese Model.
- * Date: Tue, 02 Jul 2019 16:26:01 +0700.
+ * Created by ARIS.
+ * Date: Wed, 07 Nov 2018 07:11:03 +0000.
  */
 
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
-
+use \Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Laravel\Scout\Searchable;
+use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
 /**
  * Class RoleUser
- * 
+ *
  * @property int $user_id
  * @property int $role_id
- * 
+ * @property \Carbon\Carbon $created_at
+ * @property \Carbon\Carbon $updated_at
+ *
  * @property \App\Models\Role $role
  * @property \App\Models\MUser $m_user
  *
@@ -22,22 +26,31 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class RoleUser extends Eloquent
 {
-	protected $table = 'role_user';
-	public $incrementing = false;
-	public $timestamps = false;
+    use AutoloadsRelationships;
+    // use Searchable;
+    // public $asYouType = true;
 
-	protected $casts = [
-		'user_id' => 'int',
-		'role_id' => 'int'
-	];
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+        return $array;
+    }
 
-	public function role()
-	{
-		return $this->belongsTo(\App\Models\Role::class);
-	}
+    protected $table = 'role_user';
+    public $incrementing = false;
 
-	public function m_user()
-	{
-		return $this->belongsTo(\App\Models\MUser::class, 'user_id');
-	}
+    protected $casts = [
+        'user_id' => 'int',
+        'role_id' => 'int'
+    ];
+
+    public function role()
+    {
+        return $this->belongsTo(\App\Models\Role::class);
+    }
+
+    public function m_user()
+    {
+        return $this->belongsTo(\App\Models\MUser::class, 'user_id');
+    }
 }

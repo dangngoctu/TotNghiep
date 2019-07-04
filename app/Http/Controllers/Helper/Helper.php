@@ -11,10 +11,20 @@ use Illuminate\Support\Facades\Input;
 use App\Models;
 use Carbon\Carbon;
 use GrahamCampbell\Throttle\Facades\Throttle;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class Helper extends Controller
 {
-    //
+
+    protected $lang;
+    protected $lang_id;
+
+    public function __construct()
+    {
+        $this->lang = LaravelLocalization::getCurrentLocale();
+        $this->lang_id = LaravelLocalization::getSupportedLocales()[$this->lang]['id'];
+    }
+
     public function admin_login_action($request){
         try{
             $throttler = Throttle::get($request, config('constant.limit_login'), config('constant.limit_time'));

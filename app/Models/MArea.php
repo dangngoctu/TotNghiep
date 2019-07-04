@@ -2,12 +2,14 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 02 Jul 2019 16:26:01 +0700.
+ * Date: Thu, 04 Jul 2019 09:51:54 +0700.
  */
 
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
 
 /**
  * Class MArea
@@ -22,6 +24,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\MSite $m_site
  * @property \Illuminate\Database\Eloquent\Collection $m_area_translations
  * @property \Illuminate\Database\Eloquent\Collection $m_devices
+ * @property \Illuminate\Database\Eloquent\Collection $system_managements
  *
  * @package App\Models
  */
@@ -47,11 +50,21 @@ class MArea extends Eloquent
 
 	public function m_area_translations()
 	{
+		return $this->hasOne(\App\Models\MAreaTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
+	}
+	
+	public function m_area_translations_all()
+	{
 		return $this->hasMany(\App\Models\MAreaTranslation::class, 'translation_id');
 	}
 
 	public function m_devices()
 	{
 		return $this->hasMany(\App\Models\MDevice::class, 'area_id');
+	}
+
+	public function system_managements()
+	{
+		return $this->hasMany(\App\Models\SystemManagement::class, 'area_id');
 	}
 }

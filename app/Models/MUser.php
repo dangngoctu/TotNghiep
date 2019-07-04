@@ -2,12 +2,17 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 02 Jul 2019 16:26:01 +0700.
+ * Date: Thu, 04 Jul 2019 09:51:55 +0700.
  */
 
 namespace App\Models;
-use Illuminate\Foundation\Auth\User as Authenticatable;
+
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Illuminate\Notifications\Notifiable;
+use Illuminate\Foundation\Auth\User as Authenticatable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
 
 /**
  * Class MUser
@@ -33,12 +38,17 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Illuminate\Database\Eloquent\Collection $m_notification_actions
  * @property \Illuminate\Database\Eloquent\Collection $m_notification_times
  * @property \Illuminate\Database\Eloquent\Collection $role_users
+ * @property \Illuminate\Database\Eloquent\Collection $system_managements
  *
  * @package App\Models
  */
 class MUser extends Authenticatable
 {
-	use \Illuminate\Database\Eloquent\SoftDeletes;
+	use Notifiable, AutoloadsRelationships;
+    use SoftDeletes, EntrustUserTrait {
+        SoftDeletes::restore insteadof EntrustUserTrait;
+        EntrustUserTrait::restore insteadof SoftDeletes;
+	}
 	protected $table = 'm_user';
 
 	protected $casts = [
@@ -95,5 +105,10 @@ class MUser extends Authenticatable
 	public function role_users()
 	{
 		return $this->hasMany(\App\Models\RoleUser::class, 'user_id');
+	}
+
+	public function system_managements()
+	{
+		return $this->hasMany(\App\Models\SystemManagement::class, 'user_id');
 	}
 }

@@ -27,14 +27,7 @@ $(function(){
             },
             success: function(response) {
                 if (response.code == '200') {
-                    Lobibox.notify("success", {
-                        title: 'Notification',
-                        pauseDelayOnHover: true,
-                        continueDelayOnInactiveTab: false,
-                        icon: false,
-                        sound: false,
-                        msg: response.msg
-                    });
+                    location.reload();
                 } else {
                     Lobibox.notify("warning", {
                         title: 'Notification',

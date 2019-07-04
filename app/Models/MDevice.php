@@ -2,12 +2,14 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 02 Jul 2019 16:26:01 +0700.
+ * Date: Thu, 04 Jul 2019 09:51:54 +0700.
  */
 
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
 
 /**
  * Class MDevice
@@ -22,6 +24,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \App\Models\MArea $m_area
  * @property \Illuminate\Database\Eloquent\Collection $m_device_translations
  * @property \Illuminate\Database\Eloquent\Collection $m_notifications
+ * @property \Illuminate\Database\Eloquent\Collection $system_managements
  *
  * @package App\Models
  */
@@ -47,11 +50,21 @@ class MDevice extends Eloquent
 
 	public function m_device_translations()
 	{
+		return $this->hasOne(\App\Models\MDeviceTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
+	}
+	
+	public function m_device_translations_all()
+	{
 		return $this->hasMany(\App\Models\MDeviceTranslation::class, 'translation_id');
 	}
 
 	public function m_notifications()
 	{
 		return $this->hasMany(\App\Models\MNotification::class, 'device_id');
+	}
+
+	public function system_managements()
+	{
+		return $this->hasMany(\App\Models\SystemManagement::class, 'device_id');
 	}
 }

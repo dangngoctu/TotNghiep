@@ -2,12 +2,14 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 02 Jul 2019 16:26:01 +0700.
+ * Date: Thu, 04 Jul 2019 09:51:54 +0700.
  */
 
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
 
 /**
  * Class MFalureMode
@@ -52,6 +54,11 @@ class MFalureMode extends Eloquent
 	}
 
 	public function m_falure_mode_translations()
+	{
+		return $this->hasOne(\App\Models\MFalureModeTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
+	}
+	
+	public function m_falure_mode_translations_all()
 	{
 		return $this->hasMany(\App\Models\MFalureModeTranslation::class, 'translation_id');
 	}

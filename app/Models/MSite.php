@@ -2,12 +2,14 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 02 Jul 2019 16:26:01 +0700.
+ * Date: Thu, 04 Jul 2019 09:51:55 +0700.
  */
 
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
 
 /**
  * Class MSite
@@ -21,6 +23,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * 
  * @property \Illuminate\Database\Eloquent\Collection $m_areas
  * @property \Illuminate\Database\Eloquent\Collection $m_site_translations
+ * @property \Illuminate\Database\Eloquent\Collection $system_managements
  *
  * @package App\Models
  */
@@ -42,9 +45,19 @@ class MSite extends Eloquent
 	{
 		return $this->hasMany(\App\Models\MArea::class, 'site_id');
 	}
-
+	
 	public function m_site_translations()
 	{
+		return $this->hasOne(\App\Models\MSiteTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
+	}
+	
+	public function m_site_translations_all()
+	{
 		return $this->hasMany(\App\Models\MSiteTranslation::class, 'translation_id');
+	}
+
+	public function system_managements()
+	{
+		return $this->hasMany(\App\Models\SystemManagement::class, 'site_id');
 	}
 }
