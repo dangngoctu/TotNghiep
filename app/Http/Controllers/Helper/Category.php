@@ -100,7 +100,7 @@ class Category extends Controller
     public function postCategory($request)
     {
         self::__construct();
-        // try {
+        try {
             DB::beginTransaction();
             if($request->action == 'update' || $request->action == 'delete') {
                 $query = Models\MCategory::find($request->id);
@@ -179,9 +179,9 @@ class Category extends Controller
                 DB::rollback();
                 return false;
             }
-        // } catch (\Exception $e) {
-        //     DB::rollback();
-        //     return false;
-        // }
+        } catch (\Exception $e) {
+            DB::rollback();
+            return false;
+        }
     }
 }

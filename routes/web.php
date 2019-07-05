@@ -20,6 +20,8 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         // AJAX
         Route::get('ajax_category', 'Admin\AdminController@admin_category_ajax')->name('admin.notify.category.ajax');
         Route::post('ajax_category', 'Admin\AdminController@admin_post_category_ajax')->name('admin.post.notify.category.ajax');
+        Route::get('ajax_fail_mode', 'Admin\AdminController@admin_fail_mode_ajax')->name('admin.notify.fail.mode.ajax');
+        Route::post('ajax_fail_mode', 'Admin\AdminController@admin_post_fail_mode_ajax')->name('admin.post.notify.fail.mode.ajax');
     });
     Route::group(['prefix' => 'action'], function () {
         // View
