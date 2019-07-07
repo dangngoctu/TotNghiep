@@ -39,5 +39,6 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('location','Admin\AdminController@admin_location')->name('admin.location.location')->middleware('permission:admin_site');
         Route::get('report','Admin\AdminController@admin_report')->name('admin.page.report')->middleware('permission:admin_report');
         Route::get('setting','Admin\AdminController@admin_setting')->name('admin.setting.general')->middleware('permission:admin_setting');
+        Route::get('graduation','Admin\AdminController@admin_graduation')->name('admin.graduation')->middleware('permission:admin_graduation');
     });
 });

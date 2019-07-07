@@ -8,15 +8,14 @@
     <div class="container">
       <ul class="nav">
         @if(Auth::user()->can('admin_notification')) 
-          <li class="nav-item with-sub {{ (strpos($route, 'admin.notify.') !== false) ? 'active' : '' }}">
+          <li class="nav-item with-sub {{ (strpos($route, 'admin.graduation.') !== false) ? 'active' : '' }}">
             <a class="nav-link cursor-pointer" href="#">
               <i class="icon ion-ios-bell-outline"></i>
-              <span>Notifications</span>
+              <span>Graduation</span>
             </a>
             <div class="sub-item">
               <ul>
-                  <li><a href="{{route('admin.notify.normal')}}">Notifications</a></li>
-                  <li><a href="{{route('admin.notify.system')}}">Notification schedules</a></li>
+                  <li><a href="{{route('admin.graduation')}}">Graduation</a></li>
               </ul>
             </div><!-- sub-item -->
           </li>
@@ -89,11 +88,11 @@
               </ul>
             </div><!-- dropdown-menu -->
           </li>
-        @if(Auth::user()->can('admin_report'))
+        @if(Auth::user()->can('admin_graduation'))
             <li class="nav-item {{ (strpos($route, 'admin.page.') !== false || strcmp($route, 'home.index') == 0) ? 'active' : '' }}">
-                <a class="nav-link cursor-pointer" href="{{route('admin.page.report')}}">
+                <a class="nav-link cursor-pointer" href="{{route('admin.graduation')}}">
                     <i class="icon ion-podium"></i>
-                    <span>Report</span>
+                    <span>Graduation</span>
                 </a>
             </li>
         @endif

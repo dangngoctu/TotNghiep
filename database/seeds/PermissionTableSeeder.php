@@ -27,21 +27,21 @@ class PermissionTableSeeder extends Seeder
             ],
             //Site
             [
-                'name' => 'admin_site',
-                'display_name' => 'Site management in webpage',
-                'description' => 'Site management in webpage'
+                'name' => 'admin_major',
+                'display_name' => 'Major management in webpage',
+                'description' => 'Major management in webpage'
             ],
             //Area
              [
-                'name' => 'admin_area',
-                'display_name' => 'Area management in webpage',
-                'description' => 'Area management in webpage'
+                'name' => 'admin_course',
+                'display_name' => 'Course management in webpage',
+                'description' => 'Course management in webpage'
             ],
             //Device
             [
-                'name' => 'admin_device',
-                'display_name' => 'Device management in webpage',
-                'description' => 'Device management in webpage'
+                'name' => 'admin_class',
+                'display_name' => 'Class management in webpage',
+                'description' => 'Class management in webpage'
             ],
             //Category
             [
@@ -79,11 +79,11 @@ class PermissionTableSeeder extends Seeder
                 'display_name' => 'Role management in webpage',
                 'description' => 'Role management in webpage'
             ],
-            //Notification
+            //Graduation
             [
-                'name' => 'admin_notification',
-                'display_name' => 'Notification management in webpage',
-                'description' => 'Notification management in webpage'
+                'name' => 'admin_graduation',
+                'display_name' => 'Graduation management in webpage',
+                'description' => 'Graduation management in webpage'
             ]
         ];
         DB::table('permissions')->insert($permission);

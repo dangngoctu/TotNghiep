@@ -19,7 +19,7 @@ class Setting extends Migration
         Schema::create('m_setting', function (Blueprint $table) {
             $table->increments('id');
             $table->string('default_password', 255)->nullable();
-            $table->tinyInteger('limit_upload')->default(3)->comment('MB');
+            $table->tinyInteger('limit_upload')->default(10)->comment('MB');
             $table->string('phone', 20)->unique()->comment('Phone hotline');
             $table->string('GG_KEY_MAP', 255)->comment('Google key map');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
