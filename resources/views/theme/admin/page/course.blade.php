@@ -23,10 +23,7 @@
         <div class="row">
             <div class="col-sm-6 col-md-4 mg-b-10">
                 <div id="slWrapperLocation" class="parsley-select">
-                    <select class="form-control select2" style="width: 100%" id="major_id" name="major_id" data-placeholder="Select major"
-                            data-parsley-class-handler="#slWrapperLocation"
-                            data-parsley-errors-container="#slErrorContainerLocation"
-                            required data-parsley-required-message="Major is required.">
+                    <select class="form-control select2" style="width: 100%" id="major_id" name="major_id" data-placeholder="Select major">
                         <option label="Select major"></option>
                     </select>
                     <div id="slErrorContainerLocation"></div>

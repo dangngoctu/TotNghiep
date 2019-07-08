@@ -1,3 +1,4 @@
+var table_dynamic_area;
 $(function(){
     'use strict';
     // Select2
@@ -255,7 +256,7 @@ var loadDataTable = function (major) {
         $('.table-dynamic-area').DataTable().destroy();
         $('.table-dynamic-area tbody').empty();
     }
-    var table_dynamic_area = $('.table-dynamic-area').DataTable({
+    table_dynamic_area = $('.table-dynamic-area').DataTable({
 		"processing": true,
         "serverSide": true,
         "ajax": base_admin+"/home/ajax/ajax_course?majorId="+major,
