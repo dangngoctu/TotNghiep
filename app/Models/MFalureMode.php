@@ -2,14 +2,13 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 04 Jul 2019 09:51:54 +0700.
+ * Date: Mon, 08 Jul 2019 09:44:47 +0700.
  */
 
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
 
 /**
  * Class MFalureMode
@@ -22,9 +21,8 @@ use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
  * @property string $deleted_at
  * 
  * @property \App\Models\MCategory $m_category
- * @property \Illuminate\Database\Eloquent\Collection $m_falure_mode_details
  * @property \Illuminate\Database\Eloquent\Collection $m_falure_mode_translations
- * @property \Illuminate\Database\Eloquent\Collection $m_notifications
+ * @property \Illuminate\Database\Eloquent\Collection $m_graduation_categories
  *
  * @package App\Models
  */
@@ -48,23 +46,18 @@ class MFalureMode extends Eloquent
 		return $this->belongsTo(\App\Models\MCategory::class, 'category_id');
 	}
 
-	public function m_falure_mode_details()
-	{
-		return $this->hasMany(\App\Models\MFalureModeDetail::class, 'falure_id');
-	}
-
 	public function m_falure_mode_translations()
 	{
 		return $this->hasOne(\App\Models\MFalureModeTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
 	}
-	
+
 	public function m_falure_mode_translations_all()
 	{
 		return $this->hasMany(\App\Models\MFalureModeTranslation::class, 'translation_id');
 	}
 
-	public function m_notifications()
+	public function m_graduation_categories()
 	{
-		return $this->hasMany(\App\Models\MNotification::class, 'falure_id');
+		return $this->hasMany(\App\Models\MGraduationCategory::class, 'failure_id');
 	}
 }

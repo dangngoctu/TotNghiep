@@ -84,6 +84,12 @@ class PermissionTableSeeder extends Seeder
                 'name' => 'admin_graduation',
                 'display_name' => 'Graduation management in webpage',
                 'description' => 'Graduation management in webpage'
+            ],
+            //Student
+            [
+                'name' => 'admin_student',
+                'display_name' => 'Student management in webpage',
+                'description' => 'Student management in webpage'
             ]
         ];
         DB::table('permissions')->insert($permission);

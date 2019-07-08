@@ -303,4 +303,78 @@ class AdminController extends Controller
 			}
 		}
 	}
+
+	//Major
+	public function admin_major()
+	{
+		try {
+			if(Auth::user()) {
+				if(Auth::user()->can('admin_major') && Auth::user()->hasRole('admin')){
+					return view('theme.admin.page.major');
+				} else {
+					return redirect()->guest(route('admin.error'));
+				}
+			} else {
+				return redirect()->guest(route('home.login'));
+			}
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+		}
+	}
+
+	public function admin_major_ajax(Request $request)
+	{
+		try {
+			$instance = $this->instance(\App\Http\Controllers\Helper\Major::class);
+			if($request->has('id') && !empty($request->id)) {
+				return $data = $instance->getMajor($request->id, $request->lang);
+			}
+			return $data = $instance->getDTMajor();
+		} catch (\Exception $e) {
+			return self::JsonExport(500, trans('app.error_500'));
+		}
+	}
+
+	public function admin_post_major_ajax(Request $request)
+	{
+		$rules = array(
+			'name' => 'min:1|max:255',
+			'action' => 'required|in:insert,update,delete',
+		);
+		if($request->action == 'update') {
+			$rules['id'] = 'required|digits_between:1,10';
+		} else if($request->action == 'delete') {
+			$rules = array('id' => 'required|digits_between:1,10');
+		}
+		$validator = Validator::make(Input::all(), $rules);
+		if ($validator->fails()) {
+			return self::JsonExport(403, trans('app.error_403'));
+		} else {
+			try {
+				$instance = $this->instance(\App\Http\Controllers\Helper\Major::class);
+				$data = $instance->postMajor($request);
+				if ($data === true) {
+//					self::writelog('Update group category', trans('app.success'));
+					switch ($request->action) {
+						case 'update':
+							// self::writelog('Update Site/Location', trans('app.success'));
+							return self::JsonExport(200, 'Cập nhật thành công');
+						case 'insert':
+							// self::writelog('Insert Site/Location', trans('app.success'));	
+							return self::JsonExport(200, 'Thêm mới thành công');
+						default:
+							// self::writelog('Delete Site/Location', trans('app.success'));
+							return self::JsonExport(200, 'Xóa thành công');
+					}
+				} else {
+					// self::writelog('Edit info Site/Location', 'Fail');
+					return self::JsonExport(403, trans('app.error_403'));
+
+				}
+			} catch (\Exception $e) {
+				// self::writelog('Update group category', $e->getMessage());
+				return self::JsonExport(500, 'Vui lòng kiểm tra lại thông tin');
+			}
+		}
+	}
 }

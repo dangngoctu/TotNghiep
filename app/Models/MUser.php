@@ -82,33 +82,13 @@ class MUser extends Authenticatable
 		'remember_token'
 	];
 
-	public function m_check_statuses()
-	{
-		return $this->hasMany(\App\Models\MCheckStatus::class, 'user_id');
-	}
-
-	public function m_notifications()
-	{
-		return $this->hasMany(\App\Models\MNotification::class, 'user_id');
-	}
-
-	public function m_notification_actions()
-	{
-		return $this->hasMany(\App\Models\MNotificationAction::class, 'user_id');
-	}
-
-	public function m_notification_times()
-	{
-		return $this->hasMany(\App\Models\MNotificationTime::class, 'user_id');
-	}
-
 	public function role_users()
 	{
 		return $this->hasMany(\App\Models\RoleUser::class, 'user_id');
 	}
 
-	public function system_managements()
+	public function m_graduations()
 	{
-		return $this->hasMany(\App\Models\SystemManagement::class, 'user_id');
+		return $this->hasMany(\App\Models\MGraduation::class, 'user_id');
 	}
 }

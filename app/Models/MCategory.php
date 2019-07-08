@@ -2,14 +2,13 @@
 
 /**
  * Created by Reliese Model.
- * Date: Thu, 04 Jul 2019 09:51:54 +0700.
+ * Date: Mon, 08 Jul 2019 09:44:47 +0700.
  */
 
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
-use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
 
 /**
  * Class MCategory
@@ -22,7 +21,7 @@ use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
  * 
  * @property \Illuminate\Database\Eloquent\Collection $m_categories_translations
  * @property \Illuminate\Database\Eloquent\Collection $m_falure_modes
- * @property \Illuminate\Database\Eloquent\Collection $m_notifications
+ * @property \Illuminate\Database\Eloquent\Collection $m_graduation_categories
  *
  * @package App\Models
  */
@@ -53,8 +52,8 @@ class MCategory extends Eloquent
 		return $this->hasMany(\App\Models\MFalureMode::class, 'category_id');
 	}
 
-	public function m_notifications()
+	public function m_graduation_categories()
 	{
-		return $this->hasMany(\App\Models\MNotification::class, 'category_id');
+		return $this->hasMany(\App\Models\MGraduationCategory::class, 'category_id');
 	}
 }
