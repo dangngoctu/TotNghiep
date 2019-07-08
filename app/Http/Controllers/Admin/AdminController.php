@@ -377,4 +377,85 @@ class AdminController extends Controller
 			}
 		}
 	}
+
+	//Course
+	public function admin_course()
+	{
+		try {
+			if(Auth::user()) {
+				if(Auth::user()->can('admin_course') && Auth::user()->hasRole('admin')){
+					return view('theme.admin.page.course');
+				} else {
+					return redirect()->guest(route('admin.error'));
+				}
+			} else {
+				return redirect()->guest(route('home.login'));
+			}
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+		}
+	}
+
+	public function admin_course_ajax(Request $request)
+	{
+		try {
+			$instance = $this->instance(\App\Http\Controllers\Helper\Course::class);
+			if($request->has('id') && !empty($request->id)) {
+				return $data = $instance->getCourse($request->id, $request->lang);
+			}
+			if($request->has('majorId') && !empty($request->majorId)) {
+				return $data = $instance->getDTCourse($request->majorId);
+			}
+			return $data = $instance->getDTCourse();
+		} catch (\Exception $e) {
+			return self::JsonExport(500, trans('app.error_500'));
+		}
+	}
+
+	public function admin_post_course_ajax(Request $request)
+	{
+		$rules = array(
+			'action' => 'required|in:insert,update,delete,insertlist',
+			'major_id' => 'digits_between:1,10'
+		);
+		if($request->action == 'insertlist') {
+			$rules['listname'] = 'required';
+		} else {
+			$rules['name'] = 'required|max:255';
+		}
+		if($request->action == 'update') {
+			$rules['id'] = 'required|digits_between:1,10';
+		} else if($request->action == 'delete') {
+			$rules = array('id' => 'required|digits_between:1,10');
+		}
+		$validator = Validator::make(Input::all(), $rules);
+		if ($validator->fails()) {
+			return self::JsonExport(403, trans('app.error_403'));
+		} else {
+			try {
+				$instance = $this->instance(\App\Http\Controllers\Helper\Course::class);
+				$data = $instance->postCourse($request);
+				if ($data === true) {
+					switch ($request->action) {
+						case 'update':
+							// self::writelog('Update area', trans('app.success'));
+							return self::JsonExport(200, 'Cập nhật thành công');
+						case 'insert':
+							// self::writelog('Insert area', trans('app.success'));
+							return self::JsonExport(200, 'Thêm mới thành công');
+						default:
+							// self::writelog('Delete area', trans('app.success'));
+							return self::JsonExport(200, 'Xóa thành công');
+					}
+				} else {
+					// self::writelog('Update info area', 'Fail');
+
+					return self::JsonExport(403, 'Vui lòng kiểm tra lại thông tin');
+				}
+			} catch (\Exception $e) {
+				// self::writelog('Update info area', $e->getMessage());
+				return self::JsonExport(500, 'Vui lòng kiểm tra lại thông tin');
+			}
+		}
+	}
 }

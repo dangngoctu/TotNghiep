@@ -1,7 +1,7 @@
 @extends('theme.layout.main')
 
 @section('page_title')
-    Location
+    Major
 @endsection
 
 @section('css')
@@ -14,7 +14,7 @@
             <li class="breadcrumb-item"><a href="{{route('home.index')}}">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Major</li>
         </ol>
-        <h6 class="slim-pagetitle">Location</h6>
+        <h6 class="slim-pagetitle">Major</h6>
     </div><!-- slim-pageheader -->
 @endsection
 

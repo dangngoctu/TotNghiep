@@ -44,22 +44,22 @@ class DeviceTableSeeder extends Seeder
         ]);
 
         DB::table('m_course_translation')->insert([
-            ['name' => 'CNTT_Coure_01', 'translation_id' => 1, 'language_id' => 2 ],
+            ['name' => 'CNTT_Course_01', 'translation_id' => 1, 'language_id' => 2 ],
             ['name' => 'CNTT_Khóa_01', 'translation_id' => 1, 'language_id' => 1 ],
-            ['name' => 'CNTT_Coure_02', 'translation_id' => 2, 'language_id' => 2 ],
+            ['name' => 'CNTT_Course_02', 'translation_id' => 2, 'language_id' => 2 ],
             ['name' => 'CNTT_Khóa_02', 'translation_id' => 2, 'language_id' => 1 ],
-            ['name' => 'CNTT_Coure_03', 'translation_id' => 3, 'language_id' => 2 ],
+            ['name' => 'CNTT_Course_03', 'translation_id' => 3, 'language_id' => 2 ],
             ['name' => 'CNTT_Khóa_03', 'translation_id' => 3, 'language_id' => 1 ],
 
-            ['name' => 'QLDD_Coure_01', 'translation_id' => 1, 'language_id' => 2 ],
-            ['name' => 'QLDD_Khóa_01', 'translation_id' => 1, 'language_id' => 1 ],
-            ['name' => 'QLDD_Coure_02', 'translation_id' => 2, 'language_id' => 2 ],
-            ['name' => 'QLDD_Khóa_02', 'translation_id' => 2, 'language_id' => 1 ],
+            ['name' => 'QLDD_Course_01', 'translation_id' => 4, 'language_id' => 2 ],
+            ['name' => 'QLDD_Khóa_01', 'translation_id' => 4, 'language_id' => 1 ],
+            ['name' => 'QLDD_Course_02', 'translation_id' => 5, 'language_id' => 2 ],
+            ['name' => 'QLDD_Khóa_02', 'translation_id' => 5, 'language_id' => 1 ],
             
-            ['name' => 'CTT_Coure_01', 'translation_id' => 1, 'language_id' => 2 ],
-            ['name' => 'CTT_Khóa_01', 'translation_id' => 1, 'language_id' => 1 ],
-            ['name' => 'CTT_Coure_02', 'translation_id' => 2, 'language_id' => 2 ],
-            ['name' => 'CTT_Khóa_02', 'translation_id' => 2, 'language_id' => 1 ],
+            ['name' => 'CTT_Course_01', 'translation_id' => 6, 'language_id' => 2 ],
+            ['name' => 'CTT_Khóa_01', 'translation_id' => 6, 'language_id' => 1 ],
+            ['name' => 'CTT_Course_02', 'translation_id' => 7, 'language_id' => 2 ],
+            ['name' => 'CTT_Khóa_02', 'translation_id' => 7, 'language_id' => 1 ],
         ]);
 
         DB::table('m_class')->insert([
