@@ -80,6 +80,9 @@ $(function(){
             $('#major_id').append(option);
         })
     });
+    $('#major_id').on('select2:unselect', function (e) {
+        loadDataTable('');
+    });
     $('#AreaForm').on('change input', function() {
         $('#modal-area').find('button.btn-primary').prop('disabled', $(this).serialize() == $(this).data('serialized'));
     });
