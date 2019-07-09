@@ -38,6 +38,10 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         //Course
         Route::get('ajax_course', 'Admin\AdminController@admin_course_ajax')->name('admin.notify.course.ajax');
         Route::post('ajax_course', 'Admin\AdminController@admin_post_course_ajax')->name('admin.post.notify.course.ajax');
+
+        //Class
+        Route::get('ajax_class', 'Admin\AdminController@admin_class_ajax')->name('admin.notify.class.ajax');
+        Route::post('ajax_class', 'Admin\AdminController@admin_post_class_ajax')->name('admin.post.notify.class.ajax');
     });
     Route::group(['prefix' => 'action'], function () {
         // View

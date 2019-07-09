@@ -458,4 +458,41 @@ class AdminController extends Controller
 			}
 		}
 	}
+
+	//Class
+	public function admin_class(Request $request)
+	{
+		try {
+			if(Auth::user()) {
+				if(Auth::user()->can('admin_class')){
+					return view('theme.admin.page.class');
+				} else {
+					return redirect()->guest(route('admin.error'));
+				}
+			} else {
+				return redirect()->guest(route('home.login'));
+			}
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+		}
+	}
+
+	public function admin_class_ajax(Request $request)
+	{
+		// try {
+			$instance = $this->instance(\App\Http\Controllers\Helper\ClassController::class);
+			if($request->has('id') && !empty($request->id)) {
+				return $data = $instance->getClass($request->id);
+			}
+			if($request->has('majorId') && !empty($request->majorId)) {
+				if($request->has('courseId') && !empty($request->courseId)) {
+					return $data = $instance->getDTClass($request->majorId, $request->courseId);
+				}
+				return $data = $instance->getDTClass($request->majorId);
+			}
+			return $data = $instance->getDTClass();
+		// } catch (\Exception $e) {
+		// 	return self::JsonExport(500, trans('app.error_500'));
+		// }
+	}
 }

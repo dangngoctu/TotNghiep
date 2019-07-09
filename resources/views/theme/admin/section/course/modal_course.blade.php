@@ -27,7 +27,7 @@
                                 <select class="form-control select2" style="width: 100%" id="major_id_modal" name="major_id_modal" data-placeholder="Select Major"
                                         data-parsley-class-handler="#slWrapperLocation"
                                         data-parsley-errors-container="#slErrorContainerLocation"
-                                        required data-parsley-required-message="Location is required.">
+                                        required data-parsley-required-message="Major is required.">
                                     <option label="Select major"></option>
                                 </select>
                                 <div id="slErrorContainerLocation"></div>
