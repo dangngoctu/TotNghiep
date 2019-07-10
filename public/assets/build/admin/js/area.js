@@ -4,11 +4,11 @@ $(function(){
     // Select2
     loadDataTable('');
     $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
-    $('#major_id').select2({
+    $('#major_id, #major_id_modal').select2({
         minimumResultsForSearch: Infinity,
         allowClear: true
     });
-    $('#major_id').on("select2:select", function (e) {
+    $('#major_id, #major_id_modal').on("select2:select", function (e) {
         var data = e.params.data;
         var major = data.id;
         loadDataTable(major);
@@ -63,23 +63,14 @@ $(function(){
     }).then(function (data) {
         $.map(data.data, function (item) {
             var option = new Option(item.name, item.id, false, false);
-            $('#major_id_modal').append(option);
+            $('#major_id_modal, #major_id').append(option);
         })
     });
     $('#AreaForm').on('change input', function() {
         $('#modal-area').find('button.btn-primary').prop('disabled', $(this).serialize() == $(this).data('serialized'));
     });
 
-    $.ajax({
-        type: 'GET',
-        dataType: 'json',
-        url: base_admin + "/home/ajax/ajax_major"
-    }).then(function (data) {
-        $.map(data.data, function (item) {
-            var option = new Option(item.name, item.id, false, false);
-            $('#major_id').append(option);
-        })
-    });
+    
     $('#major_id').on('select2:unselect', function (e) {
         loadDataTable('');
     });
@@ -306,3 +297,5 @@ var loadDataTable = function (major) {
 	});
     $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
 };
+
+

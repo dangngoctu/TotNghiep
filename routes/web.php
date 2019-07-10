@@ -50,7 +50,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('fail_mode','Admin\AdminController@admin_fail_mode')->name('admin.failure.mode')->middleware('permission:admin_failure');
         // Route::get('fail_mode_detail','Admin\AdminController@admin_fail_mode_detail')->name('admin.failure.mode.detail')->middleware('permission:admin_failure_detail');
         Route::get('course','Admin\AdminController@admin_course')->name('admin.school.course')->middleware('permission:admin_course');
-        Route::get('machine','Admin\AdminController@admin_class')->name('admin.school.class')->middleware('permission:admin_class');
+        Route::get('class','Admin\AdminController@admin_class')->name('admin.school.class')->middleware('permission:admin_class');
         Route::get('major','Admin\AdminController@admin_major')->name('admin.school.major')->middleware('permission:admin_major');
         Route::get('report','Admin\AdminController@admin_report')->name('admin.page.report')->middleware('permission:admin_report');
         Route::get('setting','Admin\AdminController@admin_setting')->name('admin.setting.general')->middleware('permission:admin_setting');

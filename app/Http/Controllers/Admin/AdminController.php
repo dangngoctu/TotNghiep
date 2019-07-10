@@ -479,10 +479,10 @@ class AdminController extends Controller
 
 	public function admin_class_ajax(Request $request)
 	{
-		// try {
+		try {
 			$instance = $this->instance(\App\Http\Controllers\Helper\ClassController::class);
 			if($request->has('id') && !empty($request->id)) {
-				return $data = $instance->getClass($request->id);
+				return $data = $instance->getClass($request->id, $request->lang);
 			}
 			if($request->has('majorId') && !empty($request->majorId)) {
 				if($request->has('courseId') && !empty($request->courseId)) {
@@ -491,8 +491,55 @@ class AdminController extends Controller
 				return $data = $instance->getDTClass($request->majorId);
 			}
 			return $data = $instance->getDTClass();
-		// } catch (\Exception $e) {
-		// 	return self::JsonExport(500, trans('app.error_500'));
-		// }
+		} catch (\Exception $e) {
+			return self::JsonExport(500, trans('app.error_500'));
+		}
+	}
+
+	public function admin_post_class_ajax(Request $request)
+	{
+		$rules = array(
+			'course_id' => 'digits_between:1,10',
+			'action' => 'required|in:insert,update,delete,insertlist',
+		);
+		if($request->action == 'insertlist') {
+			$rules['listname'] = 'required';
+		} else {
+			$rules['name'] = 'required|max:255';
+		}
+		if($request->action == 'update') {
+			$rules['id'] = 'required|digits_between:1,10';
+		} else if($request->action == 'delete') {
+			$rules = array('id' => 'required|digits_between:1,10');
+		}
+		$validator = Validator::make(Input::all(), $rules);
+		if ($validator->fails()) {
+			return self::JsonExport(403, trans('app.error_403'));
+		} else {
+			try {
+				$instance = $this->instance(\App\Http\Controllers\Helper\ClassController::class);
+				$data = $instance->postClass($request);
+				if ($data === true) {
+					switch ($request->action) {
+						case 'update':
+							// self::writelog('Update machine', 'Cập nhật thành công');
+							return self::JsonExport(200, 'Cập nhật thành công');
+						case 'insert':
+							// self::writelog('Insert machine', trans('app.success'));
+							return self::JsonExport(200, 'Thêm mới thành công');
+						default:
+							// self::writelog('Delete machine', trans('app.success'));
+							return self::JsonExport(200, 'Xóa thành công');
+					}
+				} else {
+					// self::writelog('Update info machine', 'Fail');
+					return self::JsonExport(403, 'Vui lòng thử lại');
+					
+				}
+			} catch (\Exception $e) {
+				self::writelog('Update info machine', $e->getMessage());
+				return self::JsonExport(500, 'Vui lòng thử lại');
+			}
+		}
 	}
 }
