@@ -27,34 +27,19 @@ class UsersTableSeeder extends Seeder
         ]);
 
         for($i = 1; $i < 20; $i++){
+            $major = rand(1, 3);
             $admin = MUser::create([
                 'phone' => '093734854'.$i,
                 'password' => Hash::make('123456'),
                 'email' => 'member'.$i.'@gmail.com',
                 'name' => 'Member'.$i,
                 'avatar' => null, 
+                'major_id' => $major,
                 'fcm_token' => null, 
                 'dob' => '1991-12-01', 
                 'status' => 1,
                 'is_online' => 0
             ]);
         }
-
-        DB::table('config_language')->insert([
-            [
-                'name' => 'Tiếng Việt',
-                'code' => 'vi',
-                'default' => 1,
-                'currency_code' => 'VNĐ',
-                'date_format' => 'd-m-Y'
-            ],
-            [
-                'name' => 'Tiếng Anh',
-                'code' => 'en',
-                'default' => 0,
-                'currency_code' => 'USD',
-                'date_format' => 'd M Y'
-            ],
-        ]);
     }
 }

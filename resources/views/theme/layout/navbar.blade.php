@@ -71,7 +71,7 @@
             <div class="sub-item">
               <ul>
                 @if(Auth::user()->can('admin_user')) 
-                  <li><a href="{{route('home.index')}}">User</a></li>
+                  <li><a href="{{route('admin.user')}}">User</a></li>
                 @endif
                 @if(Auth::user()->can('admin_student')) 
                   <li><a href="{{route('home.index')}}">Student</a></li>

@@ -11,6 +11,24 @@ class DeviceTableSeeder extends Seeder
      */
     public function run()
     {
+
+        DB::table('config_language')->insert([
+            [
+                'name' => 'Tiếng Việt',
+                'code' => 'vi',
+                'default' => 1,
+                'currency_code' => 'VNĐ',
+                'date_format' => 'd-m-Y'
+            ],
+            [
+                'name' => 'Tiếng Anh',
+                'code' => 'en',
+                'default' => 0,
+                'currency_code' => 'USD',
+                'date_format' => 'd M Y'
+            ],
+        ]);
+        
         DB::table('m_major')->insert([
             ['status' => 1 ],
             ['status' => 1 ],

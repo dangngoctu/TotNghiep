@@ -79,7 +79,8 @@ class MUser extends Authenticatable
 		'time_update_password',
 		'status',
 		'is_online',
-		'remember_token'
+		'remember_token',
+		'major_id'
 	];
 
 	public function role_users()
@@ -90,5 +91,10 @@ class MUser extends Authenticatable
 	public function m_graduations()
 	{
 		return $this->hasMany(\App\Models\MGraduation::class, 'user_id');
+	}
+
+	public function m_major()
+	{
+		return $this->belongsTo(\App\Models\MMajor::class, 'major_id');
 	}
 }

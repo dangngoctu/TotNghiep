@@ -42,6 +42,14 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         //Class
         Route::get('ajax_class', 'Admin\AdminController@admin_class_ajax')->name('admin.notify.class.ajax');
         Route::post('ajax_class', 'Admin\AdminController@admin_post_class_ajax')->name('admin.post.notify.class.ajax');
+
+        //User
+        Route::get('ajax_user', 'Admin\AdminController@admin_user_ajax')->name('admin.notify.user.ajax');
+        Route::post('ajax_user', 'Admin\AdminController@admin_post_user_ajax')->name('admin.post.notify.user.ajax');
+
+        //role
+        Route::get('ajax_role', 'Admin\AdminController@admin_role_ajax')->name('admin.notify.role.ajax');
+        Route::post('ajax_role', 'Admin\AdminController@admin_post_role_ajax')->name('admin.post.notify.role.ajax');
     });
     Route::group(['prefix' => 'action'], function () {
         // View
@@ -54,6 +62,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('major','Admin\AdminController@admin_major')->name('admin.school.major')->middleware('permission:admin_major');
         Route::get('report','Admin\AdminController@admin_report')->name('admin.page.report')->middleware('permission:admin_report');
         Route::get('setting','Admin\AdminController@admin_setting')->name('admin.setting.general')->middleware('permission:admin_setting');
+        Route::get('user','Admin\AdminController@admin_user')->name('admin.user')->middleware('permission:admin_user');
         Route::get('graduation','Admin\AdminController@admin_graduation')->name('admin.graduation')->middleware('permission:admin_graduation');
     });
 });

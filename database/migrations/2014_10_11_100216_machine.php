@@ -14,6 +14,7 @@ class Machine extends Migration
     public function up()
     {
         Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('config_language');
         Schema::dropIfExists('m_major');
         Schema::dropIfExists('m_major_translation');
         Schema::dropIfExists('m_course');
@@ -21,6 +22,18 @@ class Machine extends Migration
         Schema::dropIfExists('m_class');
         Schema::dropIfExists('m_class_translation');
         Schema::enableForeignKeyConstraints(); 
+
+        Schema::create('config_language', function (Blueprint $table) {
+            $table->increments('id');
+            $table->string('name', 64)->comment('Tên ngôn ngữ');
+            $table->string('code', 5)->comment('Mã ngôn ngữ: vn, en,...');
+            $table->boolean('default')->default(false)->comment('Ngôn ngữ mặc định: true, false');
+            $table->string('currency_code', 5)->comment('Mã tiền tệ: VND, USD,...');
+            $table->string('date_format', 15)->comment('Định dạng ngày tháng');
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+            $table->softDeletes();
+        });
 
         Schema::create('m_major', function (Blueprint $table) {
             $table->increments('id');
@@ -110,6 +123,7 @@ class Machine extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
+        Schema::dropIfExists('config_language');
         Schema::dropIfExists('m_major');
         Schema::dropIfExists('m_major_translation');
         Schema::dropIfExists('m_course');

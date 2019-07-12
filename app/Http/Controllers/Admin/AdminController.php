@@ -542,4 +542,51 @@ class AdminController extends Controller
 			}
 		}
 	}
+
+	//user
+	public function admin_user(Request $request)
+	{
+		try {
+			if(Auth::user()) {
+				if(Auth::user()->can('admin_user')){
+					return view('theme.admin.page.user');
+				} else {
+					return redirect()->guest(route('admin.error'));
+				}
+			} else {
+				return redirect()->guest(route('home.login'));
+			}
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+		}
+	}
+
+	public function admin_user_ajax(Request $request)
+	{
+		try {
+			$instance = $this->instance(\App\Http\Controllers\Helper\User::class);
+			if($request->has('id') && !empty($request->id)) {
+				return $data = $instance->getUser($request->id, $request->lang);
+			}
+			if($request->has('log_id') && !empty($request->log_id)) {
+				return $data = $instance->getDTUserActivities($request->log_id);
+			}
+			return $data = $instance->getDTUser($request->majorId);
+		} catch (\Exception $e) {
+			return self::JsonExport(500, trans('app.error_500'));
+		}
+	}
+
+	//Role
+	public function admin_role_ajax(Request $request){
+        try {
+            $instance = $this->instance(\App\Http\Controllers\Helper\Role::class);
+            if($request->has('id') && !empty($request->id)) {
+                return $data = $instance->getRole($request->id);
+            }
+            return $data = $instance->getDTRole();
+        } catch (\Exception $e) {
+			return self::JsonExport(500, trans('app.error_500'));
+        }
+    }
 }

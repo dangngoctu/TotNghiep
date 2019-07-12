@@ -30,7 +30,7 @@ $(function(){
         });
         loadDataTable(majorId_filter,'');
     }).on('select2:unselect', function (e) {
-        $('#course_id_filter').parents('.row').addClass('d-none');
+        $('#course_id_filter').parents('.col-sm-6').addClass('d-none');
         $('#course_id_filter').empty();
         loadDataTable('','');
     });
@@ -76,9 +76,6 @@ $(function(){
         allowClear: true,
         minimumResultsForSearch: Infinity
     });
-    // $('#line-id').on("change", function (e) {
-    //     $('#area-id').parents('.row').removeClass('d-none');
-    // });
     $(document).on('click', '.table-dynamic-device .table-action-delete', function (e) {
         e.preventDefault();
         var id = $(this).attr('data-id');

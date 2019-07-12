@@ -16,10 +16,10 @@ class RoleTableSeeder extends Seeder
     {
         $role = ['name' => 'admin', 'display_name' => 'Administrator','multiple_management' => 0, 'description' => 'Administrator role'];
         $role = Role::create($role);
-        // $permission_data = Models\Permission::get();
-        // foreach ($permission_data as $key => $value) {
-        //     $role->attachPermission($value);
-        // }
+        $permission_data = Models\Permission::get();
+        foreach ($permission_data as $key => $value) {
+            $role->attachPermission($value);
+        }
 
         $role1 = ['name' => 'owner', 'display_name' => 'Owner','multiple_management' => 0, 'description' => 'Owner role'];
         $role1 = Role::create($role1);
