@@ -2,13 +2,12 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 08 Jul 2019 09:44:47 +0700.
+ * Date: Tue, 06 Aug 2019 13:47:12 +0700.
  */
 
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
-use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
  * Class MCategory
@@ -21,7 +20,7 @@ use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
  * 
  * @property \Illuminate\Database\Eloquent\Collection $m_categories_translations
  * @property \Illuminate\Database\Eloquent\Collection $m_falure_modes
- * @property \Illuminate\Database\Eloquent\Collection $m_graduation_categories
+ * @property \Illuminate\Database\Eloquent\Collection $m_notificaitons
  *
  * @package App\Models
  */
@@ -39,11 +38,6 @@ class MCategory extends Eloquent
 
 	public function m_categories_translations()
 	{
-		return $this->hasOne(\App\Models\MCategoriesTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
-	}
-
-	public function m_categories_translations_all()
-	{
 		return $this->hasMany(\App\Models\MCategoriesTranslation::class, 'translation_id');
 	}
 
@@ -52,8 +46,8 @@ class MCategory extends Eloquent
 		return $this->hasMany(\App\Models\MFalureMode::class, 'category_id');
 	}
 
-	public function m_graduation_categories()
+	public function m_notificaitons()
 	{
-		return $this->hasMany(\App\Models\MGraduationCategory::class, 'category_id');
+		return $this->hasMany(\App\Models\MNotificaiton::class, 'category_id');
 	}
 }

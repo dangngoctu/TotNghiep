@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Mon, 08 Jul 2019 09:44:47 +0700.
+ * Date: Tue, 06 Aug 2019 13:47:12 +0700.
  */
 
 namespace App\Models;
@@ -10,7 +10,7 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class MMajorTranslation
+ * Class MDeviceTranslation
  * 
  * @property int $id
  * @property string $name
@@ -21,14 +21,14 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $deleted_at
  * 
  * @property \App\Models\ConfigLanguage $config_language
- * @property \App\Models\MMajor $m_major
+ * @property \App\Models\MDevice $m_device
  *
  * @package App\Models
  */
-class MMajorTranslation extends Eloquent
+class MDeviceTranslation extends Eloquent
 {
 	use \Illuminate\Database\Eloquent\SoftDeletes;
-	protected $table = 'm_major_translation';
+	protected $table = 'm_device_translation';
 
 	protected $casts = [
 		'translation_id' => 'int',
@@ -46,8 +46,8 @@ class MMajorTranslation extends Eloquent
 		return $this->belongsTo(\App\Models\ConfigLanguage::class, 'language_id');
 	}
 
-	public function m_major()
+	public function m_device()
 	{
-		return $this->belongsTo(\App\Models\MMajor::class, 'translation_id');
+		return $this->belongsTo(\App\Models\MDevice::class, 'translation_id');
 	}
 }

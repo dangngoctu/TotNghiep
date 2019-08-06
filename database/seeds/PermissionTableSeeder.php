@@ -25,23 +25,23 @@ class PermissionTableSeeder extends Seeder
                 'display_name' => 'Setting management in webpage',
                 'description' => 'Setting management in webpage'
             ],
-            //Site
+            //Line
             [
-                'name' => 'admin_major',
-                'display_name' => 'Major management in webpage',
-                'description' => 'Major management in webpage'
+                'name' => 'admin_line',
+                'display_name' => 'Line management in webpage',
+                'description' => 'Line management in webpage'
             ],
             //Area
              [
-                'name' => 'admin_course',
-                'display_name' => 'Course management in webpage',
-                'description' => 'Course management in webpage'
+                'name' => 'admin_area',
+                'display_name' => 'Area management in webpage',
+                'description' => 'Area management in webpage'
             ],
             //Device
             [
-                'name' => 'admin_class',
-                'display_name' => 'Class management in webpage',
-                'description' => 'Class management in webpage'
+                'name' => 'admin_machine',
+                'display_name' => 'Machine management in webpage',
+                'description' => 'Machine management in webpage'
             ],
             //Category
             [
@@ -81,16 +81,10 @@ class PermissionTableSeeder extends Seeder
             ],
             //Graduation
             [
-                'name' => 'admin_graduation',
-                'display_name' => 'Graduation management in webpage',
-                'description' => 'Graduation management in webpage'
+                'name' => 'admin_notification',
+                'display_name' => 'Notification management in webpage',
+                'description' => 'Notification management in webpage'
             ],
-            //Student
-            [
-                'name' => 'admin_student',
-                'display_name' => 'Student management in webpage',
-                'description' => 'Student management in webpage'
-            ]
         ];
         DB::table('permissions')->insert($permission);
     

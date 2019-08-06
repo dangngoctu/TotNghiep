@@ -1,19 +1,15 @@
 <?php
-
 /**
  * Created by Reliese Model.
  * Date: Thu, 04 Jul 2019 09:51:55 +0700.
  */
-
 namespace App\Models;
-
 use Reliese\Database\Eloquent\Model as Eloquent;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Zizaco\Entrust\Traits\EntrustUserTrait;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
-
 /**
  * Class MUser
  * 
@@ -50,17 +46,14 @@ class MUser extends Authenticatable
         EntrustUserTrait::restore insteadof SoftDeletes;
 	}
 	protected $table = 'm_user';
-
 	protected $casts = [
 		'status' => 'int',
 		'is_online' => 'int'
 	];
-
 	protected $dates = [
 		'dob',
 		'time_update_password'
 	];
-
 	protected $hidden = [
 		'password',
 		'fcm_token',
@@ -79,22 +72,21 @@ class MUser extends Authenticatable
 		'time_update_password',
 		'status',
 		'is_online',
-		'remember_token',
-		'major_id'
+		'remember_token'
 	];
+
+	public function m_notificaitons()
+	{
+		return $this->hasMany(\App\Models\MNotificaiton::class, 'user_id');
+	}
 
 	public function role_users()
 	{
 		return $this->hasMany(\App\Models\RoleUser::class, 'user_id');
 	}
 
-	public function m_graduations()
+	public function system_managements()
 	{
-		return $this->hasMany(\App\Models\MGraduation::class, 'user_id');
-	}
-
-	public function m_major()
-	{
-		return $this->belongsTo(\App\Models\MMajor::class, 'major_id');
+		return $this->hasMany(\App\Models\SystemManagement::class, 'user_id');
 	}
 }

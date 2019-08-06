@@ -25,7 +25,6 @@ class CreateUsersTable extends Migration
             $table->string('name', 128)->nullable();
             $table->string('avatar', 255)->nullable();
             $table->string('fcm_token', 255)->nullable();
-            $table->integer('major_id')->nullable()->unsigned();
             $table->date('dob')->default('1980-01-01')->nullable();
             $table->timestamp('time_update_password')->default(DB::raw('CURRENT_TIMESTAMP'))->comment('time update password');
             $table->tinyInteger('status')->default(1)->comment('Trạng thái: (1) Kích hoạt, (0) Tắt');
@@ -36,9 +35,9 @@ class CreateUsersTable extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('m_user', function (Blueprint $table) {
-            $table->foreign('major_id')->references('id')->on('m_major');
-        });
+        // Schema::table('m_user', function (Blueprint $table) {
+        //     $table->foreign('major_id')->references('id')->on('m_major');
+        // });
     }
 
     /**

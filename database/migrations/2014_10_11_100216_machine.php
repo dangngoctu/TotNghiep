@@ -15,12 +15,12 @@ class Machine extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('config_language');
-        Schema::dropIfExists('m_major');
-        Schema::dropIfExists('m_major_translation');
-        Schema::dropIfExists('m_course');
-        Schema::dropIfExists('m_course_translation');
-        Schema::dropIfExists('m_class');
-        Schema::dropIfExists('m_class_translation');
+        Schema::dropIfExists('m_line');
+        Schema::dropIfExists('m_line_translation');
+        Schema::dropIfExists('m_area');
+        Schema::dropIfExists('m_area_translation');
+        Schema::dropIfExists('m_device');
+        Schema::dropIfExists('m_device_translation');
         Schema::enableForeignKeyConstraints(); 
 
         Schema::create('config_language', function (Blueprint $table) {
@@ -35,7 +35,7 @@ class Machine extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('m_major', function (Blueprint $table) {
+        Schema::create('m_line', function (Blueprint $table) {
             $table->increments('id');
             $table->tinyInteger('status')->default(1)->comment('Trạng thái: (1) Kích hoạt, (0) Tắt');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
@@ -43,7 +43,7 @@ class Machine extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('m_major_translation', function (Blueprint $table) {
+        Schema::create('m_line_translation', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255)->nullable()->comment('Name site');
             $table->integer('translation_id')->nullable()->unsigned();
@@ -53,16 +53,16 @@ class Machine extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('m_course', function (Blueprint $table) {
+        Schema::create('m_area', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('major_id')->nullable()->unsigned();
+            $table->integer('line_id')->nullable()->unsigned();
             $table->tinyInteger('status')->default(1)->comment('Trạng thái: (1) Kích hoạt, (0) Tắt');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->softDeletes();
         });
 
-        Schema::create('m_course_translation', function (Blueprint $table) {
+        Schema::create('m_area_translation', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255)->nullable()->comment('Tên khu vực');
             $table->integer('translation_id')->nullable()->unsigned();
@@ -72,16 +72,16 @@ class Machine extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('m_class', function (Blueprint $table) {
+        Schema::create('m_device', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('course_id')->nullable()->unsigned();
+            $table->integer('area_id')->nullable()->unsigned();
             $table->tinyInteger('status')->default(1)->comment('Trạng thái: (1) Kích hoạt, (0) Tắt');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             $table->softDeletes();
         });
 
-        Schema::create('m_class_translation', function (Blueprint $table) {
+        Schema::create('m_device_translation', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255)->nullable()->comment('Tên máy');
             $table->integer('translation_id')->nullable()->unsigned();
@@ -91,26 +91,26 @@ class Machine extends Migration
             $table->softDeletes();
         });
 
-        Schema::table('m_class', function (Blueprint $table) {
-            $table->foreign('course_id')->references('id')->on('m_course');
+        Schema::table('m_device', function (Blueprint $table) {
+            $table->foreign('area_id')->references('id')->on('m_area');
         });
 
-        Schema::table('m_class_translation', function (Blueprint $table) {
-            $table->foreign('translation_id')->references('id')->on('m_class');
+        Schema::table('m_device_translation', function (Blueprint $table) {
+            $table->foreign('translation_id')->references('id')->on('m_device');
             $table->foreign('language_id')->references('id')->on('config_language');
         });
 
-        Schema::table('m_course', function (Blueprint $table) {
-            $table->foreign('major_id')->references('id')->on('m_major');
+        Schema::table('m_area', function (Blueprint $table) {
+            $table->foreign('line_id')->references('id')->on('m_line');
         });
 
-        Schema::table('m_course_translation', function (Blueprint $table) {
-            $table->foreign('translation_id')->references('id')->on('m_course');
+        Schema::table('m_area_translation', function (Blueprint $table) {
+            $table->foreign('translation_id')->references('id')->on('m_area');
             $table->foreign('language_id')->references('id')->on('config_language');
         });
 
-        Schema::table('m_major_translation', function (Blueprint $table) {
-            $table->foreign('translation_id')->references('id')->on('m_major');
+        Schema::table('m_line_translation', function (Blueprint $table) {
+            $table->foreign('translation_id')->references('id')->on('m_line');
             $table->foreign('language_id')->references('id')->on('config_language');
         });
     }
@@ -124,12 +124,12 @@ class Machine extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('config_language');
-        Schema::dropIfExists('m_major');
-        Schema::dropIfExists('m_major_translation');
-        Schema::dropIfExists('m_course');
-        Schema::dropIfExists('m_course_translation');
-        Schema::dropIfExists('m_class');
-        Schema::dropIfExists('m_class_translation');
+        Schema::dropIfExists('m_line');
+        Schema::dropIfExists('m_line_translation');
+        Schema::dropIfExists('m_area');
+        Schema::dropIfExists('m_area_translation');
+        Schema::dropIfExists('m_device');
+        Schema::dropIfExists('m_device_translation');
         Schema::enableForeignKeyConstraints();  
     }
 }

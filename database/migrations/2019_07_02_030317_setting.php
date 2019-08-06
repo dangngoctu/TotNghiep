@@ -15,6 +15,7 @@ class Setting extends Migration
     {
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('m_setting');
+        Schema::dropIfExists('system_management');
         Schema::enableForeignKeyConstraints();
         Schema::create('m_setting', function (Blueprint $table) {
             $table->increments('id');
@@ -24,6 +25,23 @@ class Setting extends Migration
             $table->string('GG_KEY_MAP', 255)->comment('Google key map');
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+        });
+
+        Schema::create('system_management', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->integer('line_id')->nullable()->unsigned();
+            $table->integer('area_id')->nullable()->unsigned();
+            $table->integer('device_id')->nullable()->unsigned();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+        });
+
+        Schema::table('system_management', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('m_user');
+            $table->foreign('area_id')->references('id')->on('m_area');
+            $table->foreign('line_id')->references('id')->on('m_line');
+            $table->foreign('device_id')->references('id')->on('m_device');
         });
     }
 
@@ -37,6 +55,7 @@ class Setting extends Migration
         //
         Schema::disableForeignKeyConstraints();
         Schema::dropIfExists('m_setting');
+        Schema::dropIfExists('system_management');
         Schema::enableForeignKeyConstraints();
     }
 }
