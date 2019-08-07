@@ -1,15 +1,14 @@
 <?php
+
 /**
  * Created by Reliese Model.
- * Date: Thu, 04 Jul 2019 09:51:55 +0700.
+ * Date: Wed, 07 Aug 2019 23:14:52 +0700.
  */
+
 namespace App\Models;
+
 use Reliese\Database\Eloquent\Model as Eloquent;
-use Illuminate\Notifications\Notifiable;
-use Illuminate\Foundation\Auth\User as Authenticatable;
-use Zizaco\Entrust\Traits\EntrustUserTrait;
-use Illuminate\Database\Eloquent\SoftDeletes;
-use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
+
 /**
  * Class MUser
  * 
@@ -29,31 +28,27 @@ use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
  * @property \Carbon\Carbon $updated_at
  * @property string $deleted_at
  * 
- * @property \Illuminate\Database\Eloquent\Collection $m_check_statuses
- * @property \Illuminate\Database\Eloquent\Collection $m_notifications
- * @property \Illuminate\Database\Eloquent\Collection $m_notification_actions
- * @property \Illuminate\Database\Eloquent\Collection $m_notification_times
+ * @property \Illuminate\Database\Eloquent\Collection $m_notificaitons
  * @property \Illuminate\Database\Eloquent\Collection $role_users
  * @property \Illuminate\Database\Eloquent\Collection $system_managements
  *
  * @package App\Models
  */
-class MUser extends Authenticatable
+class MUser extends Eloquent
 {
-	use Notifiable, AutoloadsRelationships;
-    use SoftDeletes, EntrustUserTrait {
-        SoftDeletes::restore insteadof EntrustUserTrait;
-        EntrustUserTrait::restore insteadof SoftDeletes;
-	}
+	use \Illuminate\Database\Eloquent\SoftDeletes;
 	protected $table = 'm_user';
+
 	protected $casts = [
 		'status' => 'int',
 		'is_online' => 'int'
 	];
+
 	protected $dates = [
 		'dob',
 		'time_update_password'
 	];
+
 	protected $hidden = [
 		'password',
 		'fcm_token',

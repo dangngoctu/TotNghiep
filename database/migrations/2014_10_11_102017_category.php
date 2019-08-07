@@ -14,8 +14,8 @@ class Category extends Migration
     public function up()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('m_falure_mode_translation');
-        Schema::dropIfExists('m_falure_mode');
+        Schema::dropIfExists('m_failure_mode_translation');
+        Schema::dropIfExists('m_failure_mode');
         Schema::dropIfExists('m_categories_translation');
         Schema::dropIfExists('m_categories');
         Schema::enableForeignKeyConstraints();
@@ -39,7 +39,7 @@ class Category extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('m_falure_mode', function (Blueprint $table) {
+        Schema::create('m_failure_mode', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('category_id')->nullable()->unsigned();
             $table->tinyInteger('status')->default(1)->comment('Trạng thái: (1) Kích hoạt, (0) Tắt');
@@ -48,7 +48,7 @@ class Category extends Migration
             $table->softDeletes();
         });
 
-        Schema::create('m_falure_mode_translation', function (Blueprint $table) {
+        Schema::create('m_failure_mode_translation', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name', 255)->nullable()->comment('name of falure mode');
             $table->integer('translation_id')->nullable()->unsigned();
@@ -60,8 +60,8 @@ class Category extends Migration
 
 
 
-        Schema::table('m_falure_mode_translation', function (Blueprint $table) {
-            $table->foreign('translation_id')->references('id')->on('m_falure_mode');
+        Schema::table('m_failure_mode_translation', function (Blueprint $table) {
+            $table->foreign('translation_id')->references('id')->on('m_failure_mode');
             $table->foreign('language_id')->references('id')->on('config_language');
         });
 
@@ -70,7 +70,7 @@ class Category extends Migration
             $table->foreign('language_id')->references('id')->on('config_language');
         });
 
-        Schema::table('m_falure_mode', function (Blueprint $table) {
+        Schema::table('m_failure_mode', function (Blueprint $table) {
             $table->foreign('category_id')->references('id')->on('m_categories');
         });
     }
@@ -83,8 +83,8 @@ class Category extends Migration
     public function down()
     {
         Schema::disableForeignKeyConstraints();
-        Schema::dropIfExists('m_falure_mode_translation');
-        Schema::dropIfExists('m_falure_mode');
+        Schema::dropIfExists('m_failure_mode_translation');
+        Schema::dropIfExists('m_failure_mode');
         Schema::dropIfExists('m_categories_translation');
         Schema::dropIfExists('m_categories');
         Schema::enableForeignKeyConstraints();

@@ -10,7 +10,7 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class MFalureMode
+ * Class MFailureMode
  * 
  * @property int $id
  * @property int $category_id
@@ -20,14 +20,15 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $deleted_at
  * 
  * @property \App\Models\MCategory $m_category
- * @property \Illuminate\Database\Eloquent\Collection $m_falure_mode_translations
+ * @property \Illuminate\Database\Eloquent\Collection $m_failure_mode_translations
+ * @property \Illuminate\Database\Eloquent\Collection $m_notificaitons
  *
  * @package App\Models
  */
-class MFalureMode extends Eloquent
+class MFailureMode extends Eloquent
 {
 	use \Illuminate\Database\Eloquent\SoftDeletes;
-	protected $table = 'm_falure_mode';
+	protected $table = 'm_failure_mode';
 
 	protected $casts = [
 		'category_id' => 'int',
@@ -44,8 +45,13 @@ class MFalureMode extends Eloquent
 		return $this->belongsTo(\App\Models\MCategory::class, 'category_id');
 	}
 
-	public function m_falure_mode_translations()
+	public function m_failure_mode_translations()
 	{
-		return $this->hasMany(\App\Models\MFalureModeTranslation::class, 'translation_id');
+		return $this->hasMany(\App\Models\MFailureModeTranslation::class, 'translation_id');
+	}
+
+	public function m_notificaitons()
+	{
+		return $this->hasMany(\App\Models\MNotificaiton::class, 'failure_id');
 	}
 }

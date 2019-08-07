@@ -34,7 +34,7 @@ class DbNotification extends Migration
         Schema::table('m_notificaiton', function (Blueprint $table) {
             $table->foreign('user_id')->references('id')->on('m_user');
             $table->foreign('category_id')->references('id')->on('m_categories');
-            $table->foreign('failure_id')->references('id')->on('m_falure_mode');
+            $table->foreign('failure_id')->references('id')->on('m_failure_mode');
         });
         
     }

@@ -10,10 +10,9 @@ namespace App\Models;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
- * Class MCategoriesTranslation
+ * Class MFailureModeTranslation
  * 
  * @property int $id
- * @property string $description
  * @property string $name
  * @property int $translation_id
  * @property int $language_id
@@ -22,14 +21,14 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $deleted_at
  * 
  * @property \App\Models\ConfigLanguage $config_language
- * @property \App\Models\MCategory $m_category
+ * @property \App\Models\MFailureMode $m_failure_mode
  *
  * @package App\Models
  */
-class MCategoriesTranslation extends Eloquent
+class MFailureModeTranslation extends Eloquent
 {
 	use \Illuminate\Database\Eloquent\SoftDeletes;
-	protected $table = 'm_categories_translation';
+	protected $table = 'm_failure_mode_translation';
 
 	protected $casts = [
 		'translation_id' => 'int',
@@ -37,7 +36,6 @@ class MCategoriesTranslation extends Eloquent
 	];
 
 	protected $fillable = [
-		'description',
 		'name',
 		'translation_id',
 		'language_id'
@@ -48,8 +46,8 @@ class MCategoriesTranslation extends Eloquent
 		return $this->belongsTo(\App\Models\ConfigLanguage::class, 'language_id');
 	}
 
-	public function m_category()
+	public function m_failure_mode()
 	{
-		return $this->belongsTo(\App\Models\MCategory::class, 'translation_id');
+		return $this->belongsTo(\App\Models\MFailureMode::class, 'translation_id');
 	}
 }

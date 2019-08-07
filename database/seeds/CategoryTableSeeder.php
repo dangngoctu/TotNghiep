@@ -48,7 +48,7 @@ class CategoryTableSeeder extends Seeder
             ['category_id' => 4 ,'status' => 1 ],
         ]);
 
-        DB::table('m_falure_mode_translation')->insert([
+        DB::table('m_failure_mode_translation')->insert([
             //Safety
             ['name' => 'Not complied to Life Saving Rules','translation_id' => 1 , 'language_id' => 2],
             ['name' => 'Không tuân thủ các quy tắc cứu sinh','translation_id' => 1 , 'language_id' => 1],

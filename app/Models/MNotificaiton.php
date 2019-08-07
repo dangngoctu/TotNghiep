@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 06 Aug 2019 13:47:12 +0700.
+ * Date: Wed, 07 Aug 2019 23:14:51 +0700.
  */
 
 namespace App\Models;
@@ -24,7 +24,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $deleted_at
  * 
  * @property \App\Models\MCategory $m_category
- * @property \App\Models\MFalureMode $m_falure_mode
+ * @property \App\Models\MFailureMode $m_failure_mode
  * @property \App\Models\MUser $m_user
  *
  * @package App\Models
@@ -55,9 +55,9 @@ class MNotificaiton extends Eloquent
 		return $this->belongsTo(\App\Models\MCategory::class, 'category_id');
 	}
 
-	public function m_falure_mode()
+	public function m_failure_mode()
 	{
-		return $this->belongsTo(\App\Models\MFalureMode::class, 'failure_id');
+		return $this->belongsTo(\App\Models\MFailureMode::class, 'failure_id');
 	}
 
 	public function m_user()

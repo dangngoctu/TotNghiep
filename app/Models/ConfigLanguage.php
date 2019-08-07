@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Tue, 06 Aug 2019 13:47:12 +0700.
+ * Date: Wed, 07 Aug 2019 23:14:51 +0700.
  */
 
 namespace App\Models;
@@ -25,6 +25,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property \Illuminate\Database\Eloquent\Collection $m_area_translations
  * @property \Illuminate\Database\Eloquent\Collection $m_categories_translations
  * @property \Illuminate\Database\Eloquent\Collection $m_device_translations
+ * @property \Illuminate\Database\Eloquent\Collection $m_failure_mode_translations
  * @property \Illuminate\Database\Eloquent\Collection $m_falure_mode_translations
  * @property \Illuminate\Database\Eloquent\Collection $m_line_translations
  *
@@ -60,6 +61,11 @@ class ConfigLanguage extends Eloquent
 	public function m_device_translations()
 	{
 		return $this->hasMany(\App\Models\MDeviceTranslation::class, 'language_id');
+	}
+
+	public function m_failure_mode_translations()
+	{
+		return $this->hasMany(\App\Models\MFailureModeTranslation::class, 'language_id');
 	}
 
 	public function m_falure_mode_translations()
