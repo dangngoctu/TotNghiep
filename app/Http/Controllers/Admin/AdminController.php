@@ -73,12 +73,17 @@ class AdminController extends Controller
     }
 
     public function index(){
-        try {
-            $user = Auth::user();
+        // try {
+			$user = Auth::user();
+			if($user->hasRole('admin')){
+				return 'abc';
+			} else {
+				return 'def';
+			}
             return view('theme.admin.page.homepage')->with(['user' => $user]);
-        } catch (\Exception $e) {
-			return redirect()->route('login');
-		}
+        // } catch (\Exception $e) {
+		// 	return redirect()->route('login');
+		// }
     }
 
 	//Category

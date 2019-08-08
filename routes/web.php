@@ -32,16 +32,16 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         // Route::post('ajax_fail_mode_detail', 'Admin\AdminController@admin_post_fail_mode_detail_ajax')->name('admin.post.notify.fail.mode.detail.ajax');
 
         //Major
-        Route::get('ajax_major', 'Admin\AdminController@admin_major_ajax')->name('admin.notify.major.ajax');
-        Route::post('ajax_major', 'Admin\AdminController@admin_post_major_ajax')->name('admin.post.notify.major.ajax');
+        Route::get('ajax_line', 'Admin\AdminController@admin_line_ajax')->name('admin.notify.line.ajax');
+        Route::post('ajax_line', 'Admin\AdminController@admin_post_line_ajax')->name('admin.post.notify.line.ajax');
 
         //Course
-        Route::get('ajax_course', 'Admin\AdminController@admin_course_ajax')->name('admin.notify.course.ajax');
-        Route::post('ajax_course', 'Admin\AdminController@admin_post_course_ajax')->name('admin.post.notify.course.ajax');
+        Route::get('ajax_area', 'Admin\AdminController@admin_area_ajax')->name('admin.notify.area.ajax');
+        Route::post('ajax_area', 'Admin\AdminController@admin_post_area_ajax')->name('admin.post.notify.area.ajax');
 
         //Class
-        Route::get('ajax_class', 'Admin\AdminController@admin_class_ajax')->name('admin.notify.class.ajax');
-        Route::post('ajax_class', 'Admin\AdminController@admin_post_class_ajax')->name('admin.post.notify.class.ajax');
+        Route::get('ajax_device', 'Admin\AdminController@admin_device_ajax')->name('admin.notify.device.ajax');
+        Route::post('ajax_device', 'Admin\AdminController@admin_post_device_ajax')->name('admin.post.notify.device.ajax');
 
         //User
         Route::get('ajax_user', 'Admin\AdminController@admin_user_ajax')->name('admin.notify.user.ajax');
@@ -57,12 +57,12 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('category','Admin\AdminController@admin_category')->name('admin.failure.category')->middleware('permission:admin_category');
         Route::get('fail_mode','Admin\AdminController@admin_fail_mode')->name('admin.failure.mode')->middleware('permission:admin_failure');
         // Route::get('fail_mode_detail','Admin\AdminController@admin_fail_mode_detail')->name('admin.failure.mode.detail')->middleware('permission:admin_failure_detail');
-        Route::get('course','Admin\AdminController@admin_course')->name('admin.school.course')->middleware('permission:admin_course');
-        Route::get('class','Admin\AdminController@admin_class')->name('admin.school.class')->middleware('permission:admin_class');
-        Route::get('major','Admin\AdminController@admin_major')->name('admin.school.major')->middleware('permission:admin_major');
+        Route::get('area','Admin\AdminController@admin_area')->name('admin.area')->middleware('permission:admin_area');
+        Route::get('device','Admin\AdminController@admin_device')->name('admin.device')->middleware('permission:admin_device');
+        Route::get('line','Admin\AdminController@admin_line')->name('admin.line')->middleware('permission:admin_line');
         Route::get('report','Admin\AdminController@admin_report')->name('admin.page.report')->middleware('permission:admin_report');
         Route::get('setting','Admin\AdminController@admin_setting')->name('admin.setting.general')->middleware('permission:admin_setting');
         Route::get('user','Admin\AdminController@admin_user')->name('admin.user')->middleware('permission:admin_user');
-        Route::get('graduation','Admin\AdminController@admin_graduation')->name('admin.graduation')->middleware('permission:admin_graduation');
+        Route::get('notification','Admin\AdminController@admin_notification')->name('admin.notification')->middleware('permission:admin_notification');
     });
 });

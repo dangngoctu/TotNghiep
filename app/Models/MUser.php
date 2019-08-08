@@ -2,11 +2,11 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 07 Aug 2019 23:14:52 +0700.
+ * Date: Tue, 02 Jul 2019 16:26:01 +0700.
  */
 
 namespace App\Models;
-
+use Illuminate\Foundation\Auth\User as Authenticatable;
 use Reliese\Database\Eloquent\Model as Eloquent;
 
 /**
@@ -34,7 +34,7 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  *
  * @package App\Models
  */
-class MUser extends Eloquent
+class MUser extends Authenticatable
 {
 	use \Illuminate\Database\Eloquent\SoftDeletes;
 	protected $table = 'm_user';
