@@ -2,7 +2,7 @@
 
 /**
  * Created by Reliese Model.
- * Date: Wed, 07 Aug 2019 23:14:51 +0700.
+ * Date: Thu, 08 Aug 2019 18:13:44 +0700.
  */
 
 namespace App\Models;
@@ -19,7 +19,6 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  * @property string $deleted_at
  * 
  * @property \Illuminate\Database\Eloquent\Collection $m_categories_translations
- * @property \Illuminate\Database\Eloquent\Collection $m_failure_modes
  * @property \Illuminate\Database\Eloquent\Collection $m_falure_modes
  * @property \Illuminate\Database\Eloquent\Collection $m_notificaitons
  *
@@ -40,11 +39,6 @@ class MCategory extends Eloquent
 	public function m_categories_translations()
 	{
 		return $this->hasMany(\App\Models\MCategoriesTranslation::class, 'translation_id');
-	}
-
-	public function m_failure_modes()
-	{
-		return $this->hasMany(\App\Models\MFailureMode::class, 'category_id');
 	}
 
 	public function m_falure_modes()
