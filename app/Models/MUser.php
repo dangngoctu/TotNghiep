@@ -6,8 +6,15 @@
  */
 
 namespace App\Models;
+use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Reliese\Database\Eloquent\Model as Eloquent;
+use \Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use Laravel\Scout\Searchable;
+use Zizaco\Entrust\Traits\EntrustUserTrait;
+use Illuminate\Database\Eloquent\SoftDeletes;
+use \LiamWiltshire\LaravelJitLoader\Concerns\AutoloadsRelationships;
 
 /**
  * Class MUser
@@ -36,7 +43,11 @@ use Reliese\Database\Eloquent\Model as Eloquent;
  */
 class MUser extends Authenticatable
 {
-	use \Illuminate\Database\Eloquent\SoftDeletes;
+    use Notifiable, AutoloadsRelationships;
+    use SoftDeletes, EntrustUserTrait {
+        SoftDeletes::restore insteadof EntrustUserTrait;
+        EntrustUserTrait::restore insteadof SoftDeletes;
+	}
 	protected $table = 'm_user';
 
 	protected $casts = [
