@@ -19,7 +19,7 @@
         <div class="row">
             <div class="col-sm-6 col-md-4 mg-b-10">
                 <div id="slWrapperLocation" class="parsley-select">
-                    <select class="form-control select2" style="width: 100%" id="major_id_filter" name="major_id_filter" data-placeholder="Select major">
+                    <select class="form-control select2" style="width: 100%" id="line_id_filter" name="line_id_filter" data-placeholder="Select major">
                         <option label="Select major"></option>
                     </select>
                 </div>

@@ -6,11 +6,11 @@ $(function(){
     $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: base_admin + "/home/ajax/ajax_major"
+        url: base_admin + "/home/ajax/ajax_line"
     }).then(function (data) {
         $.map(data.data, function (item) {
             var option = new Option(item.name, item.id, false, false);
-            $('#major_id_filter').append(option);
+            $('#line_id_filter').append(option);
         })
     });
     $.ajax({
@@ -24,7 +24,7 @@ $(function(){
             $('#role').append(option);
         })
     })
-    $('#major_id_filter, #role').select2({
+    $('#line_id_filter, #role').select2({
         allowClear: true,
         minimumResultsForSearch: Infinity
     });
@@ -50,7 +50,7 @@ $(function(){
         $('#modal-user').modal('show');
     });
 
-    $('#major_id_filter').on("select2:select", function (e) {
+    $('#line_id_filter').on("select2:select", function (e) {
         var data_major_filter = e.params.data;
         majorId_filter = data_major_filter.id;
         loadDataTable(majorId_filter);
