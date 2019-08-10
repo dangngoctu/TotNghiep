@@ -21,7 +21,7 @@ use Socialite;
 use Auth;
 use Carbon\Carbon;
 
-class Major extends Controller
+class Line extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     protected $lang;
@@ -34,13 +34,13 @@ class Major extends Controller
     }
 
     //DEMO
-    public function postMajor($request)
+    public function postLine($request)
     {
         self::__construct();
         try {
             DB::beginTransaction();
             if($request->action == 'update' || $request->action == 'delete') {
-                $query = Models\MMajor::find($request->id);
+                $query = Models\MLine::find($request->id);
                 if(!$query) {
                     DB::rollback();
                     return false;
@@ -58,8 +58,8 @@ class Major extends Controller
             }
 					
             if($request->action == 'update') {
-                $check = Models\MMajor::where('id', '!=', $query->id)
-                    ->whereHas('m_major_translations_all', function ($query_check) use ($request){
+                $check = Models\MLine::where('id', '!=', $query->id)
+                    ->whereHas('m_line_translations_all', function ($query_check) use ($request){
                         $query_check->where('name', $request->name)->where('language_id', $request->lang);
                     })->count();
                 if($check > 0){
@@ -67,7 +67,7 @@ class Major extends Controller
                     return false;
                 }
                 if (count($data_relationship) > 0) {
-                    $query->m_major_translations_all()->where('language_id', $request->lang)->update($data_relationship);
+                    $query->m_line_translations_all()->where('language_id', $request->lang)->update($data_relationship);
                     if (!$query) {
                         DB::rollback();
                         return false;
@@ -82,7 +82,7 @@ class Major extends Controller
                 }
             } else if($request->action == 'delete') {
                 
-                $ref = Models\MMajorTranslation::where('translation_id', $request->id);
+                $ref = Models\MlineTranslation::where('translation_id', $request->id);
                 $ref = $ref->delete();
                 if(!$ref) {
                     DB::rollback();
@@ -94,21 +94,21 @@ class Major extends Controller
                     return false;
                 }
             } else {
-                $check = Models\MMajor::whereHas('m_major_translations_all', function ($query_check) use ($request){
+                $check = Models\MLine::whereHas('m_line_translations_all', function ($query_check) use ($request){
                     $query_check->where('name', $request->name)->where('language_id', $request->lang);
                 })->count();
                 if($check > 0){
                     DB::rollback();
                     return false;
                 }
-                $query = Models\MMajor::create($data);
+                $query = Models\MLine::create($data);
                 if(!$query) {
                     DB::rollback();
                     return false;
                 }
                 
                 $data_relationship['translation_id'] = $query->id;
-					$trans = self::renderTrans($query->m_major_translations(), $data_relationship);
+					$trans = self::renderTrans($query->m_line_translations(), $data_relationship);
                 if(!$trans) {
                     DB::rollback();
                     return false;
@@ -127,13 +127,13 @@ class Major extends Controller
         }
     }
     
-    public function getMajor($id, $language)
+    public function getLine($id, $language)
     {
         self::__construct();
         try {
-            $data = Models\MMajor::with('m_major_translations')
+            $data = Models\MLine::with('m_line_translations')
                     ->where('id', $id)
-                    ->whereHas('m_major_translations', function ($query) use ($language) {
+                    ->whereHas('m_line_translations', function ($query) use ($language) {
                         $query->where('language_id', $language);
                     })->first();
             if (!empty($data)) {
@@ -146,21 +146,21 @@ class Major extends Controller
         }
     }
 
-    public function getDTMajor()
+    public function getDTLine()
     {
         self::__construct();
         try {
-            $data = Models\MMajor::with('m_major_translations');
+            $data = Models\MLine::with('m_line_translations');
             return Datatables::of($data)
             ->editColumn('name', function ($v) {
-                if(!empty($v->m_major_translations->name)) {
-                    return $v->m_major_translations->name;
+                if(!empty($v->m_line_translations->name)) {
+                    return $v->m_line_translations->name;
                 } else {
                     return '';
                 }
             })
             ->filterColumn('name', function ($query, $keyword) {
-                $query->whereHas('m_major_translations', function ($rs) use($keyword) {
+                $query->whereHas('m_line_translations', function ($rs) use($keyword) {
                     $rs->where('name', 'LIKE', '%'.$keyword.'%');
                 });
             })

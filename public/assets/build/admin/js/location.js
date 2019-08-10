@@ -3,7 +3,7 @@ $(function(){
     var table_dynamic_location = $('.table-dynamic-location').DataTable({
 		"processing": true,
         "serverSide": true,
-        "ajax": base_admin+"/home/ajax/ajax_major",
+        "ajax": base_admin+"/home/ajax/ajax_line",
         "responsive": true,
         "scrollX": true,
         "pagingType": "full_numbers",
@@ -95,7 +95,7 @@ $(function(){
 var LocationFormSubmit = function(table) {
     $('#btnLocation').attr('disabled', true);
     $.ajax({
-        url: base_admin + "/home/ajax/ajax_major",
+        url: base_admin + "/home/ajax/ajax_line",
         type: "post",
         data: $('#LocationForm').serialize(),
         success: function(response) {
@@ -137,13 +137,13 @@ var LocationFormSubmit = function(table) {
 
 var UpdateLocation = function(id, lang) {
     $.ajax({
-        url: base_admin + "/home/ajax/ajax_major?lang=" + lang + "&id=" + id,
+        url: base_admin + "/home/ajax/ajax_line?lang=" + lang + "&id=" + id,
         type: "get",
         success: function(response) {
             if (response.code == '200') {
-                if (typeof response.data.m_major_translations !== "undefined") {
+                if (typeof response.data.m_line_translations !== "undefined") {
                     $('#modal-location #id').val(response.data.id);
-                    $('#modal-location #name').val(response.data.m_major_translations.name);
+                    $('#modal-location #name').val(response.data.m_line_translations.name);
                     if(response.data.status) {
                         $('#modal-location #status').prop( "checked", true );
                     } else {
@@ -181,7 +181,7 @@ var UpdateLocation = function(id, lang) {
 
 var DeleteLocation = function(id, table) {
     $.ajax({
-        url: base_admin + "/home/ajax/ajax_major?action=delete&id=" + id,
+        url: base_admin + "/home/ajax/ajax_line?action=delete&id=" + id,
         type: "post",
         success: function(response) {
             if (response.code == '200') {
@@ -227,13 +227,13 @@ var ClearFormLocation = function(lang, type) {
     $('#LocationForm').parsley().reset();
     $('#modal-location #lang').val(lang);
     if (type == "add") {
-        $('#modal-location #ttlModal').html('Add major');
+        $('#modal-location #ttlModal').html('Add line');
         $('#modal-location #action').val('insert');
         $('#LocationForm').each(function() {
             $(this).data('serialized', $(this).serialize())
         });
     } else {
-        $('#modal-location #ttlModal').html('Update major');
+        $('#modal-location #ttlModal').html('Update line');
         $('#modal-location #action').val('update');
     }
     $('#modal-location').find('button.btn-primary').prop('disabled', true);

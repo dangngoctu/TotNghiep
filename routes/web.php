@@ -31,7 +31,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         // Route::get('ajax_fail_mode_detail', 'Admin\AdminController@admin_fail_mode_detail_ajax')->name('admin.notify.fail.mode.detail.ajax');
         // Route::post('ajax_fail_mode_detail', 'Admin\AdminController@admin_post_fail_mode_detail_ajax')->name('admin.post.notify.fail.mode.detail.ajax');
 
-        //Major
+        //line
         Route::get('ajax_line', 'Admin\AdminController@admin_line_ajax')->name('admin.notify.line.ajax');
         Route::post('ajax_line', 'Admin\AdminController@admin_post_line_ajax')->name('admin.post.notify.line.ajax');
 
@@ -58,7 +58,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('fail_mode','Admin\AdminController@admin_fail_mode')->name('admin.failure.mode')->middleware('permission:admin_failure');
         // Route::get('fail_mode_detail','Admin\AdminController@admin_fail_mode_detail')->name('admin.failure.mode.detail')->middleware('permission:admin_failure_detail');
         Route::get('area','Admin\AdminController@admin_area')->name('admin.area')->middleware('permission:admin_area');
-        Route::get('device','Admin\AdminController@admin_device')->name('admin.device')->middleware('permission:admin_device');
+        Route::get('device','Admin\AdminController@admin_device')->name('admin.device')->middleware('permission:admin_machine');
         Route::get('line','Admin\AdminController@admin_line')->name('admin.line')->middleware('permission:admin_line');
         Route::get('report','Admin\AdminController@admin_report')->name('admin.page.report')->middleware('permission:admin_report');
         Route::get('setting','Admin\AdminController@admin_setting')->name('admin.setting.general')->middleware('permission:admin_setting');

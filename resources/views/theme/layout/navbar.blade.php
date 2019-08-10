@@ -52,7 +52,7 @@
                 @if(Auth::user()->can('admin_area')) 
                   <li><a href="{{route('admin.area')}}">Area</a></li>
                 @endif
-                @if(Auth::user()->can('admin_device')) 
+                @if(Auth::user()->can('admin_machine')) 
                   <li><a href="{{route('admin.device')}}">Machine</a></li>
                 @endif
               </ul>

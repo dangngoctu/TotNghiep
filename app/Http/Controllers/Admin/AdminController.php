@@ -304,13 +304,13 @@ class AdminController extends Controller
 		}
 	}
 
-	//Major
-	public function admin_major()
+	//Line
+	public function admin_line()
 	{
 		try {
 			if(Auth::user()) {
-				if(Auth::user()->can('admin_major') && Auth::user()->hasRole('admin')){
-					return view('theme.admin.page.major');
+				if(Auth::user()->can('admin_line') && Auth::user()->hasRole('admin')){
+					return view('theme.admin.page.line');
 				} else {
 					return redirect()->guest(route('admin.error'));
 				}
@@ -322,20 +322,20 @@ class AdminController extends Controller
 		}
 	}
 
-	public function admin_major_ajax(Request $request)
+	public function admin_line_ajax(Request $request)
 	{
 		try {
-			$instance = $this->instance(\App\Http\Controllers\Helper\Major::class);
+			$instance = $this->instance(\App\Http\Controllers\Helper\Line::class);
 			if($request->has('id') && !empty($request->id)) {
-				return $data = $instance->getMajor($request->id, $request->lang);
+				return $data = $instance->getLine($request->id, $request->lang);
 			}
-			return $data = $instance->getDTMajor();
+			return $data = $instance->getDTLine();
 		} catch (\Exception $e) {
 			return self::JsonExport(500, trans('app.error_500'));
 		}
 	}
 
-	public function admin_post_major_ajax(Request $request)
+	public function admin_post_line_ajax(Request $request)
 	{
 		$rules = array(
 			'name' => 'min:1|max:255',
@@ -351,8 +351,8 @@ class AdminController extends Controller
 			return self::JsonExport(403, trans('app.error_403'));
 		} else {
 			try {
-				$instance = $this->instance(\App\Http\Controllers\Helper\Major::class);
-				$data = $instance->postMajor($request);
+				$instance = $this->instance(\App\Http\Controllers\Helper\Line::class);
+				$data = $instance->postLine($request);
 				if ($data === true) {
 //					self::writelog('Update group category', trans('app.success'));
 					switch ($request->action) {
@@ -403,8 +403,8 @@ class AdminController extends Controller
 			if($request->has('id') && !empty($request->id)) {
 				return $data = $instance->getCourse($request->id, $request->lang);
 			}
-			if($request->has('majorId') && !empty($request->majorId)) {
-				return $data = $instance->getDTCourse($request->majorId);
+			if($request->has('lineId') && !empty($request->lineId)) {
+				return $data = $instance->getDTCourse($request->lineId);
 			}
 			return $data = $instance->getDTCourse();
 		} catch (\Exception $e) {
@@ -416,7 +416,7 @@ class AdminController extends Controller
 	{
 		$rules = array(
 			'action' => 'required|in:insert,update,delete,insertlist',
-			'major_id' => 'digits_between:1,10'
+			'line_id' => 'digits_between:1,10'
 		);
 		if($request->action == 'insertlist') {
 			$rules['listname'] = 'required';
@@ -484,11 +484,11 @@ class AdminController extends Controller
 			if($request->has('id') && !empty($request->id)) {
 				return $data = $instance->getClass($request->id, $request->lang);
 			}
-			if($request->has('majorId') && !empty($request->majorId)) {
+			if($request->has('lineId') && !empty($request->lineId)) {
 				if($request->has('courseId') && !empty($request->courseId)) {
-					return $data = $instance->getDTClass($request->majorId, $request->courseId);
+					return $data = $instance->getDTClass($request->lineId, $request->courseId);
 				}
-				return $data = $instance->getDTClass($request->majorId);
+				return $data = $instance->getDTClass($request->lineId);
 			}
 			return $data = $instance->getDTClass();
 		} catch (\Exception $e) {
@@ -571,7 +571,7 @@ class AdminController extends Controller
 			if($request->has('log_id') && !empty($request->log_id)) {
 				return $data = $instance->getDTUserActivities($request->log_id);
 			}
-			return $data = $instance->getDTUser($request->majorId);
+			return $data = $instance->getDTUser($request->lineId);
 		} catch (\Exception $e) {
 			return self::JsonExport(500, trans('app.error_500'));
 		}

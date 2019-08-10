@@ -1,7 +1,7 @@
 @extends('theme.layout.main')
 
 @section('page_title')
-    Major
+    Line
 @endsection
 
 @section('css')
@@ -12,9 +12,9 @@
     <div class="slim-pageheader">
         <ol class="breadcrumb slim-breadcrumb">
             <li class="breadcrumb-item"><a href="{{route('home.index')}}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Major</li>
+            <li class="breadcrumb-item active" aria-current="page">Line</li>
         </ol>
-        <h6 class="slim-pagetitle">Major</h6>
+        <h6 class="slim-pagetitle">Line</h6>
     </div><!-- slim-pageheader -->
 @endsection
 
@@ -27,8 +27,8 @@
                 </div>
             </span>
         </div>
-        @include('theme.admin.section.location.table_major')
-        @include('theme.admin.section.location.modal_major')
+        @include('theme.admin.section.location.table_line')
+        @include('theme.admin.section.location.modal_line')
     </div><!-- section-wrapper -->
     @include('theme.layout.modal_confirm_delete')
 @endsection
