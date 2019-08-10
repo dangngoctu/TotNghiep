@@ -44,7 +44,7 @@ class MLine extends Eloquent
 
 	public function m_line_translations()
 	{
-		return $this->hasMany(\App\Models\MLineTranslation::class, 'translation_id');
+		return $this->hasOne(\App\Models\MLineTranslation::class, 'translation_id');
 	}
 
 	public function system_managements()

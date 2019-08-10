@@ -101,15 +101,15 @@ class AdminController extends Controller
 
     public function admin_category_ajax(Request $request)
 	{
-		try {
+		// try {
             $instance = self::instance(\App\Http\Controllers\Helper\Category::class);
 			if($request->has('id') && !empty($request->id)) {
 				return $data = $instance->getCategory($request->id, $request->lang);
 			}
 			return $data = $instance->getDTCategory();
-		} catch (\Exception $e) {
-			return self::JsonExport(500, 'Vui lòng thử lại');
-		}
+		// } catch (\Exception $e) {
+		// 	return self::JsonExport(500, 'Vui lòng thử lại');
+		// }
     }
     
     public function admin_post_category_ajax(Request $request)

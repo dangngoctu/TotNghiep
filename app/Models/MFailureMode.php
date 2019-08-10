@@ -47,7 +47,7 @@ class MFailureMode extends Eloquent
 
 	public function m_failure_mode_translations()
 	{
-		return $this->hasMany(\App\Models\MFailureModeTranslation::class, 'translation_id');
+		return $this->hasOne(\App\Models\MFailureModeTranslation::class, 'translation_id');
 	}
 
 	public function m_notificaitons()

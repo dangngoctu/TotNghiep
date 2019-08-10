@@ -48,7 +48,7 @@ class MArea extends Eloquent
 
 	public function m_area_translations()
 	{
-		return $this->hasMany(\App\Models\MAreaTranslation::class, 'translation_id');
+		return $this->hasOne(\App\Models\MAreaTranslation::class, 'translation_id');
 	}
 
 	public function m_devices()

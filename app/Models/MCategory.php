@@ -38,7 +38,7 @@ class MCategory extends Eloquent
 
 	public function m_categories_translations()
 	{
-		return $this->hasMany(\App\Models\MCategoriesTranslation::class, 'translation_id');
+		return $this->hasOne(\App\Models\MCategoriesTranslation::class, 'translation_id');
 	}
 
 	public function m_falure_modes()

@@ -47,7 +47,7 @@ class MDevice extends Eloquent
 
 	public function m_device_translations()
 	{
-		return $this->hasMany(\App\Models\MDeviceTranslation::class, 'translation_id');
+		return $this->hasOne(\App\Models\MDeviceTranslation::class, 'translation_id');
 	}
 
 	public function system_managements()
