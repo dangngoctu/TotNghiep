@@ -34,32 +34,32 @@
                         </div>
                     </div>
                     <div class="row mg-t-30">
-                        <label class="col-sm-3 form-control-label">Major<span class="tx-danger">*</span></label>
+                        <label class="col-sm-3 form-control-label">Line<span class="tx-danger">*</span></label>
                         <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                            <div id="slWrapperMajor" class="parsley-select">
-                                <select class="form-control select2" style="width: 100%" id="major_id" name="major_id" data-placeholder="Select major"
-                                        data-parsley-class-handler="#slWrapperMajor"
-                                        data-parsley-errors-container="#slErrorContainerMajor"
-                                        required data-parsley-required-message="Major is required.">
-                                    <option label="Select major"></option>
+                            <div id="slWrapperLine" class="parsley-select">
+                                <select class="form-control select2" style="width: 100%" id="line_id" name="line_id" data-placeholder="Select line"
+                                        data-parsley-class-handler="#slWrapperLine"
+                                        data-parsley-errors-container="#slErrorContainerLine"
+                                        required data-parsley-required-message="Line is required.">
+                                    <option label="Select line"></option>
                                 </select>
-                                <div id="slErrorContainerMajor"></div>
+                                <div id="slErrorContainerLine"></div>
                             </div>
                         </div>
                     </div>
                     
                     
                     <div class="row mg-t-30 d-none">
-                        <label class="col-sm-3 form-control-label">Course<span class="tx-danger">*</span></label>
+                        <label class="col-sm-3 form-control-label">Area<span class="tx-danger">*</span></label>
                         <div class="col-sm-9 mg-t-10 mg-sm-t-0">
-                            <div id="slWrapperCourse" class="parsley-select">
-                                <select class="form-control select2" style="width: 100%" id="course_id" name="course_id" data-placeholder="Select course"
-                                        data-parsley-class-handler="#slWrapperCourse"
-                                        data-parsley-errors-container="#slErrorContainerCourse"
-                                        required data-parsley-required-message="Course is required.">
-                                    <option label="Select course"></option>
+                            <div id="slWrapperArea" class="parsley-select">
+                                <select class="form-control select2" style="width: 100%" id="area_id" name="area_id" data-placeholder="Select area"
+                                        data-parsley-class-handler="#slWrapperArea"
+                                        data-parsley-errors-container="#slErrorContainerArea"
+                                        required data-parsley-required-message="Area is required.">
+                                    <option label="Select area"></option>
                                 </select>
-                                <div id="slErrorContainerCourse"></div>
+                                <div id="slErrorContainerArea"></div>
                             </div>
                         </div>
                     </div>

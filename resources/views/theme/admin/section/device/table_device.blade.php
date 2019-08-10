@@ -4,8 +4,8 @@
         <tr>
         <th class="wd-100">ID</th>
         <th class="wd-200">Name</th>
-        <th class="wd-200">Major</th>
-        <th class="wd-200">Course</th>
+        <th class="wd-200">Line</th>
+        <th class="wd-200">Area</th>
         <th class="wd-100">Status</th>
         <th class="wd-100"></th>
         </tr>

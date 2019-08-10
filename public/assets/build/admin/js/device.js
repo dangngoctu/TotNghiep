@@ -1,59 +1,59 @@
-var majorId, courseId, table_dynamic_device,majorId_filter, courseId_filter;
+var lineId, areaId, table_dynamic_device,lineId_filter, areaId_filter;
 $(function(){
     'use strict';
     loadDataTable('','');
     $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: base_admin + "/home/ajax/ajax_major"
+        url: base_admin + "/home/ajax/ajax_line"
     }).then(function (data) {
         $.map(data.data, function (item) {
             var option = new Option(item.name, item.id, false, false);
-            $('#major_id_filter, #major_id').append(option);
+            $('#line_id_filter, #line_id').append(option);
         })
     });
-    $('#major_id_filter').on("select2:select", function (e) {
-        $('#course_id_filter').parents('.col-sm-6').removeClass('d-none');
-        var data_major_filter = e.params.data;
-        majorId_filter = data_major_filter.id;
-        $('#course_id_filter').empty();
-        $('#course_id_filter').append('<option label="Select course"></option>');
+    $('#line_id_filter').on("select2:select", function (e) {
+        $('#area_id_filter').parents('.col-sm-6').removeClass('d-none');
+        var data_line_filter = e.params.data;
+        lineId_filter = data_line_filter.id;
+        $('#area_id_filter').empty();
+        $('#area_id_filter').append('<option label="Select area"></option>');
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: base_admin + "/home/ajax/ajax_course?majorId="+majorId_filter,
+            url: base_admin + "/home/ajax/ajax_area?lineId="+lineId_filter,
         }).then(function (data) {
             $.map(data.data, function (item) {
                 var option = new Option(item.name, item.id, false, false);
-                $('#course_id_filter').append(option);
+                $('#area_id_filter').append(option);
             })
         });
-        loadDataTable(majorId_filter,'');
+        loadDataTable(lineId_filter,'');
     }).on('select2:unselect', function (e) {
-        $('#course_id_filter').parents('.col-sm-6').addClass('d-none');
-        $('#course_id_filter').empty();
+        $('#area_id_filter').parents('.col-sm-6').addClass('d-none');
+        $('#area_id_filter').empty();
         loadDataTable('','');
     });
 
-    $('#major_id').on("select2:select", function (e) {
-        $('#course_id').parents('.row').removeClass('d-none');
-        $('#course_id').empty();
-        $('#course_id').append('<option label="Select course"></option>');
-        var data_major = e.params.data;
-        majorId = data_major.id;
+    $('#line_id').on("select2:select", function (e) {
+        $('#area_id').parents('.row').removeClass('d-none');
+        $('#area_id').empty();
+        $('#area_id').append('<option label="Select area"></option>');
+        var data_line = e.params.data;
+        lineId = data_line.id;
         $.ajax({
             type: 'GET',
             dataType: 'json',
-            url: base_admin + "/home/ajax/ajax_course?majorId="+majorId,
+            url: base_admin + "/home/ajax/ajax_area?lineId="+lineId,
         }).then(function (data) {
             $.map(data.data, function (item) {
                 var option = new Option(item.name, item.id, false, false);
-                $('#course_id').append(option);
+                $('#area_id').append(option);
             })
         });
     }).on('select2:unselect', function (e) {
-        $('#course_id').parents('.mg-t-30').addClass('d-none');
-        $('#course_id').empty();
+        $('#area_id').parents('.mg-t-30').addClass('d-none');
+        $('#area_id').empty();
     });
 
     $(document).on('click', '.table-dynamic-device .table-action-edit', function (e) {
@@ -63,16 +63,16 @@ $(function(){
         UpdateDevice(id, lang);
     })
 
-    $('#course_id_filter').on("select2:select", function (e) {
-        var data_course_filter = e.params.data;
-        courseId_filter = data_course_filter.id;
-        loadDataTable(majorId_filter, courseId_filter);
+    $('#area_id_filter').on("select2:select", function (e) {
+        var data_area_filter = e.params.data;
+        areaId_filter = data_area_filter.id;
+        loadDataTable(lineId_filter, areaId_filter);
     }).on('select2:unselect', function (e) {
-        $('#course_id_filter').empty();
-        loadDataTable(majorId,'');
+        $('#area_id_filter').empty();
+        loadDataTable(lineId,'');
     });
     // Select2
-    $('#major_id, #course_id, #major_id_filter, #course_id_filter').select2({
+    $('#line_id, #area_id, #line_id_filter, #area_id_filter').select2({
         allowClear: true,
         minimumResultsForSearch: Infinity
     });
@@ -93,13 +93,13 @@ $(function(){
     });
     $('#confirm-delete-modal').on('click', '#confirm-delete', function (e) {
         var id = $('#confirm-delete-modal #id').val();
-        DeleteClass(id, table_dynamic_device);
+        DeleteDevice(id, table_dynamic_device);
     });
     $(document).on('click', '#addDevice', function (e) {
 		e.preventDefault();
         var lang = $(this).attr('data-lang');
         ClearFormDevice(lang, 'add');
-        $('#course_id').parents('.row').addClass('d-none');
+        $('#area_id').parents('.row').addClass('d-none');
 		$('#modal-device').modal('show');
     });
 	$(document).on('click', '#btnDevice', function (e) {
@@ -119,7 +119,7 @@ $(function(){
     });
 });
 
-var loadDataTable = function (majorId, courseId) {
+var loadDataTable = function (lineId, areaId) {
     if ($.fn.DataTable.isDataTable('.table-dynamic-device')) {
         $('.table-dynamic-device').DataTable().destroy();
         $('.table-dynamic-device tbody').empty();
@@ -127,7 +127,7 @@ var loadDataTable = function (majorId, courseId) {
     table_dynamic_device = $('.table-dynamic-device').DataTable({
 		"processing": true,
         "serverSide": true,
-        "ajax": base_admin+"/home/ajax/ajax_class?majorId="+majorId+'&courseId='+courseId,
+        "ajax": base_admin+"/home/ajax/ajax_device?lineId="+lineId+'&areaId='+areaId,
         "responsive": true,
         "scrollX": true,
         "pagingType": "full_numbers",
@@ -138,8 +138,8 @@ var loadDataTable = function (majorId, courseId) {
 		"columns": [
 			{"data": "id"},
 			{"data": "name"},
-            {"data": "major_name", "searchable": false},
-            {"data": "course_name", "searchable": false},
+            {"data": "line_name", "searchable": false},
+            {"data": "area_name", "searchable": false},
             {"data": "status", "searchable": false},
 			{"data": "action", "searchable": false}
 		],
@@ -182,12 +182,12 @@ var ClearFormDevice = function(lang, type) {
     $('#DeviceForm')[0].reset();
     $('#DeviceForm').parsley().reset();
     $('#modal-device #lang').val(lang);
-    $('#modal-device #course_id').val('').trigger('change.select2');
-    $('#modal-device #major_id').val('').trigger('change.select2');
+    $('#modal-device #area_id').val('').trigger('change.select2');
+    $('#modal-device #line_id').val('').trigger('change.select2');
     if (type == "add") {
-        $('#modal-device #ttlModal').html('Add class');
+        $('#modal-device #ttlModal').html('Add device');
         $('#modal-device #action').val('insert');
-        $('#modal-device #course_id').parents('.row').addClass('d-none');
+        $('#modal-device #area_id').parents('.row').addClass('d-none');
         $('#modal-device #listname').parents('.row').addClass('d-none');
         $('#modal-device #name').parents('.row').removeClass('d-none');
         $('#modal-device #name').prop('required',true);
@@ -204,7 +204,7 @@ var ClearFormDevice = function(lang, type) {
         $('#modal-device #listname').prop('required',true);
         $('#modal-device #listname').summernote('destroy');
         $('#modal-device #listname').val('');
-        $('#modal-device #course_id').parents('.row').addClass('d-none');
+        $('#modal-device #area_id').parents('.row').addClass('d-none');
         $('#modal-device #action').val(type);
     } else {
         $('#modal-device #ttlModal').html('Update Class');
@@ -219,26 +219,26 @@ var ClearFormDevice = function(lang, type) {
 
 var UpdateDevice = function(id, lang) {
     $.ajax({
-        url: base_admin + "/home/ajax/ajax_class?lang=" + lang + "&id=" + id,
+        url: base_admin + "/home/ajax/ajax_device?lang=" + lang + "&id=" + id,
         type: "get",
         success: function(response) {
             if (response.code == '200') {
-                if (typeof response.data.m_class_translations !== "undefined") {
+                if (typeof response.data.m_device_translations !== "undefined") {
                     $('#modal-device #id').val(response.data.id);
-                    $('#modal-device #name').val(response.data.m_class_translations.name);
-                    $('#modal-device #major_id').val(response.data.m_course.major_id).trigger('change.select2');
+                    $('#modal-device #name').val(response.data.m_device_translations.name);
+                    $('#modal-device #line_id').val(response.data.m_area.line_id).trigger('change.select2');
                     $.ajax({
                         type: 'GET',
                         dataType: 'json',
-                        url: base_admin + "/home/ajax/ajax_course?majorId="+response.data.m_course.major_id,
+                        url: base_admin + "/home/ajax/ajax_area?lineId="+response.data.m_area.line_id,
                     }).then(function (data) {
                         $.map(data.data, function (item) {
                             var option = new Option(item.name, item.id, false, false);
-                            $('#course_id').append(option);
+                            $('#area_id').append(option);
                         })
                     }).then(function(e){
-                        $('#modal-device #course_id').parents('.row').removeClass('d-none');
-                        $('#modal-device #course_id').val(response.data.course_id).trigger('change.select2');
+                        $('#modal-device #area_id').parents('.row').removeClass('d-none');
+                        $('#modal-device #area_id').val(response.data.area_id).trigger('change.select2');
                     });
                     if(response.data.status) {
                         $('#modal-device #status').prop( "checked", true );
@@ -277,7 +277,7 @@ var UpdateDevice = function(id, lang) {
 var DeviceFormSubmit = function(table) {
     $('#btnDevice').attr('disabled', true);
     $.ajax({
-        url: base_admin + "/home/ajax/ajax_class",
+        url: base_admin + "/home/ajax/ajax_device",
         type: "post",
         data: $('#DeviceForm').serialize(),
         success: function(response) {
@@ -316,9 +316,9 @@ var DeviceFormSubmit = function(table) {
     });
 };
 
-var DeleteClass = function(id, table) {
+var DeleteDevice = function(id, table) {
     $.ajax({
-        url: base_admin + "/home/ajax/ajax_class?action=delete&id=" + id,
+        url: base_admin + "/home/ajax/ajax_device?action=delete&id=" + id,
         type: "post",
         success: function(response) {
             if (response.code == '200') {

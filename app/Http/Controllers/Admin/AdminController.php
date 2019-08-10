@@ -459,13 +459,13 @@ class AdminController extends Controller
 		}
 	}
 
-	//Class
-	public function admin_class(Request $request)
+	//Device
+	public function admin_device(Request $request)
 	{
 		try {
 			if(Auth::user()) {
-				if(Auth::user()->can('admin_class')){
-					return view('theme.admin.page.class');
+				if(Auth::user()->can('admin_machine')){
+					return view('theme.admin.page.device');
 				} else {
 					return redirect()->guest(route('admin.error'));
 				}
@@ -477,26 +477,26 @@ class AdminController extends Controller
 		}
 	}
 
-	public function admin_class_ajax(Request $request)
+	public function admin_device_ajax(Request $request)
 	{
 		try {
-			$instance = $this->instance(\App\Http\Controllers\Helper\ClassController::class);
+			$instance = $this->instance(\App\Http\Controllers\Helper\DeviceController::class);
 			if($request->has('id') && !empty($request->id)) {
-				return $data = $instance->getClass($request->id, $request->lang);
+				return $data = $instance->getDevice($request->id, $request->lang);
 			}
 			if($request->has('lineId') && !empty($request->lineId)) {
 				if($request->has('areaId') && !empty($request->areaId)) {
-					return $data = $instance->getDTClass($request->lineId, $request->areaId);
+					return $data = $instance->getDTDevice($request->lineId, $request->areaId);
 				}
-				return $data = $instance->getDTClass($request->lineId);
+				return $data = $instance->getDTDevice($request->lineId);
 			}
-			return $data = $instance->getDTClass();
+			return $data = $instance->getDTDevice();
 		} catch (\Exception $e) {
 			return self::JsonExport(500, trans('app.error_500'));
 		}
 	}
 
-	public function admin_post_class_ajax(Request $request)
+	public function admin_post_device_ajax(Request $request)
 	{
 		$rules = array(
 			'area_id' => 'digits_between:1,10',
@@ -517,8 +517,8 @@ class AdminController extends Controller
 			return self::JsonExport(403, trans('app.error_403'));
 		} else {
 			try {
-				$instance = $this->instance(\App\Http\Controllers\Helper\ClassController::class);
-				$data = $instance->postClass($request);
+				$instance = $this->instance(\App\Http\Controllers\Helper\DeviceController::class);
+				$data = $instance->postDevice($request);
 				if ($data === true) {
 					switch ($request->action) {
 						case 'update':

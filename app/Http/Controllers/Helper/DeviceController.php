@@ -23,7 +23,7 @@ use Carbon\Carbon;
 use App\Models;
 use niklasravnsborg\LaravelPdf\Facades\Pdf;
 
-class ClassController extends Controller
+class DeviceController extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     protected $lang;
@@ -36,13 +36,13 @@ class ClassController extends Controller
     }
 
     //DEMO
-    public function postClass($request)
+    public function postDevice($request)
     {
         self::__construct();
         try {
             DB::beginTransaction();
             if($request->action == 'update' || $request->action == 'delete') {
-                $query = Models\MClass::find($request->id);
+                $query = Models\MDevice::find($request->id);
                 if(!$query) {
                     DB::rollback();
                     return false;
@@ -55,8 +55,8 @@ class ClassController extends Controller
             if($request->has('name') && !empty($request->name)) {
 				$data_relationship['name'] = $request->name;
             }
-			if($request->has('course_id') && !empty($request->course_id)) {
-				$data['course_id'] = $request->course_id;
+			if($request->has('area_id') && !empty($request->area_id)) {
+				$data['area_id'] = $request->area_id;
 			}
 			if($request->status == 'on') {
 				$data['status'] = 1;
@@ -65,8 +65,8 @@ class ClassController extends Controller
 			}
 					
             if($request->action == 'update') {
-				$check = Models\MClass::where('id', '!=', $query->id)
-					->whereHas('m_class_translations_all', function ($query_check) use ($request){
+				$check = Models\MDevice::where('id', '!=', $query->id)
+					->whereHas('m_device_translations_all', function ($query_check) use ($request){
 						$query_check->where('name', $request->name)->where('language_id', $request->lang);
 					})->count();
 				if($check > 0){
@@ -81,14 +81,14 @@ class ClassController extends Controller
 					}
 				}
 				if (count($data_relationship) > 0) {
-					$query->m_class_translations_all()->where('language_id', $request->lang)->update($data_relationship);
+					$query->m_device_translations_all()->where('language_id', $request->lang)->update($data_relationship);
 					if (!$query) {
 						DB::rollback();
 						return false;
 					}
 				}
             } else if($request->action == 'delete') {
-                $ref = Models\MClassTranslation::where('translation_id', $request->id);
+                $ref = Models\MDeviceTranslation::where('translation_id', $request->id);
                 $ref = $ref->delete();
                 if(!$ref) {
                     DB::rollback();
@@ -104,20 +104,20 @@ class ClassController extends Controller
                 $list_name = explode("\n", trim($list_name));
                 foreach($list_name as $key => $val){
                     if(!empty($val) && $val != ''){
-                        $check = Models\MClass::whereHas('m_class_translations_all', function ($query_check) use ($request){
+                        $check = Models\MDevice::whereHas('m_device_translations_all', function ($query_check) use ($request){
 							$query_check->where('name', $request->name)->where('language_id', $request->lang);
 						})->count();
                         if($check < 1){
                             $data_relationship['name'] = $val;
                         }
-                        $query = Models\MClass::create($data);
+                        $query = Models\MDevice::create($data);
 						if(!$query) {
 							DB::rollback();
 							return false;
 						}
 						
 						$data_relationship['translation_id'] = $query->id;
-						$trans = self::renderTrans($query->m_class_translations(), $data_relationship);
+						$trans = self::renderTrans($query->m_device_translations(), $data_relationship);
 						if(!$trans) {
 							DB::rollback();
 							return false;
@@ -125,21 +125,21 @@ class ClassController extends Controller
                     }
                 }
             } else {
-				$check = Models\MClass::whereHas('m_class_translations_all', function ($query_check) use ($request){
+				$check = Models\MDevice::whereHas('m_device_translations_all', function ($query_check) use ($request){
 					$query_check->where('name', $request->name)->where('language_id', $request->lang);
 				})->count();
 				if($check > 0){
 					DB::rollback();
 					return false;
 				}
-                $query = Models\MClass::create($data);
+                $query = Models\MDevice::create($data);
                 if(!$query) {
                     DB::rollback();
                     return false;
                 }
                 
                 $data_relationship['translation_id'] = $query->id;
-				$trans = self::renderTrans($query->m_class_translations(), $data_relationship);
+				$trans = self::renderTrans($query->m_device_translations(), $data_relationship);
                 if(!$trans) {
                     DB::rollback();
                     return false;
@@ -158,19 +158,19 @@ class ClassController extends Controller
 		}
     }
 
-	public function downloadClass($request, $language) {
+	public function downloadDevice($request, $language) {
 		try {
 			if($request->action == 'only') {
-				$device = MDevice::with('m_class_translations', 'm_area.m_line.m_line_translations')
+				$device = MDevice::with('m_device_translations', 'm_area.m_line.m_line_translations')
 				->where('id', $request->id)->where('status', 1)->first();
 				if($device) {
 					$pdf = PDF::loadView('pdf.qrcode_only', ['data' => $device]);
-					return $pdf->download('QR_'.$device->m_class_translations->name.'.pdf');
+					return $pdf->download('QR_'.$device->m_device_translations->name.'.pdf');
 				} else {
 					return false;
 				}
 			} else if($request->action == 'line') {
-				$device = MDevice::with('m_class_translations', 'm_area.m_line.m_line_translations')
+				$device = MDevice::with('m_device_translations', 'm_area.m_line.m_line_translations')
 				->whereHas('m_area.m_line', function ($query) use ($request) {
 					$query->where('id', $request->id);
 				})->where('status', 1)->get();
@@ -181,7 +181,7 @@ class ClassController extends Controller
 					return false;
 				}
 			} else {
-				$device = MDevice::with('m_class_translations', 'm_area.m_line.m_line_translations')->where('status', 1)->get();
+				$device = MDevice::with('m_device_translations', 'm_area.m_line.m_line_translations')->where('status', 1)->get();
 				if(count($device) > 0) {
 					$pdf = PDF::loadView('pdf.qrcode', ['data' => $device]);
 					return $pdf->download('QR_All_.pdf');
@@ -193,13 +193,13 @@ class ClassController extends Controller
 		}
 	}
 
-    public function getClass($id, $language)
+    public function getDevice($id, $language)
     {
         self::__construct();
         try {
-            $data = Models\MClass::with('m_class_translations', 'm_course.m_course_translations', 'm_course.m_major.m_major_translations')
+            $data = Models\MDevice::with('m_device_translations', 'm_area.m_area_translations', 'm_area.m_line.m_line_translations')
                     ->where('id', $id)
-                    ->whereHas('m_class_translations_all', function ($query) use ($language) {
+                    ->whereHas('m_device_translations_all', function ($query) use ($language) {
                         $query->where('language_id', $language);
                     })->first();
             if (!empty($data)) {
@@ -213,46 +213,46 @@ class ClassController extends Controller
     }
     
 
-    public function getDTClass($majorId = null, $courseId = null)
+    public function getDTDevice($lineId = null, $areaId = null)
     {
         self::__construct();
         try {
-			if($majorId != null && $majorId != 0){
-				if($courseId != null && $courseId != 0){
-					$data = Models\MClass::with('m_class_translations', 'm_course.m_course_translations', 'm_course.m_major.m_major_translations')
-					->where('course_id', $courseId);
+			if($lineId != null && $lineId != 0){
+				if($areaId != null && $areaId != 0){
+					$data = Models\MDevice::with('m_device_translations', 'm_area.m_area_translations', 'm_area.m_line.m_line_translations')
+					->where('area_id', $areaId);
 				} else {
-					$data = Models\MClass::with('m_class_translations', 'm_course.m_course_translations', 'm_course.m_major.m_major_translations')
-					->whereHas('m_course', function($query) use ($majorId){
-						$query->where('major_id', $majorId);
+					$data = Models\MDevice::with('m_device_translations', 'm_area.m_area_translations', 'm_area.m_line.m_line_translations')
+					->whereHas('m_area', function($query) use ($lineId){
+						$query->where('line_id', $lineId);
 					});
 				}
 			} else {
-				$data = Models\MClass::with('m_class_translations', 'm_course.m_course_translations', 'm_course.m_major.m_major_translations');
+				$data = Models\MDevice::with('m_device_translations', 'm_area.m_area_translations', 'm_area.m_line.m_line_translations');
 			}
 			return Datatables::of($data)
 			->editColumn('name', function ($v) {
-				if(!empty($v->m_class_translations->name)) {
-					return '<span class="tx-name">' . $v->m_class_translations->name . '</span><div class="d-none"><div class="img-qr tx-center">';
+				if(!empty($v->m_device_translations->name)) {
+					return '<span class="tx-name">' . $v->m_device_translations->name . '</span><div class="d-none"><div class="img-qr tx-center">';
 				} else {
 					return '';
 				}
 			})
 			->filterColumn('name', function ($query, $keyword) {
-				$query->whereHas('m_class_translations', function ($rs) use($keyword) {
+				$query->whereHas('m_device_translations', function ($rs) use($keyword) {
 						$rs->where('name', 'LIKE', '%'.$keyword.'%');
 				});
 			})
-			->editColumn('major_name', function ($v) {
-				if(!empty($v->m_course->m_major->m_major_translations->name)) {
-						return '' . $v->m_course->m_major->m_major_translations->name . '';
+			->editColumn('line_name', function ($v) {
+				if(!empty($v->m_area->m_line->m_line_translations->name)) {
+						return '' . $v->m_area->m_line->m_line_translations->name . '';
 				} else {
 						return '';
 				}
 			})
-			->editColumn('course_name', function ($v) {
-				if(!empty($v->m_course->m_course_translations->name)) {
-					return '' . $v->m_course->m_course_translations->name . '';
+			->editColumn('area_name', function ($v) {
+				if(!empty($v->m_area->m_area_translations->name)) {
+					return '' . $v->m_area->m_area_translations->name . '';
 				} else {
 					return '';
 				}
@@ -282,7 +282,7 @@ class ClassController extends Controller
 				return $action;
 			})
 			->addIndexColumn()
-			->rawColumns(['action', 'status', 'name', 'course_name', 'major_name'])
+			->rawColumns(['action', 'status', 'name', 'area_name', 'line_name'])
 			->make(true);
         } catch (\Exception $e) {
             return self::JsonExport(500, trans('app.error_500'));
