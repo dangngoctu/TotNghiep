@@ -41,7 +41,7 @@ class FailureMode extends Controller
         try {
             DB::beginTransaction();
             if($request->action == 'update' || $request->action == 'delete') {
-                $query = Models\MFalureMode::find($request->id);
+                $query = Models\MFailureMode::find($request->id);
                 if(!$query) {
                     DB::rollback();
                     return false;
@@ -57,8 +57,8 @@ class FailureMode extends Controller
             }
             
             if($request->action == 'update') {
-                $check = Models\MFalureMode::where('status', 1)->where('id', '!=', $query->id)
-                    ->whereHas('m_falure_mode_translations_all', function ($query_check) use ($request){
+                $check = Models\MFailureMode::where('status', 1)->where('id', '!=', $query->id)
+                    ->whereHas('m_failure_mode_translations_all', function ($query_check) use ($request){
                         $query_check->where('name', $request->name)->where('language_id', $request->lang);
                     })->count();
                 if($check > 0){
@@ -73,24 +73,24 @@ class FailureMode extends Controller
                     }
                 }
                 if (count($data_relationship) > 0) {
-                    $query->m_falure_mode_translations_all()->where('language_id', $request->lang)->update($data_relationship);
+                    $query->m_failure_mode_translations_all()->where('language_id', $request->lang)->update($data_relationship);
                     if (!$query) {
                         DB::rollback();
                         return false;
                     }
                 }
             } else if($request->action == 'delete') {
-                $failure_mode_detail = Models\MFalureModeDetail::where('falure_id', $request->id);
-                if(count($failure_mode_detail->get()) > 0) {
-                    DB::rollback();
-                    return false;
-                }
-                $noti = Models\MNotification::where('falure_id', $request->id);
+                // $failure_mode_detail = Models\MFalureModeDetail::where('falure_id', $request->id);
+                // if(count($failure_mode_detail->get()) > 0) {
+                //     DB::rollback();
+                //     return false;
+                // }
+                $noti = Models\MNotificaiton::where('failure_id', $request->id);
                 if(count($noti->get()) > 0) {
                     DB::rollback();
                     return false;
                 }
-                $ref = Models\MFalureModeTranslation::where('translation_id', $request->id);
+                $ref = Models\MFailureModeTranslation::where('translation_id', $request->id);
                 $ref = $ref->delete();
                 if(!$ref) {
                     DB::rollback();
@@ -102,21 +102,21 @@ class FailureMode extends Controller
                     return false;
                 }
             } else {
-                $check = Models\MFalureMode::where('status', 1)->whereHas('m_falure_mode_translations_all', function ($query_check) use ($request){
+                $check = Models\MFailureMode::where('status', 1)->whereHas('m_failure_mode_translations_all', function ($query_check) use ($request){
                     $query_check->where('name', $request->name)->where('language_id', $request->lang);
                 })->count();
                 if($check > 0){
                     DB::rollback();
                     return false;
                 }
-                $query = Models\MFalureMode::create($data);
+                $query = Models\MFailureMode::create($data);
                 if(!$query) {
                     DB::rollback();
                     return false;
                 }
                 
                 $data_relationship['translation_id'] = $query->id;
-                $trans = self::renderTrans($query->m_falure_mode_translations(), $data_relationship);
+                $trans = self::renderTrans($query->m_failure_mode_translations(), $data_relationship);
                 if(!$trans) {
                     DB::rollback();
                     return false;
@@ -139,9 +139,9 @@ class FailureMode extends Controller
     {
         self::__construct();
         try {
-            $data = Models\MFalureMode::with('m_falure_mode_translations', 'm_category')
+            $data = Models\MFailureMode::with('m_failure_mode_translations', 'm_category')
             ->where('id', $id)
-            ->whereHas('m_falure_mode_translations_all', function ($query) use ($language) {
+            ->whereHas('m_failure_mode_translations_all', function ($query) use ($language) {
                 $query->where('language_id', $language);
             })->first();
             if (!empty($data)) {
@@ -158,9 +158,9 @@ class FailureMode extends Controller
     {
         self::__construct();
         try {
-            $data = Models\MFalureMode::with('m_falure_mode_translations', 'm_category.m_categories_translations');
+            $data = Models\MFailureMode::with('m_failure_mode_translations', 'm_category.m_categories_translations');
                 if($categoryId) {
-                    $data = Models\MFalureMode::with('m_falure_mode_translations')
+                    $data = Models\MFailureMode::with('m_failure_mode_translations')
                         ->whereHas('m_category',function ($query) use ($categoryId){
                             $query->where('id', $categoryId);
                         })->where('status', 1);
@@ -168,14 +168,14 @@ class FailureMode extends Controller
                 }
             return Datatables::of($data)
                 ->editColumn('name', function ($v) {
-                    if(!empty($v->m_falure_mode_translations->name)) {
-                        return $v->m_falure_mode_translations->name;
+                    if(!empty($v->m_failure_mode_translations->name)) {
+                        return $v->m_failure_mode_translations->name;
                     } else {
                         return '';
                     }
                 })
                 ->filterColumn('name', function ($query, $keyword) {
-                    $query->whereHas('m_falure_mode_translations', function ($rs) use($keyword) {
+                    $query->whereHas('m_failure_mode_translations', function ($rs) use($keyword) {
                             $rs->where('name', 'LIKE', '%'.$keyword.'%');
                     });
                 })

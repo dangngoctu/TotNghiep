@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
  * Class MFailureMode
@@ -47,7 +48,12 @@ class MFailureMode extends Eloquent
 
 	public function m_failure_mode_translations()
 	{
-		return $this->hasOne(\App\Models\MFailureModeTranslation::class, 'translation_id');
+		return $this->hasOne(\App\Models\MFailureModeTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
+	}
+
+	public function m_failure_mode_translations_all()
+	{
+		return $this->hasMany(\App\Models\MFailureModeTranslation::class, 'translation_id');
 	}
 
 	public function m_notificaitons()

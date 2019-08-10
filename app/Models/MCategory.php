@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
  * Class MCategory
@@ -38,7 +39,12 @@ class MCategory extends Eloquent
 
 	public function m_categories_translations()
 	{
-		return $this->hasOne(\App\Models\MCategoriesTranslation::class, 'translation_id');
+		return $this->hasOne(\App\Models\MCategoriesTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
+	}
+
+	public function m_categories_translations_all()
+	{
+		return $this->hasMany(\App\Models\MCategoriesTranslation::class, 'translation_id');
 	}
 
 	public function m_falure_modes()

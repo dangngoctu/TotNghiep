@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
  * Class MDevice
@@ -47,7 +48,12 @@ class MDevice extends Eloquent
 
 	public function m_device_translations()
 	{
-		return $this->hasOne(\App\Models\MDeviceTranslation::class, 'translation_id');
+		return $this->hasOne(\App\Models\MDeviceTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
+	}
+
+	public function m_device_translations_all()
+	{
+		return $this->hasMany(\App\Models\MDeviceTranslation::class, 'translation_id');
 	}
 
 	public function system_managements()

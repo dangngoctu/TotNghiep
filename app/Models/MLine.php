@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
  * Class MLine
@@ -43,6 +44,11 @@ class MLine extends Eloquent
 	}
 
 	public function m_line_translations()
+	{
+		return $this->hasOne(\App\Models\MLineTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
+	}
+
+	public function m_line_translations_all()
 	{
 		return $this->hasOne(\App\Models\MLineTranslation::class, 'translation_id');
 	}

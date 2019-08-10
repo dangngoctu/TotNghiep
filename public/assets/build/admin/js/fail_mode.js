@@ -136,9 +136,9 @@ var UpdateFailureMode = function(id, lang) {
         type: "get",
         success: function(response) {
             if (response.code == '200') {
-                if (typeof response.data.m_falure_mode_translations !== "undefined") {
+                if (typeof response.data.m_failure_mode_translations !== "undefined") {
                     $('#modal-fail-mode #id').val(response.data.id);
-                    $('#modal-fail-mode #name').val(response.data.m_falure_mode_translations.name);
+                    $('#modal-fail-mode #name').val(response.data.m_failure_mode_translations.name);
                     $('#modal-fail-mode #category_id').val(response.data.m_category.id).trigger('change.select2');
                 }
                 $('#modal-fail-mode').modal('show');

@@ -8,6 +8,7 @@
 namespace App\Models;
 
 use Reliese\Database\Eloquent\Model as Eloquent;
+use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 /**
  * Class MArea
@@ -48,7 +49,12 @@ class MArea extends Eloquent
 
 	public function m_area_translations()
 	{
-		return $this->hasOne(\App\Models\MAreaTranslation::class, 'translation_id');
+		return $this->hasOne(\App\Models\MAreaTranslation::class, 'translation_id')->where('language_id', LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']);
+	}
+
+	public function m_area_translations_all()
+	{
+		return $this->hasMany(\App\Models\MAreaTranslation::class, 'translation_id');
 	}
 
 	public function m_devices()
