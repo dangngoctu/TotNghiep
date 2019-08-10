@@ -35,7 +35,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('ajax_line', 'Admin\AdminController@admin_line_ajax')->name('admin.notify.line.ajax');
         Route::post('ajax_line', 'Admin\AdminController@admin_post_line_ajax')->name('admin.post.notify.line.ajax');
 
-        //Course
+        //Area
         Route::get('ajax_area', 'Admin\AdminController@admin_area_ajax')->name('admin.notify.area.ajax');
         Route::post('ajax_area', 'Admin\AdminController@admin_post_area_ajax')->name('admin.post.notify.area.ajax');
 

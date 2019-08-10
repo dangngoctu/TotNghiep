@@ -21,14 +21,14 @@
                         </div>
                     </div>
                     <div class="row mg-t-30">
-                        <label class="col-sm-3 form-control-label">Major<span class="tx-danger">*</span></label>
+                        <label class="col-sm-3 form-control-label">Line<span class="tx-danger">*</span></label>
                         <div class="col-sm-9 mg-t-10 mg-sm-t-0">
                             <div id="slWrapperLocation" class="parsley-select">
-                                <select class="form-control select2" style="width: 100%" id="major_id_modal" name="major_id_modal" data-placeholder="Select Major"
+                                <select class="form-control select2" style="width: 100%" id="line_id_modal" name="line_id_modal" data-placeholder="Select Line"
                                         data-parsley-class-handler="#slWrapperLocation"
                                         data-parsley-errors-container="#slErrorContainerLocation"
-                                        required data-parsley-required-message="Major is required.">
-                                    <option label="Select major"></option>
+                                        required data-parsley-required-message="Line is required.">
+                                    <option label="Select line"></option>
                                 </select>
                                 <div id="slErrorContainerLocation"></div>
                             </div>

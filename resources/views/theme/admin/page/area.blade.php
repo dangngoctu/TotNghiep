@@ -1,7 +1,7 @@
 @extends('theme.layout.main')
 
 @section('page_title')
-    Course
+    Area
 @endsection
 
 @section('css')
@@ -12,9 +12,9 @@
     <div class="slim-pageheader">
         <ol class="breadcrumb slim-breadcrumb">
             <li class="breadcrumb-item"><a href="{{route('home.index')}}">Home</a></li>
-            <li class="breadcrumb-item active" aria-current="page">Course</li>
+            <li class="breadcrumb-item active" aria-current="page">Area</li>
         </ol>
-        <h6 class="slim-pagetitle">Course</h6>
+        <h6 class="slim-pagetitle">Area</h6>
     </div><!-- slim-pageheader -->
 @endsection
 
@@ -23,8 +23,8 @@
         <div class="row">
             <div class="col-sm-6 col-md-4 mg-b-10">
                 <div id="slWrapperLocation" class="parsley-select">
-                    <select class="form-control select2" style="width: 100%" id="major_id" name="major_id" data-placeholder="Select major">
-                        <option label="Select major"></option>
+                    <select class="form-control select2" style="width: 100%" id="line_id" name="line_id" data-placeholder="Select line">
+                        <option label="Select line"></option>
                     </select>
                 </div>
             </div>
@@ -41,8 +41,8 @@
                 </div>
             </span>
         </div>
-        @include('theme.admin.section.course.table_course')
-        @include('theme.admin.section.course.modal_course')
+        @include('theme.admin.section.area.table_area')
+        @include('theme.admin.section.area.modal_area')
     </div><!-- section-wrapper -->
     @include('theme.layout.modal_confirm_delete')
 @endsection

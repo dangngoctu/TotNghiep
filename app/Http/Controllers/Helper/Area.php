@@ -22,7 +22,7 @@ use Auth;
 use Carbon\Carbon;
 use App\Models;
 
-class Course extends Controller
+class Area extends Controller
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
     protected $lang;
@@ -35,13 +35,13 @@ class Course extends Controller
     }
 
     //DEMO
-    public function postCourse($request)
+    public function postArea($request)
     {
         self::__construct();
         try {
             DB::beginTransaction();
             if($request->action == 'update' || $request->action == 'delete') {
-                $query = Models\MCourse::find($request->id);
+                $query = Models\MArea::find($request->id);
                 if(!$query) {
                     DB::rollback();
                     return false;
@@ -52,8 +52,8 @@ class Course extends Controller
             if($request->has('name') && !empty($request->name)) {
 				$data_relationship['name'] = $request->name;
             }
-			if($request->has('major_id_modal') && !empty($request->major_id_modal)) {
-				$data['major_id'] = $request->major_id_modal;
+			if($request->has('line_id_modal') && !empty($request->line_id_modal)) {
+				$data['line_id'] = $request->line_id_modal;
 			}
 
 			if($request->status == 'on') {
@@ -63,8 +63,8 @@ class Course extends Controller
 			}
 					
             if($request->action == 'update') {
-				$check = Models\MCourse::where('id', '!=', $query->id)
-					->whereHas('m_course_translations_all', function ($query_check) use ($request){
+				$check = Models\MArea::where('id', '!=', $query->id)
+					->whereHas('m_area_translations_all', function ($query_check) use ($request){
 						$query_check->where('name', $request->name)->where('language_id', $request->lang);
 					})->count();
 				if($check > 0){
@@ -79,20 +79,20 @@ class Course extends Controller
 					}
 				}
 				if (count($data_relationship) > 0) {
-					$query->m_course_translations_all()->where('language_id', $request->lang)->update($data_relationship);
+					$query->m_area_translations_all()->where('language_id', $request->lang)->update($data_relationship);
 					if (!$query) {
 						DB::rollback();
 						return false;
 					}
 				}
             } else if($request->action == 'delete') {
-				$class = Models\MClass::where('course_id', $request->id);
+				$class = Models\MDevice::where('area_id', $request->id);
 				if(count($class->get()) > 0) {
 					DB::rollback();
 					return false;
 				}
 				
-                $ref = Models\MCourseTranslation::where('translation_id', $request->id);
+                $ref = Models\MAreaTranslation::where('translation_id', $request->id);
                 $ref = $ref->delete();
                 if(!$ref) {
                     DB::rollback();
@@ -108,20 +108,20 @@ class Course extends Controller
                 $list_name = explode("\n", trim($list_name));
                 foreach($list_name as $key => $val){
                     if(!empty($val) && $val != ''){
-                        $check = Models\MCourse::whereHas('m_course_translations_all', function ($query_check) use ($request){
+                        $check = Models\MArea::whereHas('m_area_translations_all', function ($query_check) use ($request){
 							$query_check->where('name', $request->name)->where('language_id', $request->lang);
 						})->count();
                         if($check < 1){
                             $data_relationship['name'] = $val;
                         }
-                        $query = Models\MCourse::create($data);
+                        $query = Models\MArea::create($data);
 						if(!$query) {
 							DB::rollback();
 							return false;
 						}
 						
 						$data_relationship['translation_id'] = $query->id;
-						$trans = self::renderTrans($query->m_course_translations(), $data_relationship);
+						$trans = self::renderTrans($query->m_area_translations(), $data_relationship);
 						if(!$trans) {
 							DB::rollback();
 							return false;
@@ -129,21 +129,21 @@ class Course extends Controller
                     }
                 }
             } else {
-				$check = Models\MCourse::whereHas('m_course_translations_all', function ($query_check) use ($request){
+				$check = Models\MArea::whereHas('m_area_translations_all', function ($query_check) use ($request){
 					$query_check->where('name', $request->name)->where('language_id', $request->lang);
 				})->count();
 				if($check > 0){
 					DB::rollback();
 					return false;
 				}
-                $query = Models\MCourse::create($data);
+                $query = Models\MArea::create($data);
                 if(!$query) {
                     DB::rollback();
                     return false;
                 }
                 
                 $data_relationship['translation_id'] = $query->id;
-				$trans = self::renderTrans($query->m_course_translations(), $data_relationship);
+				$trans = self::renderTrans($query->m_area_translations(), $data_relationship);
                 if(!$trans) {
                     DB::rollback();
                     return false;
@@ -162,13 +162,13 @@ class Course extends Controller
 		}
     }
 
-    public function getCourse($id, $language)
+    public function getArea($id, $language)
     {
         self::__construct();
         try {
-            $data = Models\MCourse::with('m_course_translations', 'm_major.m_major_translations')
+            $data = Models\MArea::with('m_area_translations', 'm_line.m_line_translations')
                     ->where('id', $id)
-                    ->whereHas('m_course_translations', function ($query) use ($language) {
+                    ->whereHas('m_area_translations', function ($query) use ($language) {
                         $query->where('language_id', $language);
                     })->first();
             if (!empty($data)) {
@@ -181,17 +181,17 @@ class Course extends Controller
         }
     }
 
-    public function getDTCourse($majorId = '')
+    public function getDTArea($lineId = '')
     {
         self::__construct();
         try {
-			if($majorId && !empty($majorId)) {
-				$data = Models\MCourse::with('m_course_translations', 'm_major.m_major_translations')
-					->whereHas('m_major',function ($query) use ($majorId){
-						$query->where('id', $majorId);
+			if($lineId && !empty($lineId)) {
+				$data = Models\MArea::with('m_area_translations', 'm_line.m_line_translations')
+					->whereHas('m_line',function ($query) use ($lineId){
+						$query->where('id', $lineId);
 					})->where('status', 1);
 			} else {
-				$data = Models\MCourse::with('m_course_translations','m_major.m_major_translations');
+				$data = Models\MArea::with('m_area_translations','m_line.m_line_translations');
 			}
 			return Datatables::of($data)
 				->editColumn('id', function ($v) {
@@ -202,20 +202,20 @@ class Course extends Controller
 						}
 				})
 				->editColumn('name', function ($v) {
-						if(!empty($v->m_course_translations->name)) {
-							return '' . $v->m_course_translations->name . '';
+						if(!empty($v->m_area_translations->name)) {
+							return '' . $v->m_area_translations->name . '';
 						} else {
 							return '';
 						}
 				})
 				->filterColumn('name', function ($query, $keyword) {
-						$query->whereHas('m_course_translations', function ($rs) use($keyword) {
+						$query->whereHas('m_area_translations', function ($rs) use($keyword) {
 								$rs->where('name', 'LIKE', '%'.$keyword.'%');
 						});
 				})
-				->editColumn('major_name', function ($v) {
-						if(!empty($v->m_major->m_major_translations->name)) {
-							return '' . $v->m_major->m_major_translations->name . '';
+				->editColumn('line_name', function ($v) {
+						if(!empty($v->m_line->m_line_translations->name)) {
+							return '' . $v->m_line->m_line_translations->name . '';
 						} else {
 							return '';
 						}

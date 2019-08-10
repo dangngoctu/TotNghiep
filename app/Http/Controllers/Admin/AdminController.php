@@ -378,13 +378,13 @@ class AdminController extends Controller
 		}
 	}
 
-	//Course
-	public function admin_course()
+	//Area
+	public function admin_area()
 	{
 		try {
 			if(Auth::user()) {
-				if(Auth::user()->can('admin_course') && Auth::user()->hasRole('admin')){
-					return view('theme.admin.page.course');
+				if(Auth::user()->can('admin_area') && Auth::user()->hasRole('admin')){
+					return view('theme.admin.page.area');
 				} else {
 					return redirect()->guest(route('admin.error'));
 				}
@@ -396,23 +396,23 @@ class AdminController extends Controller
 		}
 	}
 
-	public function admin_course_ajax(Request $request)
+	public function admin_area_ajax(Request $request)
 	{
 		try {
-			$instance = $this->instance(\App\Http\Controllers\Helper\Course::class);
+			$instance = $this->instance(\App\Http\Controllers\Helper\Area::class);
 			if($request->has('id') && !empty($request->id)) {
-				return $data = $instance->getCourse($request->id, $request->lang);
+				return $data = $instance->getArea($request->id, $request->lang);
 			}
 			if($request->has('lineId') && !empty($request->lineId)) {
-				return $data = $instance->getDTCourse($request->lineId);
+				return $data = $instance->getDTArea($request->lineId);
 			}
-			return $data = $instance->getDTCourse();
+			return $data = $instance->getDTArea();
 		} catch (\Exception $e) {
 			return self::JsonExport(500, trans('app.error_500'));
 		}
 	}
 
-	public function admin_post_course_ajax(Request $request)
+	public function admin_post_area_ajax(Request $request)
 	{
 		$rules = array(
 			'action' => 'required|in:insert,update,delete,insertlist',
@@ -433,8 +433,8 @@ class AdminController extends Controller
 			return self::JsonExport(403, trans('app.error_403'));
 		} else {
 			try {
-				$instance = $this->instance(\App\Http\Controllers\Helper\Course::class);
-				$data = $instance->postCourse($request);
+				$instance = $this->instance(\App\Http\Controllers\Helper\Area::class);
+				$data = $instance->postArea($request);
 				if ($data === true) {
 					switch ($request->action) {
 						case 'update':
@@ -485,8 +485,8 @@ class AdminController extends Controller
 				return $data = $instance->getClass($request->id, $request->lang);
 			}
 			if($request->has('lineId') && !empty($request->lineId)) {
-				if($request->has('courseId') && !empty($request->courseId)) {
-					return $data = $instance->getDTClass($request->lineId, $request->courseId);
+				if($request->has('areaId') && !empty($request->areaId)) {
+					return $data = $instance->getDTClass($request->lineId, $request->areaId);
 				}
 				return $data = $instance->getDTClass($request->lineId);
 			}
@@ -499,7 +499,7 @@ class AdminController extends Controller
 	public function admin_post_class_ajax(Request $request)
 	{
 		$rules = array(
-			'course_id' => 'digits_between:1,10',
+			'area_id' => 'digits_between:1,10',
 			'action' => 'required|in:insert,update,delete,insertlist',
 		);
 		if($request->action == 'insertlist') {

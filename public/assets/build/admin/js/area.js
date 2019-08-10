@@ -4,14 +4,14 @@ $(function(){
     // Select2
     loadDataTable('');
     $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
-    $('#major_id, #major_id_modal').select2({
+    $('#line_id, #line_id_modal').select2({
         minimumResultsForSearch: Infinity,
         allowClear: true
     });
-    $('#major_id, #major_id_modal').on("select2:select", function (e) {
+    $('#line_id, #line_id_modal').on("select2:select", function (e) {
         var data = e.params.data;
-        var major = data.id;
-        loadDataTable(major);
+        var line = data.id;
+        loadDataTable(line);
     })
     $(document).on('click', '.table-dynamic-area .table-action-delete', function (e) {
         e.preventDefault();
@@ -59,11 +59,11 @@ $(function(){
     $.ajax({
         type: 'GET',
         dataType: 'json',
-        url: base_admin + "/home/ajax/ajax_major"
+        url: base_admin + "/home/ajax/ajax_line"
     }).then(function (data) {
         $.map(data.data, function (item) {
             var option = new Option(item.name, item.id, false, false);
-            $('#major_id_modal, #major_id').append(option);
+            $('#line_id_modal, #line_id').append(option);
         })
     });
     $('#AreaForm').on('change input', function() {
@@ -71,7 +71,7 @@ $(function(){
     });
 
     
-    $('#major_id').on('select2:unselect', function (e) {
+    $('#line_id').on('select2:unselect', function (e) {
         loadDataTable('');
     });
     $('#AreaForm').on('change input', function() {
@@ -83,9 +83,9 @@ var ClearFormArea = function(lang, type) {
     $('#AreaForm')[0].reset();
     $('#AreaForm').parsley().reset();
     $('#modal-area #lang').val(lang);
-    $('#modal-area #major_id').val('').trigger('change.select2');
+    $('#modal-area #line_id').val('').trigger('change.select2');
     if (type == "add") {
-        $('#modal-area #ttlModal').html('Add course');
+        $('#modal-area #ttlModal').html('Add area');
         $('#modal-area #action').val('insert');
         $('#modal-area #listname').parents('.row').addClass('d-none');
         $('#modal-area #name').parents('.row').removeClass('d-none');
@@ -96,7 +96,7 @@ var ClearFormArea = function(lang, type) {
             $(this).data('serialized', $(this).serialize())
         });
     } else if(type == "insertlist"){
-        $('#modal-area #ttlModal').html('Add list course');
+        $('#modal-area #ttlModal').html('Add list area');
         $('#modal-area #listname').parents('.row').removeClass('d-none');
         $('#modal-area #name').parents('.row').addClass('d-none');
         $('#modal-area #name').prop('required',false);
@@ -105,7 +105,7 @@ var ClearFormArea = function(lang, type) {
         $('#modal-area #listname').val('');
         $('#modal-area #action').val(type);
     } else {
-        $('#modal-area #ttlModal').html('Update course');
+        $('#modal-area #ttlModal').html('Update area');
         $('#modal-area #listname').parents('.row').addClass('d-none');
         $('#modal-area #name').parents('.row').removeClass('d-none');
         $('#modal-area #name').prop('required',true);
@@ -118,7 +118,7 @@ var ClearFormArea = function(lang, type) {
 var AreaFormSubmit = function(table) {
     $('#btnArea').attr('disabled', true);
     $.ajax({
-        url: base_admin + "/home/ajax/ajax_course",
+        url: base_admin + "/home/ajax/ajax_area",
         type: "post",
         data: $('#AreaForm').serialize(),
         success: function(response) {
@@ -160,14 +160,14 @@ var AreaFormSubmit = function(table) {
 
 var UpdateArea = function(id, lang) {
     $.ajax({
-        url: base_admin + "/home/ajax/ajax_course?lang=" + lang + "&id=" + id,
+        url: base_admin + "/home/ajax/ajax_area?lang=" + lang + "&id=" + id,
         type: "get",
         success: function(response) {
             if (response.code == '200') {
-                if (typeof response.data.m_course_translations !== "undefined") {
+                if (typeof response.data.m_area_translations !== "undefined") {
                     $('#modal-area #id').val(response.data.id);
-                    $('#modal-area #name').val(response.data.m_course_translations.name);
-                    $('#modal-area #major_id_modal').val(response.data.major_id).trigger('change.select2');
+                    $('#modal-area #name').val(response.data.m_area_translations.name);
+                    $('#modal-area #line_id_modal').val(response.data.line_id).trigger('change.select2');
                     if(response.data.status) {
                         $('#modal-area #status').prop( "checked", true );
                     } else {
@@ -204,7 +204,7 @@ var UpdateArea = function(id, lang) {
 
 var DeleteArea = function(id, table) {
     $.ajax({
-        url: base_admin + "/home/ajax/ajax_course?action=delete&id=" + id,
+        url: base_admin + "/home/ajax/ajax_area?action=delete&id=" + id,
         type: "post",
         success: function(response) {
             if (response.code == '200') {
@@ -245,7 +245,7 @@ var DeleteArea = function(id, table) {
     });
 };
 
-var loadDataTable = function (major) {
+var loadDataTable = function (line) {
     if ($.fn.DataTable.isDataTable('.table-dynamic-area')) {
         $('.table-dynamic-area').DataTable().destroy();
         $('.table-dynamic-area tbody').empty();
@@ -253,7 +253,7 @@ var loadDataTable = function (major) {
     table_dynamic_area = $('.table-dynamic-area').DataTable({
 		"processing": true,
         "serverSide": true,
-        "ajax": base_admin+"/home/ajax/ajax_course?majorId="+major,
+        "ajax": base_admin+"/home/ajax/ajax_area?lineId="+line,
         "responsive": true,
         "scrollX": true,
         "pagingType": "full_numbers",
@@ -264,7 +264,7 @@ var loadDataTable = function (major) {
 		"columns": [
 			{"data": "id"},
 			{"data": "name"},
-            {"data": "major_name", "searchable": false},
+            {"data": "line_name", "searchable": false},
             {"data": "status", "searchable": false},
 			{"data": "action", "searchable": false}
 		],
