@@ -322,6 +322,10 @@ var ClearFormUser = function(lang, type) {
         $('#modal-user #action').val('update');
     }
     $('#modal-user').find('button.btn-primary').prop('disabled', true);
+
+    $('#UserForm').on('change input', function() {
+        $('#modal-user').find('button.btn-primary').prop('disabled', $(this).serialize() == $(this).data('serialized'));
+    });
 };
 
 var UpdateUser = function(id, lang) {

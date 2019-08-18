@@ -131,18 +131,18 @@
                             </div>
                         </div>
                     </div>
-                    <div id="blockLocation" class="d-none">
+                    <div id="blockLine" class="d-none">
                         <div class="row mg-t-30">
-                            <label class="col-sm-4 form-control-label">Location<span class="tx-danger">*</span></label>
+                            <label class="col-sm-4 form-control-label">Line<span class="tx-danger">*</span></label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
-                                <div id="slWrapperLocation" class="parsley-select">
-                                    <select class="form-control select2" style="width: 100%" id="site_id" name="site_id" data-placeholder="Select location"
-                                            data-parsley-class-handler="#slWrapperLocation"
-                                            data-parsley-errors-container="#slErrorContainerLocation"
-                                            required data-parsley-required-message="Location is required.">
-                                        <option label="Select section"></option>
+                                <div id="slWrapperLine" class="parsley-select">
+                                    <select class="form-control select2" style="width: 100%" id="line_select" name="line_select" data-placeholder="Select line"
+                                            data-parsley-class-handler="#slWrapperLine"
+                                            data-parsley-errors-container="#slErrorContainerLine"
+                                            required data-parsley-required-message="Line is required.">
+                                        <option label="Select line"></option>
                                     </select>
-                                    <div id="slErrorContainerLocation"></div>
+                                    <div id="slErrorContainerLine"></div>
                                 </div>
                             </div>
                         </div>

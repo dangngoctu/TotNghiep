@@ -23,15 +23,15 @@
         <div class="row">
             <div class="col-sm-6 col-md-4 mg-b-10">
                 <div id="slWrapperLocation" class="parsley-select">
-                    <select class="form-control select2" style="width: 100%" id="line_id_filter" name="line_id_filter" data-placeholder="Select major">
-                        <option label="Select major"></option>
+                    <select class="form-control select2" style="width: 100%" id="line_id_filter" name="line_id_filter" data-placeholder="Select line">
+                        <option label="Select Line"></option>
                     </select>
                 </div>
             </div>
             <div class="col-sm-6 col-md-4 mg-b-10 d-none">
                 <div id="slWrapperLocation" class="parsley-select">
-                    <select class="form-control select2 " style="width: 100%" id="area_id_filter" name="area_id_filter" data-placeholder="Select course">
-                        <option label="Select course"></option>
+                    <select class="form-control select2 " style="width: 100%" id="area_id_filter" name="area_id_filter" data-placeholder="Select area">
+                        <option label="Select area"></option>
                     </select>
                 </div>
             </div>
