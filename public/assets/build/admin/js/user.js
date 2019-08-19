@@ -133,13 +133,7 @@ $(function(){
         minimumResultsForSearch: Infinity
     }).on('select2:select', function (e) {
         var data = e.params.data;
-        if(data.id == "1") {
-            $('#areaMachine').prop('multiple', false).attr('name', 'areaMachine').select2({
-                minimumResultsForSearch: Infinity
-            });
-        } else {
-            $('#areaMachine').prop('multiple', true).attr('name', 'areaMachine[]').select2();
-        }
+        switchRole(data.id);
     });
     $('#areaMachine').select2();
     $('.datepicker').mask('99/99/9999');
@@ -155,6 +149,19 @@ $(function(){
         e.preventDefault();
         $('#modal-import-user #ttlModal').html('Import User');
         $('#modal-import-user').modal('show');
+    });
+
+    $('#line_select').on("select2:select", function (e) {
+        $('#area_select').parents('.row').removeClass('d-none');
+        $('#UserForm #area_select').prop('required',true);
+        $('#UserForm').parsley().reset();
+        var data = e.params.data;
+        switchFunction('#area_select', data.id);
+    }).on('select2:unselect', function (e) {
+        $('#area_select').parents('.row').addClass('d-none');
+        $('#UserForm #section_id').prop('required',false);
+        $('#UserForm').parsley().reset();
+        $('#area_select').empty();
     });
 
     if(typeof api_fileuploader !== 'undefined') {
@@ -388,4 +395,84 @@ var UpdateUser = function(id, lang) {
             });
         }
     });
+};
+
+var switchRole = function (id) {
+    switch (id)
+    {
+        case "2":
+            $('#UserForm #line_select').prop('required',false);
+            $('#UserForm').parsley().reset();
+            $('#UserForm #line_select').val('').trigger('change.select2');
+            $('#line_select, #area_selected').empty();
+            line_id = '', area_id = '';
+            break;
+        case "3":
+            $('#blockLine').removeClass('d-none');
+            if ($('#UserForm #line_select').data("select2")) {
+                $('#UserForm #line_select').select2('destroy');
+                $('#UserForm #line_select').select2({
+                    allowClear: true,
+                    minimumResultsForSearch: Infinity
+                });
+            }
+            $('#UserForm #line_select').prop('required',true);
+            $('#UserForm').parsley().reset();
+            $('#UserForm #line_select').val('').trigger('change.select2');
+            $('#line_select, #area_selected').empty();
+            line_id = '', area_id = '';
+            break;
+        case "4":
+            $('#blockLine').removeClass('d-none');
+            $('#blockArea').removeClass('d-none');
+            if ($('#UserForm #line_select').data("select2")) {
+                $('#UserForm #line_select').select2('destroy');
+                $('#UserForm #line_select').select2({
+                    allowClear: true,
+                    minimumResultsForSearch: Infinity
+                });
+            }
+            if ($('#UserForm #area_select').data("select2")) {
+                $('#UserForm #area_select').select2('destroy');
+                $('#UserForm #area_select').select2({
+                    allowClear: true,
+                    minimumResultsForSearch: Infinity
+                });
+            }
+            $('#UserForm #line_select').prop('required',true);
+            $('#UserForm #area_select').prop('required',true);
+            $('#UserForm').parsley().reset();
+            $('#UserForm #line_select').val('').trigger('change.select2');
+            $('#UserForm #area_select').val('').trigger('change.select2');
+            $('#line_select, #area_selected').empty();
+            line_id = '', area_id = '';
+            break;
+        default:
+            $('#UserForm #line_select').prop('required',false);
+            $('#UserForm').parsley().reset();
+            $('#UserForm #line_select').val('').trigger('change.select2');
+            $('#line_select, #area_selected').empty();
+            line_id = '', area_id = '';
+            break;
+    }
+};
+
+var switchFunction = function (ele, data) {
+    $(ele).empty();
+    switch (ele) {
+        case '#area_select':
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: base_admin + "/home/ajax/ajax_area?lineId=" + data
+            }).then(function (data) {
+                $.map(data, function (item) {
+                    var option = new Option(item.m_section_translations.name, item.id, false, false);
+                    $(ele).append(option);
+                })
+            }).then(function (data) {
+                $('#UserForm #section_id').val(site_id).trigger('change.select2');
+            });
+            break;
+    }
 };

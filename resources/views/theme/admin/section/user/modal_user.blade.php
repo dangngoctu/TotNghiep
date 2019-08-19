@@ -132,7 +132,7 @@
                         </div>
                     </div>
                     <div id="blockLine" class="d-none">
-                        <div class="row mg-t-30">
+                        <div class="row mg-t-30" class="d-none">
                             <label class="col-sm-4 form-control-label">Line<span class="tx-danger">*</span></label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
                                 <div id="slWrapperLine" class="parsley-select">
@@ -143,6 +143,22 @@
                                         <option label="Select line"></option>
                                     </select>
                                     <div id="slErrorContainerLine"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="blockArea" class="d-none">
+                        <div class="row mg-t-30" class="d-none">
+                            <label class="col-sm-4 form-control-label">Area<span class="tx-danger">*</span></label>
+                            <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                                <div id="slWrapperArea" class="parsley-select">
+                                    <select class="form-control select2" style="width: 100%" id="area_select" name="area_select" data-placeholder="Select area"
+                                            data-parsley-class-handler="#slWrapperArea"
+                                            data-parsley-errors-container="#slErrorContainerArea"
+                                            required data-parsley-required-message="Area is required.">
+                                        <option label="Select area"></option>
+                                    </select>
+                                    <div id="slErrorContainerArea"></div>
                                 </div>
                             </div>
                         </div>
