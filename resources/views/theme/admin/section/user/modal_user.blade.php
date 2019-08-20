@@ -20,7 +20,7 @@
                                    maxlength="128" required data-parsley-required-message="Name is required.">
                         </div>
                     </div>
-                    <div class="row  mg-t-30">
+                    <div class="row mg-t-30">
                         <label class="col-sm-4 form-control-label">Email <span class="tx-danger">*</span></label>
                         <div class="col-sm-8 mg-t-10 mg-sm-t-0">
                             <input type="text" class="form-control" name="email" id="email" value=""
@@ -131,8 +131,8 @@
                             </div>
                         </div>
                     </div>
-                    <div id="blockLine" class="d-none">
-                        <div class="row mg-t-30" class="d-none">
+                    <div id="blockLine" class="">
+                        <div class="row mg-t-30" class="">
                             <label class="col-sm-4 form-control-label">Line<span class="tx-danger">*</span></label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
                                 <div id="slWrapperLine" class="parsley-select">

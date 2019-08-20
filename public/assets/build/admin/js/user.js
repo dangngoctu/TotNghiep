@@ -1,8 +1,9 @@
-var table_dynamic_user, table_dynamic_log, majorId_filter, api_fileuploader;
+var table_dynamic_user, table_dynamic_log, line_filter, api_fileuploader;
 
 $(function(){
     'use strict';
     loadDataTable('');
+
     $.ajax({
         type: 'GET',
         dataType: 'json',
@@ -10,8 +11,10 @@ $(function(){
     }).then(function (data) {
         $.map(data.data, function (item) {
             var option = new Option(item.name, item.id, false, false);
-            $('#line_id_filter').append(option);
+            $('#line_id_filter, #line_select').append(option);
         })
+    }).then(function () {
+        $('#line_id_filter').val('').trigger('change.select2');
     });
     $.ajax({
         type: 'GET',
@@ -51,9 +54,9 @@ $(function(){
     });
 
     $('#line_id_filter').on("select2:select", function (e) {
-        var data_major_filter = e.params.data;
-        majorId_filter = data_major_filter.id;
-        loadDataTable(majorId_filter);
+        var data_line_filter = e.params.data;
+        line_filter = data_line_filter.id;
+        loadDataTable(line_filter);
     }).on('select2:unselect', function (e) {
         loadDataTable('');
     });
@@ -244,7 +247,7 @@ var fileuploader = function () {
     }
 };
 
-var loadDataTable = function (majorId, courseId) {
+var loadDataTable = function (lineId, courseId) {
     if ($.fn.DataTable.isDataTable('.table-dynamic-user')) {
         $('.table-dynamic-user').DataTable().destroy();
         $('.table-dynamic-user tbody').empty();
@@ -252,7 +255,7 @@ var loadDataTable = function (majorId, courseId) {
     table_dynamic_user = $('.table-dynamic-user').DataTable({
 		"processing": true,
         "serverSide": true,
-        "ajax": base_admin+"/home/ajax/ajax_user?majorId="+majorId,
+        "ajax": base_admin+"/home/ajax/ajax_user?lineId="+lineId,
         "responsive": true,
         "scrollX": true,
         "ordering": false,
@@ -401,9 +404,11 @@ var switchRole = function (id) {
     switch (id)
     {
         case "2":
+            $('#blockLine').addClass('d-none');
+            $('#blockArea').addClass('d-none');
             $('#UserForm #line_select').prop('required',false);
+            $('#UserForm #area_select').prop('required',false);
             $('#UserForm').parsley().reset();
-            $('#UserForm #line_select').val('').trigger('change.select2');
             $('#line_select, #area_selected').empty();
             line_id = '', area_id = '';
             break;
@@ -418,7 +423,7 @@ var switchRole = function (id) {
             }
             $('#UserForm #line_select').prop('required',true);
             $('#UserForm').parsley().reset();
-            $('#UserForm #line_select').val('').trigger('change.select2');
+            // $('#UserForm #line_select').val('').trigger('change.select2');
             $('#line_select, #area_selected').empty();
             line_id = '', area_id = '';
             break;
