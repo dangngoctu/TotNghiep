@@ -97,7 +97,10 @@ $(function(){
     //Add User
     $(document).on('click', '#addUser', function (e) {
         e.preventDefault();
-        $('#modal-user #ttlModal').html('Add User');
+        var lang = $(this).attr('data-lang');
+        ClearFormUser(lang, 'add');
+        $('#blockLine, #blockLine, #blockArea').addClass('d-none');
+        $('#line_select, #area_select').parents('.row').addClass('d-none');
         $('#modal-user').modal('show');
     });
 
@@ -155,7 +158,6 @@ $(function(){
     });
 
     $('#line_select').on("select2:select", function (e) {
-        $('#area_select').parents('.row').removeClass('d-none');
         $('#UserForm #area_select').prop('required',true);
         $('#UserForm').parsley().reset();
         var data = e.params.data;
@@ -317,7 +319,9 @@ var ClearFormUser = function(lang, type) {
     fileuploader();
     $('#modal-user #lang').val(lang);
     $('#modal-user #major_id').val('').trigger('change.select2');
-    $('#modal-user #machine_id').val('').trigger('change.select2');
+    $('#modal-user #area_select').val('').trigger('change.select2');
+    $('#modal-user #line_select').val('').trigger('change.select2');
+    
     if (type == "add") {
         $('#modal-user #ttlModal').html('Add user');
         $('#modal-user #action').val('insert');
@@ -414,6 +418,7 @@ var switchRole = function (id) {
             break;
         case "3":
             $('#blockLine').removeClass('d-none');
+            $('#line_select').parents('.row').removeClass('d-none');
             if ($('#UserForm #line_select').data("select2")) {
                 $('#UserForm #line_select').select2('destroy');
                 $('#UserForm #line_select').select2({
@@ -423,12 +428,14 @@ var switchRole = function (id) {
             }
             $('#UserForm #line_select').prop('required',true);
             $('#UserForm').parsley().reset();
-            // $('#UserForm #line_select').val('').trigger('change.select2');
+            $('#UserForm #line_select').val('').trigger('change.select2');
             $('#line_select, #area_selected').empty();
             line_id = '', area_id = '';
+            switchFunction('#line_select', line_id);
             break;
         case "4":
             $('#blockLine').removeClass('d-none');
+            $('#line_select').parents('.row').removeClass('d-none');
             $('#blockArea').removeClass('d-none');
             if ($('#UserForm #line_select').data("select2")) {
                 $('#UserForm #line_select').select2('destroy');
@@ -451,6 +458,7 @@ var switchRole = function (id) {
             $('#UserForm #area_select').val('').trigger('change.select2');
             $('#line_select, #area_selected').empty();
             line_id = '', area_id = '';
+            switchFunction('#line_select', line_id);
             break;
         default:
             $('#UserForm #line_select').prop('required',false);
@@ -466,6 +474,8 @@ var switchFunction = function (ele, data) {
     $(ele).empty();
     switch (ele) {
         case '#area_select':
+            $('#blockArea').removeClass('d-none');
+            $('#area_select').parents('.row').removeClass('d-none');
             $.ajax({
                 type: 'GET',
                 dataType: 'json',
@@ -477,6 +487,19 @@ var switchFunction = function (ele, data) {
                 })
             }).then(function (data) {
                 $('#UserForm #section_id').val(site_id).trigger('change.select2');
+            });
+            break;
+        case '#line_select':
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: base_admin + "/home/ajax/ajax_line"
+            }).then(function (data) {
+                $('#line_select').append("<option>Select line</option>");
+                $.map(data.data, function (item) {
+                    var option = new Option(item.name, item.id, false, false);
+                    $('#line_select').append(option);
+                })
             });
             break;
     }
