@@ -646,6 +646,24 @@ class AdminController extends Controller
 	}
 
 	//Role
+
+	public function admin_role(Request $request)
+	{
+		try {
+			if(Auth::user()) {
+				if(Auth::user()->can('admin_role')){
+					return view('theme.admin.page.role');
+				} else {
+					return redirect()->guest(route('admin.error'));
+				}
+			} else {
+				return redirect()->guest(route('home.login'));
+			}
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+		}
+	}
+
 	public function admin_role_ajax(Request $request){
         try {
             $instance = $this->instance(\App\Http\Controllers\Helper\Role::class);
@@ -656,5 +674,77 @@ class AdminController extends Controller
         } catch (\Exception $e) {
 			return self::JsonExport(500, trans('app.error_500'));
         }
-    }
+	}
+	
+	public function admin_post_role_ajax(Request $request){
+        $rules = array(
+            'display_name' => 'required|max:191',
+            'description' => 'required|max:191',
+            'action' => 'required|in:insert,update,delete'
+        );
+        if($request->action == 'update') {
+			$rules['id'] = 'required|digits_between:1,10';
+		} else if($request->action == 'delete') {
+			$rules = array('id' => 'required|digits_between:1,10');
+		} else if($request->action == 'insert') {
+			$rules['name'] = 'required|max:191';
+		}
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return self::JsonExport(403, trans('app.error_403'));
+        } else {
+            try {
+                $instance = $this->instance(\App\Http\Controllers\Helper\Role::class);
+                $action = $instance->postRole($request);
+                if ($action === true){
+                    if($request->action == 'update'){
+                        // self::writelog('Update data role', trans('app.success'));
+                        return self::JsonExport(200, trans('app.success'));
+                    }else if($request->action == 'insert'){
+                        // self::writelog('insert data role', trans('app.success'));
+                        return self::JsonExport(200, trans('app.success'));
+                    } else{
+                        // self::writelog('Delete data role', trans('app.success'));
+                        return self::JsonExport(200, trans('app.success'));
+                    }
+                }else {
+                    // self::writelog('Update data role', 'Fail');
+                    switch ($action) {
+                        case 1:
+                            return self::JsonExport(403, trans('app.error_404'));
+                        case 2:
+                            return self::JsonExport(403, trans('app.error_403'));
+                        case 3:
+                            return self::JsonExport(403, trans('app.update_fail'));
+                        case 4:
+                            return self::JsonExport(403, trans('app.delete_fail'));
+                        case 5:
+                            return self::JsonExport(403, trans('app.delete_fail'));
+                        case 51:
+                            return self::JsonExport(403, trans('app.delete_fail'));
+                        case 6:
+                            return self::JsonExport(403, trans('app.add_fail'));
+                        case 8:
+                            return self::JsonExport(403, trans('app.error_403'));
+                        default:
+                            return self::JsonExport(403, trans('app.error_403'));
+                    }
+                }
+            } catch (\Exception $e) {
+                // self::writelog('Update data role', $e->getMessage());
+                return self::JsonExport(500, trans('app.error_500'));
+            } 
+        }
+	}
+	
+	public function get_permission(){
+        try {
+            $instance = $this->instance(\App\Http\Controllers\Helper\Role::class);
+            return $action = $instance->get_permission();
+            
+        } catch (\Exception $e) {
+            return self::JsonExport(500, trans('app.error_500'));
+        } 
+	}
+	
 }

@@ -41,6 +41,27 @@ class Role extends Controller
         $this->lang_id = LaravelLocalization::getSupportedLocales()[$this->lang]['id'];
     }
 
+    public function get_permission(){
+        self::__construct();
+        try {
+            $data = Models\Permission::whereNotIn('name', ['admin_setting','admin_category','admin_failure','admin_role'])->get();
+            return Datatables::of($data)
+            ->editColumn('name', function ($v){
+                return $v->display_name;
+            })
+            ->editColumn('action', function ($v){
+                return '<label data-id="' . $v->id . '" class="ckbox d-inline-block">' .
+                            '<input type="checkbox" name="permission_'.$v->id.'" id="permission_'.$v->id.'" class="all" data-id="' . $v->id . '">' .
+                            '<span></span>' .
+                            '</label>';
+            })
+            ->rawColumns(['name','action'])
+            ->make(true);
+        } catch (\Exception $e) {
+            return false;
+        }
+    }
+
     public function getDTRole(){
         self::__construct();
         try {

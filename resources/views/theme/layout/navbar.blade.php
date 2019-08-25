@@ -71,7 +71,7 @@
                   <li><a href="{{route('admin.user')}}">User</a></li>
                 @endif
                 @if(Auth::user()->can('admin_role') && Auth::user()->hasRole('admin')) 
-                  <li><a href="{{route('home.index')}}">Role</a></li>
+                  <li><a href="{{route('admin.role')}}">Role</a></li>
                 @endif
               </ul>
             </div><!-- dropdown-menu -->
