@@ -131,8 +131,8 @@
                             </div>
                         </div>
                     </div>
-                    <div id="blockLine" class="">
-                        <div class="row mg-t-30" class="">
+                    <div id="blockLine" class="d-none">
+                        <div class="row mg-t-30" class="d-none">
                             <label class="col-sm-4 form-control-label">Line<span class="tx-danger">*</span></label>
                             <div class="col-sm-8 mg-t-10 mg-sm-t-0">
                                 <div id="slWrapperLine" class="parsley-select">

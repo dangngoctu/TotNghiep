@@ -577,6 +577,74 @@ class AdminController extends Controller
 		}
 	}
 
+	public function admin_post_user_ajax(Request $request)
+	{
+		$rules = array(
+			'phone' => 'required|min:1|max:20|unique:m_user',
+			// 'password' => 'required|min:1|max:128',
+			'name' => 'min:1|max:128',
+			'action' => 'required|in:insert,update,delete',
+			'dob' => 'required|before:18 years ago',
+			'avatar' => 'max:3000|mimes:png,jpg,jpeg',
+		);
+		if($request->action == 'update') {
+			$rules['id'] = 'required|digits_between:1,10';
+			$rules['password'] = 'min:0|max:128';
+			$rules['phone'] = 'required|min:1|max:20|unique:m_user,phone,'.$request->id;
+		} else if($request->action == 'delete' || $request->action == 'deactive' || $request->action == 'active') {
+			$rules = array('id' => 'required|digits_between:1,10');
+		}
+		$validator = Validator::make(Input::all(), $rules);
+		if ($validator->fails()) {
+			return self::JsonExport(403, $validator->errors());
+		} else {
+			try {
+				$instance = $this->instance(\App\Http\Controllers\Helper\User::class);
+				$data = $instance->postUser($request);
+				if ($data === true) {
+					switch ($request->action) {
+						case 'update':
+							// self::writelog('Update user', trans('app.success'));
+							return self::JsonExport(200, trans('app.success'));
+						case 'insert':
+							// self::writelog('Insert user', trans('app.success'));
+							return self::JsonExport(200, trans('app.success'));
+						case 'deactive':
+							// self::writelog('Deactive user', trans('app.success'));
+							return self::JsonExport(200, trans('app.success'));
+						case 'active':
+							// self::writelog('Active user', trans('app.success'));
+							return self::JsonExport(200, trans('app.success'));
+						default:
+							// self::writelog('Delete user', trans('app.success'));
+							return self::JsonExport(200, trans('app.success'));
+					}
+				} else {
+					// self::writelog('Edit info user', 'Fail');
+					switch ($data) {
+						case 1:
+							return self::JsonExport(403, trans('app.error_404'));
+						case 2:
+							return self::JsonExport(403, trans('app.error_403'));
+						case 3:
+							return self::JsonExport(403, trans('app.update_fail'));
+						case 4:
+							return self::JsonExport(403, trans('app.delete_fail'));
+						case 5:
+							return self::JsonExport(403, trans('app.delete_fail'));
+						case 6:
+							return self::JsonExport(403, trans('app.add_fail'));
+						default:
+							return self::JsonExport(403, trans('app.error_403'));
+					}
+				}
+			} catch (\Exception $e) {
+				self::writelog('Edit info user', $e->getMessage());
+				return self::JsonExport(500, trans('app.error_500'));;
+			}
+		}
+	}
+
 	//Role
 	public function admin_role_ajax(Request $request){
         try {

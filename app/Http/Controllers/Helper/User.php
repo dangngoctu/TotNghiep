@@ -44,24 +44,10 @@ class User extends Controller
         try {
             DB::beginTransaction();
             if($request->action == 'update' || $request->action == 'delete' || $request->action == 'deactive' || $request->action == 'active') {
-				$query = MUser::find($request->id);
-                $query_role = RoleUser::where('user_id', $request->id);
-				$query_management = SystemManagement::where('user_id', $request->id);
+				$query = Models\MUser::find($request->id);
+                $query_role = Models\RoleUser::where('user_id', $request->id);
+				$query_management = Models\SystemManagement::where('user_id', $request->id);
 				$old_management = $query_management->get();
-				$list_unsub_area = [];
-				foreach($old_management as $key => $val){
-					if($val->area_id != null || $val->area_id != ''){
-						array_push($list_unsub_area, $val->area_id);
-					}
-					if($val->line_id != null || $val->line_id != ''){
-						$list_area = MArea::where('status', 1)->where('line_id', $val->line_id)->pluck('id');
-						if(count($list_area) >0){
-							foreach($list_area as $key1 => $val1){
-								array_push($list_unsub_area, $val1);
-							}
-						}
-					}
-				}
 
                 if(!$query) {
                     DB::rollback();
@@ -91,8 +77,12 @@ class User extends Controller
 				$data['phone'] = $request->phone;
 			}
 
+			if($request->has('email') && !empty($request->email)) {
+				$data['email'] = $request->email;
+			}
+
 			if($request->pass == 1) {
-            	$default_password = MSetting::first()->default_password;
+            	$default_password = Models\MSetting::first()->default_password;
 					$data['password'] = Hash::make($default_password);
 			} else {
 				if($request->has('password') && !empty($request->password)) {
@@ -101,18 +91,18 @@ class User extends Controller
 			}
 
 			if($request->has('avatar') && !empty($request->avatar)) {
-				$dir = public_path('img/avatar');
+				$dir = public_path('img/images_user');
 				if (!File::exists($dir)) {
 					File::makeDirectory($dir, 0777, true, true);
 				}
-				$name_image_avatar = 'avatar_'.time().'.'.$request->avatar->getClientOriginalExtension();
+				$name_image_avatar = 'images_user'.time().'.'.$request->avatar->getClientOriginalExtension();
 				if($request->action == 'update') {
 					$old_file = $query->avatar;
 					if(!empty($old_file)){
 						@unlink(public_path($old_file));
 					}
 				}
-				$data['avatar'] = 'img/avatar/'.$name_image_avatar;
+				$data['avatar'] = 'img/images_user/'.$name_image_avatar;
 			} else {
 				if($request->fileList == 0) {
 					$data['avatar'] = null;
@@ -127,20 +117,10 @@ class User extends Controller
 				array_push($data_role, $request->role);
 			}
 
-			if($request->has('role_add') && !empty($request->role_add)) {
-				foreach ($request->role_add as $k => $v) {
-					array_push($data_role, $v);
-				}
-			}
-
-			if($request->has('area_id') && !empty($request->area_id)) {
-				$data_management['area_id'][] = $request->area_id;
+			if($request->has('area_select') && !empty($request->area_select)) {
+				$data_management['area_id'] = $request->area_select;
 			} else {
-				if($request->has('line_id') && !empty($request->line_id)) {
-					foreach ($request->line_id as $k => $v) {
-						$data_management['line_id'][$k] = $v;
-					}
-				}
+				$data_management['line_id'] = $request->line_select;
 			}
 			
 			if($request->action == 'update') {
@@ -171,10 +151,10 @@ class User extends Controller
 						DB::rollback();
 						return 3;
 					}
-					$system_management['area_id'] = $data_management['area_id'][0];
+					$system_management['area_id'] = $data_management['area_id'];
 					$system_management['line_id'] = null;
 					$system_management['user_id'] = $request->id;
-					$query_management = SystemManagement::create($system_management);
+					$query_management = Models\SystemManagement::create($system_management);
 					if (!$query_management) {
 						DB::rollback();
 						return 3;
@@ -183,12 +163,10 @@ class User extends Controller
 					if (isset($data_management['line_id'])) {
 						//list area in line
 						$list_area = [];
-						foreach($data_management['line_id'] as $key => $val){
-							$list_area_in_line = MArea::where('status', 1)->where('line_id',$val)->pluck('id');
-							if(count($list_area_in_line) > 0){
-								foreach($list_area_in_line as $key1 => $val1){
-									array_push($list_area, $val1);
-								}
+						$list_area_in_line = Models\MArea::where('status', 1)->where('line_id',$data_management['line_id'])->pluck('id');
+						if(count($list_area_in_line) > 0){
+							foreach($list_area_in_line as $key1 => $val1){
+								array_push($list_area, $val1);
 							}
 						}
 						$list_area = array_unique($list_area);
@@ -197,16 +175,15 @@ class User extends Controller
 							DB::rollback();
 							return 3;
 						}
-						foreach ($data_management['line_id'] as $key => $val) {
-							$system_management['line_id'] = $val;
-							$system_management['user_id'] = $request->id;
-							$system_management['area_id'] = null;
-							$query_management = SystemManagement::create($system_management);
-							if(!$query_management) {
-								DB::rollback();
-								return 3;
-							}
+						$system_management['line_id'] = $data_management['line_id'];
+						$system_management['user_id'] = $request->id;
+						$system_management['area_id'] = null;
+						$query_management = Models\SystemManagement::create($system_management);
+						if(!$query_management) {
+							DB::rollback();
+							return 3;
 						}
+						
 					} else {
 						$query_management->forceDelete();
 						if(!$query_management) {
@@ -217,13 +194,8 @@ class User extends Controller
 				}
 			} else if($request->action == 'delete') {
 					$img_avatar = $query->avatar;
-					$noti = MNotification::where('user_id', $request->id);
+					$noti = Models\MNotificaiton::where('user_id', $request->id);
 					if(count($noti->get()) > 0) {
-						DB::rollback();
-						return 4;
-					}
-					$to = MNotification::where('to', $request->id);
-					if(count($to->get()) > 0) {
 						DB::rollback();
 						return 4;
 					}
@@ -255,7 +227,7 @@ class User extends Controller
 					return 5;
 				}
 			} else {
-					$query = MUser::create($data);
+					$query = Models\MUser::create($data);
 					foreach ($data_role as $key => $val) {
 						$query->attachRole($val);
 						if(!$query) {
@@ -268,7 +240,7 @@ class User extends Controller
 						$system_management['area_id'] = $data_management['area_id'][0];
 						$system_management['line_id'] = null;
 						$system_management['user_id'] = $query->id;
-						$query_management = SystemManagement::create($system_management);
+						$query_management = Models\SystemManagement::create($system_management);
 						if (!$query_management) {
 							DB::rollback();
 							return 6;
@@ -279,7 +251,7 @@ class User extends Controller
 								$system_management['line_id'] = $val;
 								$system_management['area_id'] = null;
 								$system_management['user_id'] = $query->id;
-								$query_management = SystemManagement::create($system_management);
+								$query_management = Models\SystemManagement::create($system_management);
 								if(!$query_management) {
 									DB::rollback();
 									return 6;
@@ -297,38 +269,9 @@ class User extends Controller
 					if(!empty($img_avatar)){
 						@unlink(public_path($img_avatar));
 					}
-					
 					DB::commit();
-					if($query->fcm_token != null || $query->fcm_token != ''){
-						if($request->action == 'update' || $request->action == 'delete' || $request->action == 'deactive') {
-							// //Expire token
-							if($query->user_token != '' || $query->user_token != null){
-								$this->blacklist($query->user_token);
-							}
-							if(count($list_unsub_area)>0){
-								foreach($list_unsub_area as $key => $val){
-									UnSubscribeTopic::dispatch($query->fcm_token, 'group_'.$val);
-									// self::UnSubscribeTopic($query->fcm_token, 'group_'.$val);
-								}
-							}
-						}
-						if($request->action == 'update') {
-							if(isset($data_management['area_id'])) {
-								SubscribeTopic::dispatch($query->fcm_token, 'group_'.$data_management['area_id'][0]);
-								// self::SubscribeTopic($query->fcm_token, 'group_'.$data_management['area_id'][0]);
-							}
-							if (isset($data_management['line_id'])) {
-								if(count($list_area) >0){
-									foreach($list_area as $list => $item){
-										SubscribeTopic::dispatch($query->fcm_token, 'group_'.$item);
-										// self::SubscribeTopic($query->fcm_token, 'group_'.$item);
-									}
-								}
-							}
-						} 
-					}
 					if($request->has('avatar') && !empty($request->avatar)) {
-						Uploader::uploadFile($request->avatar,'img/avatar' , 'avatar', false, $name_image_avatar);
+						Uploader::uploadFile($request->avatar,'img/images_user' , 'avatar', false, $name_image_avatar);
 					}
 					return true;
 				} else {

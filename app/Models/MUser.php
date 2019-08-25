@@ -95,4 +95,5 @@ class MUser extends Authenticatable
 	{
 		return $this->hasMany(\App\Models\SystemManagement::class, 'user_id');
 	}
+	
 }

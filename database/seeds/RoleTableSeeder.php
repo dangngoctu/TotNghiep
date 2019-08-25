@@ -24,10 +24,10 @@ class RoleTableSeeder extends Seeder
         $role1 = ['name' => 'hr', 'display_name' => 'Human Resources','multiple_management' => 0, 'description' => 'Human Resources Role'];
         $role1 = Role::create($role1);
 
-        $role2 = ['name' => 'owner', 'display_name' => 'Owner','multiple_management' => 1, 'description' => 'Owner Role'];
+        $role2 = ['name' => 'manager', 'display_name' => 'Manager','multiple_management' => 1, 'description' => 'Manager Role'];
         $role2 = Role::create($role2);
 
-        $role2 = ['name' => 'manager', 'display_name' => 'Manager','multiple_management' => 1, 'description' => 'Manager Role'];
+        $role2 = ['name' => 'owner', 'display_name' => 'Owner','multiple_management' => 1, 'description' => 'Owner Role'];
         $role2 = Role::create($role2);
     }
 }

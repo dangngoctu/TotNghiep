@@ -16,7 +16,7 @@
 
 @section('page_content')
     <div class="section-wrapper">
-        <div class="row">
+        <!-- <div class="row">
             <div class="col-sm-6 col-md-4 mg-b-10">
                 <div id="slWrapperLocation" class="parsley-select">
                     <select class="form-control select2" style="width: 100%" id="line_id_filter" name="line_id_filter" data-placeholder="Select line">
@@ -24,7 +24,7 @@
                     </select>
                 </div>
             </div>
-        </div>
+        </div> -->
         <div class="text-right">
             <span class="btn btn-primary btn-icon mg-l-5" id="addUser">
                 <div>
