@@ -51,6 +51,10 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('ajax_get_permission', 'Admin\AdminController@get_permission')->name('admin.get.permission.ajax');
         Route::get('ajax_role', 'Admin\AdminController@admin_role_ajax')->name('admin.notify.role.ajax');
         Route::post('ajax_role', 'Admin\AdminController@admin_post_role_ajax')->name('admin.post.notify.role.ajax');
+
+        //User
+        Route::get('ajax_setting', 'Admin\AdminController@admin_setting_ajax')->name('admin.setting.ajax');
+        Route::post('ajax_setting', 'Admin\AdminController@admin_post_setting_ajax')->name('admin.post.setting.ajax');
     });
     Route::group(['prefix' => 'action'], function () {
         // View
@@ -62,9 +66,9 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('device','Admin\AdminController@admin_device')->name('admin.device')->middleware('permission:admin_machine');
         Route::get('line','Admin\AdminController@admin_line')->name('admin.line')->middleware('permission:admin_line');
         Route::get('report','Admin\AdminController@admin_report')->name('admin.page.report')->middleware('permission:admin_report');
-        Route::get('setting','Admin\AdminController@admin_setting')->name('admin.setting.general')->middleware('permission:admin_setting');
         Route::get('user','Admin\AdminController@admin_user')->name('admin.user')->middleware('permission:admin_user');
         Route::get('notification','Admin\AdminController@admin_notification')->name('admin.notification')->middleware('permission:admin_notification');
         Route::get('role','Admin\AdminController@admin_role')->name('admin.role')->middleware('permission:admin_role');
+        Route::get('setting','Admin\AdminController@admin_setting')->name('admin.setting')->middleware('permission:admin_setting');
     });
 });

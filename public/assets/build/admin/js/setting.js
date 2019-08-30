@@ -2,6 +2,7 @@ var api_fileuploader_cover, api_fileuploader_background, api_fileuploader_logo;
 
 $(function(){
     'use strict';
+    UpdateSetting();
     $(document).on('click', '#btnSetting', function (e) {
         e.preventDefault();
         $('#SettingForm').submit();
@@ -9,11 +10,9 @@ $(function(){
     $("#SettingForm").on('submit', function(e){
         e.preventDefault();
         var form = $(this);
-
         form.parsley().validate();
-
         if (form.parsley().isValid()){
-            alert('valid');
+            SettingFormSubmit()
         }
     });
     if(typeof api_fileuploader_logo !== 'undefined') {
@@ -21,23 +20,27 @@ $(function(){
         api_fileuploader_logo.destroy();
     }
     fileuploader('input#logo');
-    if(typeof api_fileuploader_cover !== 'undefined') {
-        api_fileuploader_cover.reset();
-        api_fileuploader_cover.destroy();
-    }
-    fileuploader('input#img_cover');
-    if(typeof api_fileuploader_background !== 'undefined') {
-        api_fileuploader_background.reset();
-        api_fileuploader_background.destroy();
-    }
-    fileuploader('input#img_background');
+    // if(typeof api_fileuploader_cover !== 'undefined') {
+    //     api_fileuploader_cover.reset();
+    //     api_fileuploader_cover.destroy();
+    // }
+    // fileuploader('input#img_cover');
+    // if(typeof api_fileuploader_background !== 'undefined') {
+    //     api_fileuploader_background.reset();
+    //     api_fileuploader_background.destroy();
+    // }
+    // fileuploader('input#img_background');
+    $('#SettingForm').on('change input', function() {
+        $(this).find('button:button').prop('disabled', $(this).serialize() == $(this).data('serialized'));
+    }).find('button:button').prop('disabled', true);
 });
 
 var fileuploader = function (element) {
     if($(element).length > 0) {
         $(element).fileuploader({
             limit: 1,
-            extensions: ['jpg', 'jpeg', 'png', 'gif'],
+            fileMaxSize: 3,
+            extensions: ['jpg', 'jpeg', 'png'],
             changeInput: ' ',
             theme: 'thumbnails',
             enableApi: true,
@@ -78,7 +81,8 @@ var fileuploader = function (element) {
                                 plusInput.show()
                             }
                         }, 100)
-                    })
+                    });
+                    $('#SettingForm').find('button:button').prop('disabled', $(this).serialize() == $(this).data('serialized'));
                 }
             },
             dragDrop: {
@@ -101,7 +105,119 @@ var fileuploader = function (element) {
             }
         });
         api_fileuploader_logo = $.fileuploader.getInstance('input#logo');
-        api_fileuploader_cover = $.fileuploader.getInstance('input#img_cover');
-        api_fileuploader_background = $.fileuploader.getInstance('input#img_background');
-    }
+        // api_fileuploader_cover = $.fileuploader.getInstance('input#img_cover');
+        // api_fileuploader_background = $.fileuploader.getInstance('input#img_background');
+    } 
 }
+
+var UpdateSetting = function(){
+    $.ajax({
+        url: base_admin + "/home/ajax/ajax_setting",
+        type: "get",
+        success: function(response) {
+            if (response.code == '200') {
+                $('#id').val(response.data.id);
+                $('#limit_upload').val(response.data.limit_upload);
+                $('#default_password').val(response.data.default_password);
+                $('#phone').val(response.data.phone);
+                if(response.data.logo != null) {
+                    api_fileuploader_logo.append([{
+                        name: (response.data.logo).substring((response.data.logo).lastIndexOf('/')+1),
+                        type: 'image/png',
+                        file: base_admin+'/'+response.data.logo,
+                        data: {
+                            url: base_admin+'/'+response.data.logo,
+                            thumbnail: base_admin+'/'+response.data.logo
+                        }
+                    }]);
+                    api_fileuploader_logo.updateFileList();
+                }	
+               
+            } else {
+                Lobibox.notify("warning", {
+                    title: 'Thông báo',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+            }
+            $('#SettingForm').each(function() {
+                $(this).data('serialized', $(this).serialize())
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            Lobibox.notify("warning", {
+                title: 'Thông báo',
+                pauseDelayOnHover: true,
+                continueDelayOnInactiveTab: false,
+                icon: false,
+                sound: false,
+                msg: response.msg
+            });
+        }
+    });
+};
+
+var SettingFormSubmit = function(){
+    var form_data = new FormData($('#SettingForm')[0]);
+    var fileListLogo = Object.keys(api_fileuploader_logo.getFileList()).length;
+    form_data.append('fileListLogo', fileListLogo);
+    // var fileListCover = Object.keys(api_fileuploader_cover.getFileList()).length;
+    // form_data.append('fileListCover', fileListCover);
+    // var fileListBackground = Object.keys(api_fileuploader_background.getFileList()).length;
+    // form_data.append('fileListBackground', fileListBackground);
+    $.ajax({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: form_data,
+		cache:false,
+		contentType: false,
+		enctype: 'multipart/form-data',
+		processData: false,
+		dataType: "json",
+		type: "post",
+		url: base_admin+"/home/ajax/ajax_setting",
+        success: function(response) {
+            if (response.code == '200') {
+                Lobibox.notify("success", {
+                    title: 'Notification',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+                $('#btnSetting').attr('disabled', true);
+                // table.ajax.reload(null, true);
+            } else {
+                Lobibox.notify("warning", {
+                    title: 'Notification',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+                $('#btnSetting').attr('disabled', true);
+            }
+            // $('#btnNews').button('reset');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            Lobibox.notify("warning", {
+                title: 'Notification',
+                pauseDelayOnHover: true,
+                continueDelayOnInactiveTab: false,
+                icon: false,
+                sound: false,
+                msg: 'There was an error during processing'
+            });
+            $('#btnSetting').attr('disabled', true);
+            // $('#btnNews').button('reset');
+        }
+    });
+};
+
+

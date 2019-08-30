@@ -95,7 +95,7 @@
             <div class="sub-item">
               <ul>
                 @if(Auth::user()->can('admin_setting') && Auth::user()->hasRole('admin'))
-                  <li><a href="{{route('admin.setting.general')}}">Setting</a></li>
+                  <li><a href="{{route('admin.setting')}}">Setting</a></li>
                 @endif
               </ul>
             </div><!-- dropdown-menu -->

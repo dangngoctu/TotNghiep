@@ -60,6 +60,11 @@ return [
             'root' => public_path('img/images_user'),
         ],
 
+        'app' => [
+            'driver' => 'local',
+            'root' => public_path('img/images_app'),
+        ],
+
         'notification' => [
             'driver' => 'local',
             'root' => public_path('img/images_notification'),

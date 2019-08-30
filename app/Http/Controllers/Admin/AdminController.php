@@ -746,5 +746,61 @@ class AdminController extends Controller
             return self::JsonExport(500, trans('app.error_500'));
         } 
 	}
+
+	//Setting
+	public function admin_setting(Request $request)
+	{
+		try {
+			if(Auth::user()) {
+				if(Auth::user()->can('admin_setting')){
+					return view('theme.admin.page.setting');
+				} else {
+					return redirect()->guest(route('admin.error'));
+				}
+			} else {
+				return redirect()->guest(route('home.login'));
+			}
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+		}
+	}
+
+	public function admin_setting_ajax(Request $request){
+        try {
+            $instance = $this->instance(\App\Http\Controllers\Helper\Setting::class);
+            $data = $instance->getSetting();
+            return $data;
+        } catch (\Exception $e) {
+			return self::JsonExport(500, trans('app.error_500'));
+        }  
+	}
+	
+	public function admin_post_setting_ajax(Request $request){
+
+        $rules = array(
+            'logo' => 'max:3000|mimes:png,jpg,jpeg',
+            'limit_upload' => 'required|numeric|min:1|max:10',
+            'phone' => 'required|max:20|min:0',
+            'default_password' => 'required|max:20'
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return self::JsonExport(403, trans('app.error_403'));
+        } else {
+            try {
+                $instance = $this->instance(\App\Http\Controllers\Helper\Setting::class);
+				$action = $instance->postSetting($request);
+                if ($action === true){
+                    return self::JsonExport(200, trans('app.success'));
+                }else {
+                    // self::writelog('Update info setting', 'Fail');
+                    return self::JsonExport(403, trans('app.error_403'));
+                }
+            } catch (\Exception $e) {
+                // self::writelog('Update info setting', $e->getMessage());
+                return self::JsonExport(500, trans('app.error_500'));
+            } 
+        }
+    }
 	
 }

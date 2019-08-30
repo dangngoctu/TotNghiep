@@ -19,6 +19,7 @@ class Setting extends Migration
         Schema::enableForeignKeyConstraints();
         Schema::create('m_setting', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('logo', 255)->nullable()->comment('logo');
             $table->string('default_password', 255)->nullable();
             $table->tinyInteger('limit_upload')->default(10)->comment('MB');
             $table->string('phone', 20)->unique()->comment('Phone hotline');

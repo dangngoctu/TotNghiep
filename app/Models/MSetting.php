@@ -30,14 +30,13 @@ class MSetting extends Eloquent
 		'limit_upload' => 'int'
 	];
 
-	protected $hidden = [
-		'default_password'
-	];
+	protected $hidden = [];
 
 	protected $fillable = [
 		'default_password',
 		'limit_upload',
 		'phone',
+		'logo',
 		'GG_KEY_MAP'
 	];
 }
