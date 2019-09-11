@@ -55,6 +55,10 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         //User
         Route::get('ajax_setting', 'Admin\AdminController@admin_setting_ajax')->name('admin.setting.ajax');
         Route::post('ajax_setting', 'Admin\AdminController@admin_post_setting_ajax')->name('admin.post.setting.ajax');
+
+        //Notification
+        Route::get('ajax_notification', 'Admin\AdminController@admin_notification_ajax')->name('admin.notification.ajax');
+        Route::post('ajax_notification', 'Admin\AdminController@admin_post_notification_ajax')->name('admin.post.notification.ajax');
     });
     Route::group(['prefix' => 'action'], function () {
         // View

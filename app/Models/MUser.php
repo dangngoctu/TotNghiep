@@ -93,7 +93,7 @@ class MUser extends Authenticatable
 
 	public function system_managements()
 	{
-		return $this->hasMany(\App\Models\SystemManagement::class, 'user_id');
+		return $this->hasOne(\App\Models\SystemManagement::class, 'user_id');
 	}
 	
 }

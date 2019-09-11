@@ -101,15 +101,15 @@ class AdminController extends Controller
 
     public function admin_category_ajax(Request $request)
 	{
-		// try {
+		try {
             $instance = self::instance(\App\Http\Controllers\Helper\Category::class);
 			if($request->has('id') && !empty($request->id)) {
 				return $data = $instance->getCategory($request->id, $request->lang);
 			}
 			return $data = $instance->getDTCategory();
-		// } catch (\Exception $e) {
-		// 	return self::JsonExport(500, 'Vui lòng thử lại');
-		// }
+		} catch (\Exception $e) {
+			return self::JsonExport(500, 'Vui lòng thử lại');
+		}
     }
     
     public function admin_post_category_ajax(Request $request)
@@ -801,6 +801,37 @@ class AdminController extends Controller
                 return self::JsonExport(500, trans('app.error_500'));
             } 
         }
-    }
+	}
+
+	//Notification
+	
+	public function admin_notification(Request $request)
+	{
+		try {
+			if(Auth::user()) {
+				if(Auth::user()->can('admin_notification')){
+					return view('theme.admin.page.notification');
+				} else {
+					return redirect()->guest(route('admin.error'));
+				}
+			} else {
+				return redirect()->guest(route('home.login'));
+			}
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+		}
+	}
+
+	public function admin_notification_ajax(Request $request){
+        // try {
+            $instance = $this->instance(\App\Http\Controllers\Helper\Notification::class);
+            if($request->has('id') && !empty($request->id)) {
+                return $data = $instance->getNotification($request->id);
+            }
+            return $data = $instance->getDTNotification();
+        // } catch (\Exception $e) {
+		// 	return self::JsonExport(500, trans('app.error_500'));
+        // }
+	}
 	
 }

@@ -13,7 +13,8 @@ $(function(){
         },
 		"columns": [
 			{"data": "id"},
-			{"data": "creater"},
+            {"data": "creater"},
+            {"data": "device"},
             {"data": "image"},
             {"data": "category"},
 			{"data": "failure"},
