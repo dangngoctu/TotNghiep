@@ -17,6 +17,7 @@
 <script src="{{asset('assets/app/lib/moment/min/moment.min.js')}}"></script>
 <script src="{{asset('assets/app/lib/bootstrap-daterangepicker/daterangepicker.js')}}"></script>
 <script src="{{asset('assets/app/lib/lightbox2/js/lightbox.js')}}"></script>
+<script src="{{asset('assets/app/lib/ckediter/ckediter.js')}}"></script>
 <script src="{{asset('assets/app/lib/fileuploader/js/jquery.modal.min.js')}}"></script>
 <script src="{{asset('assets/app/lib/fileuploader/js/jquery.slick.min.js')}}"></script>
 <script src="{{asset('assets/app/lib/fileuploader/js/main.js')}}"></script>

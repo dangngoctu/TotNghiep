@@ -21,14 +21,15 @@
 @section('page_content')
     <div class="section-wrapper">
         <div class="text-right">
-            <span class="btn btn-primary btn-icon" data-lang="{{LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']}}" id="addLocation">
+            <span class="btn btn-primary btn-icon" data-lang="{{LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']}}" id="addNotification">
                 <div>
                     <i class="fa fa-plus"></i>
                 </div>
             </span>
         </div>
         @include('theme.admin.section.notification.table_notification')
-        @include('theme.admin.section.notification.modal_notification')
+        @include('theme.admin.section.notification.modal_notification_add')
+        @include('theme.admin.section.notification.modal_notification_insert')
     </div><!-- section-wrapper -->
     @include('theme.layout.modal_confirm_delete')
 @endsection
