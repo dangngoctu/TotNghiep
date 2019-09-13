@@ -1,4 +1,5 @@
 var api_fileuploader_logo;
+var areaId, deviceId;
 $(function(){
     'use strict';
     var table_dynamic_notification = $('.table-dynamic-notification').DataTable({
@@ -39,12 +40,58 @@ $(function(){
 			}
 		]
     });
-    
-    $('#category_id', '#failure_id', 'line_id', 'area_id', 'device_id').select2({
+    $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
+    $('#category_id, #line_id, #failure_id, #area_id, #device_id').select2({
         minimumResultsForSearch: Infinity,
         allowClear: true
     });
-    
+
+    $('#line_id').on("select2:select", function (e) {
+        $('#blockArea').removeClass('d-none');
+        $('#NotificationForm #area_id').prop('required',true);
+        $('#NotificationForm').parsley().reset();
+        var data = e.params.data;
+        switchFunction('#area_id', data.id);
+    }).on('select2:unselect', function (e) {
+        $('#blockArea').addClass('d-none');
+        $('#blockDevice').addClass('d-none');
+        $('#NotificationForm #area_id').prop('required',false);
+        $('#NotificationForm #device_id').prop('required',false);
+        $('#NotificationForm').parsley().reset();
+        $('#area_id').empty();
+        $('#device_id').empty();
+    });
+
+    $('#area_id').on("select2:select", function (e) {
+        $('#blockDevice').removeClass('d-none');
+        $('#NotificationForm #device_id').prop('required',true);
+        $('#NotificationForm').parsley().reset();
+        var data = e.params.data;
+        switchFunction('#device_id', data.id);
+    }).on('select2:unselect', function (e) {
+        $('#blockDevice').addClass('d-none');
+        $('#NotificationForm #area_id').prop('required',false);
+        $('#NotificationForm #device_id').prop('required',false);
+        $('#NotificationForm').parsley().reset();
+        $('#area_id').empty();
+        $('#device_id').empty();
+    });
+
+    $('#category_id').on("select2:select", function (e) {
+        $('#blockFailure').removeClass('d-none');
+        $('#NotificationForm #failure_id').prop('required',true);
+        $('#NotificationForm').parsley().reset();
+        var data = e.params.data;
+        switchFunction('#failure_id', data.id);
+    }).on('select2:unselect', function (e) {
+        $('#blockFailure').addClass('d-none');
+        $('#NotificationForm #failure_id').prop('required',false);
+        $('#NotificationForm').parsley().reset();
+        $('#failure_id').empty();
+    });
+
+    $('.summernote').summernote();
+
 
     if(typeof api_fileuploader_logo !== 'undefined') {
         api_fileuploader_logo.reset();
@@ -90,11 +137,12 @@ $(function(){
 		$('#modal-notification-add').modal('show');
     });
 
-    $(document).on('click', '.table-dynamic-location .table-action-edit', function (e) {
+    $(document).on('click', '.table-dynamic-notification .table-action-edit', function (e) {
         var id = $(this).attr('data-id');
         var lang = $(this).attr('data-lang');
-        ClearFormNotification(lang, 'edit');
-        UpdateNotification(id, lang);
+        ClearFormNotificationInsert(lang, 'edit');
+        $('#modal-notification-update').modal('show');
+        // UpdateNotification(id, lang);
     });
 });
 
@@ -194,4 +242,62 @@ var ClearFormNotificationAdd = function(lang, type) {
     });
 
     $('#modal-notification-add').find('button.btn-primary').prop('disabled', true);
+};
+var line_id = '', area_id = '', device_id = '';
+var ClearFormNotificationInsert = function(lang, type) {
+    $('#NotificationFormUpdate').parsley().reset();
+    if(typeof api_fileuploader_logo !== 'undefined') {
+        api_fileuploader_logo.reset();
+        api_fileuploader_logo.destroy();
+    }
+    fileuploader('input#logo');
+    $('#modal-notification-update #lang').val(lang);
+    $('#modal-notification-update #ttlModal').html('Confirm Notification');
+    $('#modal-notification-update #action').val('update');
+    $('#modal-notification-update').find('button.btn-primary').prop('disabled', true);
+};
+
+var switchFunction = function (ele, data) {
+    $(ele).empty();
+    switch (ele) {
+        case '#area_id':
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: base_admin + "/home/ajax/ajax_area?lineId=" + data
+            }).then(function (data) {
+                $('#area_id').append("<option>Select area</option>");
+                $.map(data.data, function (item) {
+                    var option = new Option(item.m_area_translations.name, item.id, false, false);
+                    $('#area_id').append(option);
+                })
+            });
+            break;
+        case '#device_id':
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: base_admin + "/home/ajax/ajax_device?areaId=" + data
+            }).then(function (data) {
+                $('#device_id').append("<option>Select device</option>");
+                $.map(data.data, function (item) {
+                    var option = new Option(item.m_device_translations.name, item.id, false, false);
+                    $('#device_id').append(option);
+                })
+            });
+            break;
+        case '#failure_id':
+            $.ajax({
+                type: 'GET',
+                dataType: 'json',
+                url: base_admin + "/home/ajax/ajax_fail_mode?categoryId=" + data
+            }).then(function (data) {
+                $('#failure_id').append("<option>Select failure</option>");
+                $.map(data, function (item) {
+                    var option = new Option(item.m_failure_mode_translations.name, item.id, false, false);
+                    $('#failure_id').append(option);
+                })
+            });
+            break;
+    }
 };

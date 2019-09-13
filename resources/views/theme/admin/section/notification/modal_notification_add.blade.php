@@ -30,7 +30,7 @@
                         </div>
                     </div>
                     <div id="blockArea" class="d-none">
-                        <div class="row mg-t-30" class="d-none">
+                        <div class="row mg-t-30">
                             <label class="col-sm-3 form-control-label">Area<span class="tx-danger">*</span></label>
                             <div class="col-sm-9 mg-t-9 mg-sm-t-0">
                                 <div id="slWrapperArea" class="parsley-select">
@@ -46,7 +46,7 @@
                         </div>
                     </div>
                     <div id="blockDevice" class="d-none">
-                        <div class="row mg-t-30" class="d-none">
+                        <div class="row mg-t-30">
                             <label class="col-sm-3 form-control-label">Device<span class="tx-danger">*</span></label>
                             <div class="col-sm-9 mg-t-9 mg-sm-t-0">
                                 <div id="slWrapperDevice" class="parsley-select">
@@ -81,16 +81,18 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row mg-t-30">
-                        <label class="col-sm-3 form-control-label">Failure</label>
-                        <div class="col-sm-9 mg-t-9 mg-sm-t-0">
-                            <div id="slWrapperFailure" class="parsley-select">
-                                <select class="form-control select2" style="width: 100%" id="failure_id" name="failure_id" data-placeholder="Select failure"
-                                        data-parsley-class-handler="#slWrapperFailure" data-parsley-errors-container="#slErrorContainerFailure"
-                                        required data-parsley-required-message="Failure is required.">
-                                    <option label="Select failure"></option>
-                                </select>
-                                <div id="slErrorContainerFailure"></div>
+                    <div id="blockFailure" class="d-none">
+                        <div class="row mg-t-30">
+                            <label class="col-sm-3 form-control-label">Failure</label>
+                            <div class="col-sm-9 mg-t-9 mg-sm-t-0">
+                                <div id="slWrapperFailure" class="parsley-select">
+                                    <select class="form-control select2" style="width: 100%" id="failure_id" name="failure_id" data-placeholder="Select failure"
+                                            data-parsley-class-handler="#slWrapperFailure" data-parsley-errors-container="#slErrorContainerFailure"
+                                            required data-parsley-required-message="Failure is required.">
+                                        <option label="Select failure"></option>
+                                    </select>
+                                    <div id="slErrorContainerFailure"></div>
+                                </div>
                             </div>
                         </div>
                     </div>

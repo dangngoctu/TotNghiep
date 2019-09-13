@@ -29,7 +29,7 @@
         </div>
         @include('theme.admin.section.notification.table_notification')
         @include('theme.admin.section.notification.modal_notification_add')
-        @include('theme.admin.section.notification.modal_notification_insert')
+        @include('theme.admin.section.notification.modal_notification_update')
     </div><!-- section-wrapper -->
     @include('theme.layout.modal_confirm_delete')
 @endsection

@@ -40820,3 +40820,6 @@ a.hover-white-8:hover, a.hover-white-8:focus {
 
 .mx-wd-1350 {
   max-width: 1350px; }
+.ck-editor__editable_inline {
+    min-height: 200px;
+}

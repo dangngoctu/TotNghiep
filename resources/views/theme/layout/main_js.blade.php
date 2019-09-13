@@ -22,6 +22,7 @@
 <script src="{{asset('assets/app/lib/fileuploader/js/jquery.slick.min.js')}}"></script>
 <script src="{{asset('assets/app/lib/fileuploader/js/main.js')}}"></script>
 <script src="{{asset('assets/app/lib/lobibox/js/lobibox.js')}}"></script>
+<!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script> -->
 @yield('js')
 <script src="{{asset('assets/app/js/ResizeSensor.js')}}"></script>
 <script src="{{asset('assets/app/js/slim.js')}}"></script>

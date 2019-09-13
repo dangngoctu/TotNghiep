@@ -1,5 +1,5 @@
 <!-- Edit modal location -->
-<div class="modal fade" id="modal-location" data-backdrop="static">
+<div class="modal fade" id="modal-notification-update" data-backdrop="static">
     <div class="modal-dialog modal-lg w-75">
         <div class="modal-content tx-size-sm">
             <div class="modal-header pd-x-20">
@@ -9,7 +9,7 @@
                 </button>
             </div>
             <div class="modal-body pd-20">
-                <form class="form-layout" id="LocationForm">
+                <form class="form-layout" id="NotificationFormUpdate">
                     <input type="hidden" id="action" name="action" value="">
                     <input type="hidden" id="id" name="id" value="">
                     <input type="hidden" id="lang" name="lang" value="">
@@ -50,7 +50,7 @@
                         <label class="col-sm-3 form-control-label">Comment</label>
                         <div class="col-sm-9 mg-t-9 mg-sm-t-0">
                             <div id="slWrapperComment" class="parsley-select">
-                                <input type="text" class="form-control" name="comment_review" id="comment_review" readonly>
+                                <input type="text" class="form-control" name="comment" id="comment" readonly>
                             </div>
                         </div>
                     </div>
@@ -69,10 +69,10 @@
                         </div>
                     </div>
                     <div class="row mg-t-30">
-                        <label class="col-sm-3 form-control-label">Reason</label>
+                        <label class="col-sm-3 form-control-label">Comment Review</label>
                         <div class="col-sm-9 mg-t-9 mg-sm-t-0">
-                            <div id="slWrapperFailure" class="parsley-select">
-                                <input type="textarea" class="form-control" name="comment_review" id="comment_review">
+                            <div id="slWrapperCommentReview" class="parsley-select">
+                            <div class="summernote"></div>
                             </div>
                         </div>
                     </div>
