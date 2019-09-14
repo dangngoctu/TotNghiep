@@ -823,15 +823,73 @@ class AdminController extends Controller
 	}
 
 	public function admin_notification_ajax(Request $request){
-        // try {
+        try {
             $instance = $this->instance(\App\Http\Controllers\Helper\Notification::class);
             if($request->has('id') && !empty($request->id)) {
-                return $data = $instance->getNotification($request->id);
+                return $data = $instance->getNotification($request->id,$request->lang);
             }
             return $data = $instance->getDTNotification();
-        // } catch (\Exception $e) {
-		// 	return self::JsonExport(500, trans('app.error_500'));
-        // }
+        } catch (\Exception $e) {
+			return self::JsonExport(500, trans('app.error_500'));
+        }
+	}
+
+	public function admin_post_notification_add_ajax(Request $request){
+
+        $rules = array(
+            'logo' => 'max:3000|mimes:png,jpg,jpeg',
+			'device_id' => 'required|numeric',
+			'category_id' => 'required|numeric',
+			'failure_id' => 'required|numeric',
+            'comment' => 'required|max:255',
+		);
+		if($request->action == 'delete') {
+			$rules = array('id' => 'required|digits_between:1,10');
+		}
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return self::JsonExport(403, 'Error');
+        } else {
+            try {
+                $instance = $this->instance(\App\Http\Controllers\Helper\Notification::class);
+				$action = $instance->postAddNotification($request);
+                if ($action === true){
+                    return self::JsonExport(200, 'Success');
+                }else {
+                    // self::writelog('Update info setting', 'Fail');
+                    return self::JsonExport(403, 'Error');
+                }
+            } catch (\Exception $e) {
+                // self::writelog('Update info setting', $e->getMessage());
+                return self::JsonExport(500, 'Error');
+            } 
+        }
+	}
+
+	public function admin_post_notification_update_ajax(Request $request){
+
+        $rules = array(
+			'id' => 'required|numeric',
+            'status' => 'required|numeric',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return self::JsonExport(403, 'Error');
+        } else {
+            try {
+                $instance = $this->instance(\App\Http\Controllers\Helper\Notification::class);
+				$action = $instance->postUpdateNotification($request);
+                if ($action === true){
+                    return self::JsonExport(200, 'Success');
+                }else {
+                    // self::writelog('Update info setting', 'Fail');
+                    return self::JsonExport(403, 'Error');
+                }
+            } catch (\Exception $e) {
+                // self::writelog('Update info setting', $e->getMessage());
+                return self::JsonExport(500, 'Error');
+            } 
+        }
 	}
 	
 }

@@ -34,7 +34,7 @@
                         <label class="col-sm-3 form-control-label">Failure</label>
                         <div class="col-sm-9 mg-t-9 mg-sm-t-0">
                             <div id="slWrapperFailure" class="parsley-select">
-                                <input type="text" class="form-control" name="category" id="category" readonly>
+                                <input type="text" class="form-control" name="failure" id="failure" readonly>
                             </div>
                         </div>
                     </div>
@@ -72,7 +72,7 @@
                         <label class="col-sm-3 form-control-label">Comment Review</label>
                         <div class="col-sm-9 mg-t-9 mg-sm-t-0">
                             <div id="slWrapperCommentReview" class="parsley-select">
-                            <div class="summernote"></div>
+                                <input type="text" class="form-control summernote" name="comment_review" id="comment_review" readonly>
                             </div>
                         </div>
                     </div>
@@ -81,7 +81,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left"
                         data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="btnLocation"
+                <button type="button" class="btn btn-primary btn-submit-noti" id="btnNotificationUpdate"
                         data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
                     <i class="fa fa-plus"></i> Save</button>
             </div>

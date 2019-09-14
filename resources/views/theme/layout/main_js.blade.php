@@ -11,7 +11,7 @@
 <script src="{{asset('assets/app/lib/select2/js/select2.min.js')}}"></script>
 <script src="{{asset('assets/app/lib/parsleyjs/js/parsley.js')}}"></script>
 <script src="{{asset('assets/app/lib/jquery.maskedinput/js/jquery.maskedinput.js')}}"></script>
-<script src="{{asset('assets/app/lib/summernote/js/summernote-bs4.min.js')}}"></script>
+<script src="{{asset('assets/app/lib/summernote/dist/summernote-lite.js')}}"></script>
 <script src="{{asset('assets/app/lib/jquery-ui/js/jquery-ui.js')}}"></script>
 <script src="{{asset('assets/app/lib/jt.timepicker/js/jquery.timepicker.js')}}"></script>
 <script src="{{asset('assets/app/lib/moment/min/moment.min.js')}}"></script>

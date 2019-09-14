@@ -20,6 +20,8 @@ use Illuminate\Support\Facades\Hash;
 use Socialite;
 use Auth;
 use Carbon\Carbon;
+use Vmorozov\FileUploads\FilesSaver as Uploader;
+use Illuminate\Http\UploadedFile;
 
 class Notification extends Controller
 {
@@ -34,108 +36,13 @@ class Notification extends Controller
     }
 
     //DEMO
-    public function postNotification($request)
-    {
-        self::__construct();
-        try {
-            DB::beginTransaction();
-            if($request->action == 'update' || $request->action == 'delete') {
-                $query = Models\MLine::find($request->id);
-                if(!$query) {
-                    DB::rollback();
-                    return false;
-                }
-            }
-            $data = [];
-            $data_relationship = [];
-            if($request->has('name') && !empty($request->name)) {
-                $data_relationship['name'] = $request->name;
-            }
-            if($request->status == 'on') {
-                $data['status'] = 1;
-            } else {
-                $data['status'] = 0;
-            }
-					
-            if($request->action == 'update') {
-                $check = Models\MLine::where('id', '!=', $query->id)
-                    ->whereHas('m_line_translations_all', function ($query_check) use ($request){
-                        $query_check->where('name', $request->name)->where('language_id', $request->lang);
-                    })->count();
-                if($check > 0){
-                    DB::rollback();
-                    return false;
-                }
-                if (count($data_relationship) > 0) {
-                    $query->m_line_translations_all()->where('language_id', $request->lang)->update($data_relationship);
-                    if (!$query) {
-                        DB::rollback();
-                        return false;
-                    }
-                }
-                if (count($data) > 0) {
-                    $query->update($data);
-                    if (!$query) {
-                        DB::rollback();
-                        return false;
-                    }
-                }
-            } else if($request->action == 'delete') {
-                
-                $ref = Models\MlineTranslation::where('translation_id', $request->id);
-                $ref = $ref->delete();
-                if(!$ref) {
-                    DB::rollback();
-                    return false;
-                }
-                $query->delete();
-                if(!$query) {
-                    DB::rollback();
-                    return false;
-                }
-            } else {
-                $check = Models\MLine::whereHas('m_line_translations_all', function ($query_check) use ($request){
-                    $query_check->where('name', $request->name)->where('language_id', $request->lang);
-                })->count();
-                if($check > 0){
-                    DB::rollback();
-                    return false;
-                }
-                $query = Models\MLine::create($data);
-                if(!$query) {
-                    DB::rollback();
-                    return false;
-                }
-                
-                $data_relationship['translation_id'] = $query->id;
-					$trans = self::renderTrans($query->m_line_translations(), $data_relationship);
-                if(!$trans) {
-                    DB::rollback();
-                    return false;
-                }
-            }
-            if ($query) {
-                DB::commit();
-                return true;
-            } else {
-                DB::rollback();
-                return false;
-            }
-        } catch (\Exception $e) {
-            DB::rollback();
-            return false;
-        }
-    }
-    
     public function getNotification($id, $language)
     {
         self::__construct();
         try {
-            $data = Models\MLine::with('m_line_translations')
+            $data = Models\MNotificaiton::with('m_user','m_failure_mode.m_failure_mode_translations','m_device.m_device_translations','m_category.m_categories_translations')
                     ->where('id', $id)
-                    ->whereHas('m_line_translations', function ($query) use ($language) {
-                        $query->where('language_id', $language);
-                    })->first();
+                    ->first();
             if (!empty($data)) {
                 return self::JsonExport(200, trans('app.success'), $data);
             } else {
@@ -227,10 +134,9 @@ class Notification extends Controller
                         }
                     } 
                 }
-                if($v->status == 1){
-                    if($user->hasRole(['hr', 'admin']) || $role_action == 1) {
-                        $action .= '<span class="btn-action table-action-edit cursor-pointer tx-success" data-lang="'.$this->lang_id.'" data-id="'.$v->id.'"><i class="fa fa-edit"></i></span>';
-                    }
+                
+                if($user->hasRole(['hr', 'admin']) || $role_action == 1) {
+                    $action .= '<span class="btn-action table-action-edit cursor-pointer tx-success" data-lang="'.$this->lang_id.'" data-id="'.$v->id.'"><i class="fa fa-edit"></i></span>';
                 }
                 
                 if($user->hasRole(['hr', 'admin']) || $role_action == 1){
@@ -243,6 +149,107 @@ class Notification extends Controller
             ->rawColumns(['action', 'image', 'category', 'failure', 'creater', 'device'])
             ->make(true);
         } catch (\Exception $e) {
+            return false;
+        }
+    }
+
+    public function postAddNotification($request){
+        try{
+            DB::beginTransaction();
+            $data = [];
+            $data['user_id'] = Auth::user()->id;
+            $data['status'] = 1;
+            if($request->has('category_id') && !empty($request->category_id)) {
+                $data['category_id'] = $request->category_id;
+            }
+            if($request->has('device_id') && !empty($request->device_id)) {
+                $data['device_id'] = $request->device_id;
+            }
+            if($request->has('failure_id') && !empty($request->failure_id)) {
+                $data['failure_id'] = $request->failure_id;
+            }
+            if($request->has('comment') && !empty($request->comment)) {
+                $data['comment'] = $request->comment;
+            }
+            if($request->has('logo') && !empty($request->logo)) {
+                $dir = public_path('img/images_notification');
+                if (!File::exists($dir)) {
+                    File::makeDirectory($dir, 0777, true, true);
+                }
+                $name_image_logo = 'notification_'.time().'.'.$request->logo->getClientOriginalExtension();
+                $data['file'] = 'img/images_notification/'.$name_image_logo;
+            } else {
+                if($request->fileListLogo == 0) {
+                    $data['file'] = null;
+                }
+            }
+            if($request->action == 'delete'){
+                if(!$request->id){
+                    DB::rollback();
+                    return false;
+                }
+                $query_delete = Models\MNotificaiton::where('id', $request->id)->first();
+                if($query_delete){
+                    $query_delete->delete();
+                    DB::commit();
+                } else {
+                    DB::rollback();
+                    return false;
+                }
+            } else {
+                if(count($data) >0){
+                    $query = Models\MNotificaiton::insert($data);
+                    if(!$query){
+                        DB::rollback();
+                        return false;
+                    } else {
+                        DB::commit();
+                        if($request->has('logo') && !empty($request->logo)) {
+                            if(!empty($name_image_logo)) {
+                                Uploader::uploadFile($request->logo, 'img/images_notification', 'notification', false, $name_image_logo);
+                            }
+                        }
+                    }
+                }
+            }
+            
+            return true;
+        } catch (\Exception $e) {
+            DB::rollback();
+            return false;
+        }
+    }
+
+    public function postUpdateNotification($request){
+        try{
+            DB::beginTransaction();
+            $data = [];
+            $query = Models\MNotificaiton::where('id', $request->id);
+            if(!$query){
+                DB::rollback();
+                return false;
+            }
+            if($request->has('status') && !empty($request->status)) {
+                $data['status'] = $request->status;
+            }
+            if($request->has('reason') && !empty($request->reason)) {
+                $data['submit_comment'] = $request->reason;
+            }
+            if(count($data) > 0){
+                $query->update($data);
+                if(!$query){
+                    DB::rollback();
+                    return false;
+                } else {
+                    DB::commit();
+                    return true;
+                }
+            } else {
+                DB::rollback();
+                return false;
+            }
+        } catch (\Exception $e) {
+            DB::rollback();
             return false;
         }
     }

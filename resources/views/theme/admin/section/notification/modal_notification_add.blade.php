@@ -108,7 +108,7 @@
             <div class="modal-footer">
                 <button type="button" class="btn btn-default pull-left"
                         data-dismiss="modal">Cancel</button>
-                <button type="button" class="btn btn-primary" id="btnLocation"
+                <button type="button" class="btn btn-primary" id="btnNotificationAdd"
                         data-loading-text="<i class='fa fa-spinner fa-spin'></i>">
                     <i class="fa fa-plus"></i> Submit</button>
             </div>

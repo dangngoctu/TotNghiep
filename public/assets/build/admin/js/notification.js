@@ -41,9 +41,37 @@ $(function(){
 		]
     });
     $('.dataTables_length select').select2({ minimumResultsForSearch: Infinity });
-    $('#category_id, #line_id, #failure_id, #area_id, #device_id').select2({
+    $('#category_id, #line_id, #failure_id, #area_id, #device_id, #status').select2({
         minimumResultsForSearch: Infinity,
         allowClear: true
+    });
+    $(document).on('click', '#btnNotificationAdd', function (e) {
+        e.preventDefault();
+        $('#NotificationForm').submit();
+    });
+
+    $("#NotificationForm").on('submit', function(e){
+        e.preventDefault();
+        var form = $(this);
+        form.parsley().validate();
+        if (form.parsley().isValid()){
+            NotificationFormSubmit(table_dynamic_notification);
+        }
+    });
+
+    $(document).on('click', '#btnNotificationUpdate', function (e) {
+        e.preventDefault();
+        $('#reason').val($('#modal-notification-update #comment_review').summernote('code'));
+        $('#NotificationFormUpdate').submit();
+    });
+
+    $("#NotificationFormUpdate").on('submit', function(e){
+        e.preventDefault();
+        var form = $(this);
+        form.parsley().validate();
+        if (form.parsley().isValid()){
+            NotificationFormUpdateSubmit(table_dynamic_notification);
+        }
     });
 
     $('#line_id').on("select2:select", function (e) {
@@ -90,7 +118,10 @@ $(function(){
         $('#failure_id').empty();
     });
 
-    $('.summernote').summernote();
+    $('.summernote').summernote({
+        dialogsInBody: true,
+        height: 300
+    });
 
 
     if(typeof api_fileuploader_logo !== 'undefined') {
@@ -129,6 +160,21 @@ $(function(){
         })
     });
 
+    $(document).on('click', '.table-dynamic-notification .table-action-delete', function (e) {
+        e.preventDefault();
+        var id = $(this).attr('data-id');
+        $('#confirm-delete-modal #id').val(id);
+        $('#confirm-delete-modal').modal({
+            backdrop: 'static',
+            keyboard: false
+        });
+    });
+
+    $('#confirm-delete-modal').on('click', '#confirm-delete', function (e) {
+        var id = $('#confirm-delete-modal #id').val();
+        DeleteNotification(id, table_dynamic_notification);
+    });
+
     $(document).on('click', '#addNotification', function (e) {
 		e.preventDefault();
         $('#NotificationForm')[0].reset();
@@ -141,8 +187,11 @@ $(function(){
         var id = $(this).attr('data-id');
         var lang = $(this).attr('data-lang');
         ClearFormNotificationInsert(lang, 'edit');
-        $('#modal-notification-update').modal('show');
-        // UpdateNotification(id, lang);
+        UpdateNotification(id, lang);
+    });
+
+    $('#NotificationForm').on('change input', function() {
+        $('#modal-notification-add').find('button.btn-primary').prop('disabled', $(this).serialize() == $(this).data('serialized'));
     });
 });
 
@@ -221,6 +270,55 @@ var fileuploader = function (element) {
     } 
 }
 
+var UpdateNotification = function(id, lang) {
+    $.ajax({
+        url: base_admin + "/home/ajax/ajax_notification?lang=" + lang + "&id=" + id,
+        type: "get",
+        success: function(response) {
+            if (response.code == '200') {
+                $('#modal-notification-update #id').val(response.data.id);
+                $('#modal-notification-update #creater').val(response.data.m_user.name);
+                $('#modal-notification-update #category').val(response.data.m_category.m_categories_translations.name);
+                $('#modal-notification-update #failure').val(response.data.m_failure_mode.m_failure_mode_translations.name);
+                $('#modal-notification-update #device').val(response.data.m_device.m_device_translations.name);
+                $('#modal-notification-update #comment').val(response.data.comment);
+                if(response.data.status != 1){
+                    $('#modal-notification-update #comment_review').summernote('code',response.data.submit_comment);
+                    $('.summernote').summernote('disable');
+                    $('#modal-notification-update #status').val(response.data.status).trigger('change.select2');
+                    $('#modal-notification-update #status').prop('disabled', true);
+                    $('.btn-submit-noti').addClass('d-none')
+                } else {
+                    $('.btn-submit-noti').removeClass('d-none')
+                }
+                $('#modal-notification-update').modal('show');
+            } else {
+                Lobibox.notify("warning", {
+                    title: 'Notification',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+            }
+            $('#NotificationFormUpdate').each(function() {
+                $(this).data('serialized', $(this).serialize())
+            });
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            Lobibox.notify("warning", {
+                title: 'Notification',
+                pauseDelayOnHover: true,
+                continueDelayOnInactiveTab: false,
+                icon: false,
+                sound: false,
+                msg: response.msg
+            });
+        }
+    });
+};
+
 var ClearFormNotificationAdd = function(lang, type) {
     $('#NotificationForm').parsley().reset();
     if(typeof api_fileuploader_logo !== 'undefined') {
@@ -251,10 +349,13 @@ var ClearFormNotificationInsert = function(lang, type) {
         api_fileuploader_logo.destroy();
     }
     fileuploader('input#logo');
+    $('#modal-notification-update #comment_review').summernote('code','');
+    $('.summernote').summernote('enable');
+    $('#modal-notification-update #status').val('').trigger('change.select2');
+    $('#modal-notification-update #status').prop('disabled', false);
     $('#modal-notification-update #lang').val(lang);
     $('#modal-notification-update #ttlModal').html('Confirm Notification');
     $('#modal-notification-update #action').val('update');
-    $('#modal-notification-update').find('button.btn-primary').prop('disabled', true);
 };
 
 var switchFunction = function (ele, data) {
@@ -300,4 +401,144 @@ var switchFunction = function (ele, data) {
             });
             break;
     }
+};
+
+var NotificationFormUpdateSubmit = function(table) {
+    $.ajax({
+        url: base_admin + "/home/ajax/ajax_notification_update",
+        type: "post",
+        data: $('#NotificationFormUpdate').serialize(),
+        success: function(response) {
+            if (response.code == '200') {
+                Lobibox.notify("success", {
+                    title: 'Notification',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+                table.ajax.reload(null, true);
+                $('#modal-notification-update').modal('hide');
+            } else {
+                Lobibox.notify("warning", {
+                    title: 'Notification',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            Lobibox.notify("warning", {
+                title: 'Notification',
+                pauseDelayOnHover: true,
+                continueDelayOnInactiveTab: false,
+                icon: false,
+                sound: false,
+                msg: 'There was an error during processing'
+            });
+        }
+    });
+};
+
+var NotificationFormSubmit = function(table){
+    var form_data = new FormData($('#NotificationForm')[0]);
+    var fileListLogo = Object.keys(api_fileuploader_logo.getFileList()).length;
+    form_data.append('fileListLogo', fileListLogo);
+    // var fileListCover = Object.keys(api_fileuploader_cover.getFileList()).length;
+    // form_data.append('fileListCover', fileListCover);
+    // var fileListBackground = Object.keys(api_fileuploader_background.getFileList()).length;
+    // form_data.append('fileListBackground', fileListBackground);
+    $.ajax({
+        headers: {
+        'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')
+        },
+        data: form_data,
+		cache:false,
+		contentType: false,
+		enctype: 'multipart/form-data',
+		processData: false,
+		dataType: "json",
+		type: "post",
+		url: base_admin + "/home/ajax/ajax_notification_add",
+        success: function(response) {
+            if (response.code == '200') {
+                Lobibox.notify("success", {
+                    title: 'Notification',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+                table.ajax.reload(null, true);
+                $('#modal-notification-add').modal('hide');
+            } else {
+                Lobibox.notify("warning", {
+                    title: 'Notification',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+            }
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            Lobibox.notify("warning", {
+                title: 'Notification',
+                pauseDelayOnHover: true,
+                continueDelayOnInactiveTab: false,
+                icon: false,
+                sound: false,
+                msg: 'There was an error during processing'
+            });
+        }
+    });
+};
+
+var DeleteNotification = function(id, table) {
+    $.ajax({
+        url: base_admin + "/home/ajax/ajax_notification_add?action=delete&id=" + id,
+        type: "post",
+        success: function(response) {
+            if (response.code == '200') {
+                Lobibox.notify("success", {
+                    title: 'Notification',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+                table.ajax.reload(null, true);
+            } else {
+                Lobibox.notify("warning", {
+                    title: 'Notification',
+                    pauseDelayOnHover: true,
+                    continueDelayOnInactiveTab: false,
+                    icon: false,
+                    sound: false,
+                    msg: response.msg
+                });
+            }
+            // $('#confirm-delete-modal #confirm-delete').button('reset');
+            $('#confirm-delete-modal').modal('hide');
+        },
+        error: function(jqXHR, textStatus, errorThrown) {
+            Lobibox.notify("warning", {
+                title: 'Notification',
+                pauseDelayOnHover: true,
+                continueDelayOnInactiveTab: false,
+                icon: false,
+                sound: false,
+                msg: 'There was an error during processing'
+            });
+            // $('#confirm-delete-modal #confirm-delete').button('reset');
+            $('#confirm-delete-modal').modal('hide');
+        }
+    });
 };

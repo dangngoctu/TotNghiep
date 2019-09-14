@@ -5,7 +5,7 @@
 <link href="{{asset('assets/app/lib/rickshaw/css/rickshaw.min.css')}}" rel="stylesheet">
 <link href="{{asset('assets/app/lib/datatables/css/jquery.dataTables.css')}}" rel="stylesheet">
 <link href="{{asset('assets/app/lib/select2/css/select2.min.css')}}" rel="stylesheet">
-<link href="{{asset('assets/app/lib/summernote/css/summernote-bs4.css')}}" rel="stylesheet">
+<link href="{{asset('assets/app/lib/summernote/dist/summernote-lite.css')}}" rel="stylesheet">
 <link href="{{asset('assets/app/lib/jt.timepicker/css/jquery.timepicker.css')}}" rel="stylesheet">
 <link href="{{asset('assets/app/lib/bootstrap-daterangepicker/daterangepicker.css')}}" rel="stylesheet">
 <link href="{{asset('assets/app/lib/lightbox2/css/lightbox.css')}}" rel="stylesheet">
