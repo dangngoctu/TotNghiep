@@ -26,4 +26,5 @@
 @yield('js')
 <script src="{{asset('assets/app/js/ResizeSensor.js')}}"></script>
 <script src="{{asset('assets/app/js/slim.js')}}"></script>
+<script src="{{asset('assets/build/admin/js/changePass.js')}}"></script>
 <script> var base_admin = '{{ url('/') }}'</script>

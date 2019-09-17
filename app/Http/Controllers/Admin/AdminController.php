@@ -9,6 +9,8 @@ use Illuminate\Support\Facades\Input;
 use Carbon\Carbon;
 use App\Models;
 use Validator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
 
 class AdminController extends Controller
@@ -892,4 +894,40 @@ class AdminController extends Controller
         }
 	}
 	
+	public function change_pass(Request $request){
+		$rules = array(
+			'oldPassword' => 'required|min:1|max:255',
+			'newPassword' => 'required|min:6|max:255',
+			'renewPassword' => 'required|min:6|max:255|same:newPassword'
+		);
+		$validator = Validator::make(Input::all(), $rules);
+		if ($validator->fails()) {
+			return self::JsonExport(403, 'Error');
+		} else {
+			try{
+				DB::beginTransaction();
+				$account = Models\MUser::find(Auth::user()->id);
+				if($account){
+					if(Hash::check($request->oldPassword,$account->password)){
+						$account->update(['password' =>  Hash::make($request->newPassword)]);
+						if(!$account){
+							DB::rollback();
+							return self::JsonExport(403, 'Error');
+						}
+					} else {
+						DB::rollback();
+						return self::JsonExport(403, 'Error');
+					}
+				} else {
+					DB::rollback();
+					return self::JsonExport(403, 'Error');
+				}
+				DB::commit();
+				return self::JsonExport(200, 'Success');
+			} catch (\Exception $e) {
+				DB::rollback();
+				return self::JsonExport(500, 'Error');
+			}
+		}
+	}
 }

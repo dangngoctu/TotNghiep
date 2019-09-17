@@ -13,7 +13,7 @@
 Route::get('/', 'Admin\AdminController@admin_login')->name('login');
 Route::post('/login', 'Admin\AdminController@admin_login_action')->name('admin.login.action');
 Route::get('/logout', 'Admin\AdminController@logout')->name('home.logout');
-
+Route::post('changepassword', 'Admin\AdminController@change_pass')->name('admin.changepassword.action');
 //After login
 Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
     Route::group(['prefix' => 'ajax'], function () {
