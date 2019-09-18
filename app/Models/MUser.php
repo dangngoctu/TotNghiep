@@ -73,6 +73,8 @@ class MUser extends Authenticatable
 		'email',
 		'name',
 		'avatar',
+		'basic_salary',
+		'hour_salary',
 		'fcm_token',
 		'dob',
 		'time_update_password',

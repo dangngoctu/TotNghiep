@@ -44,6 +44,20 @@ class Setting extends Migration
             $table->foreign('line_id')->references('id')->on('m_line');
             $table->foreign('device_id')->references('id')->on('m_device');
         });
+
+        Schema::create('logtime', function (Blueprint $table) {
+            $table->increments('id');
+            $table->integer('user_id')->unsigned();
+            $table->timestamp('time_in')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('time_out')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->string('hash', 255)->nullable();
+            $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
+            $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
+        });
+
+        Schema::table('logtime', function (Blueprint $table) {
+            $table->foreign('user_id')->references('id')->on('m_user');
+        });
     }
 
     /**

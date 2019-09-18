@@ -28,6 +28,18 @@
                         </div>
                     </div>
                     <div class="row mg-t-30">
+                        <label class="col-sm-4 form-control-label">Basic salary <span class="tx-danger">*</span></label>
+                        <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                            <input type="text" class="form-control" name="basic_salary" id="basic_salary" value="" {{Auth::user()->hasRole(['hr', 'admin']) !== true ? 'readonly' : ''}}  >
+                        </div>
+                    </div>
+                    <div class="row mg-t-30">
+                        <label class="col-sm-4 form-control-label">Hour Salary <span class="tx-danger">*</span></label>
+                        <div class="col-sm-8 mg-t-10 mg-sm-t-0">
+                            <input type="text" class="form-control" name="hour_salary" id="hour_salary" value="" {{Auth::user()->hasRole(['hr', 'admin']) !== true ? 'readonly' : ''}}>
+                        </div>
+                    </div>
+                    <div class="row mg-t-30">
                         <label class="col-sm-4 form-control-label">Phone <span class="tx-danger">*</span></label>
                         <div class="col-sm-8 mg-t-10 mg-sm-t-0">
                             <div id="slWrapperPhone" class="parsley-select">

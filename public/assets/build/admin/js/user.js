@@ -258,7 +258,6 @@ var loadDataTable = function (lineId, courseId) {
 			{"data": "id"},
             {"data": "name"},
             {"data": "email", "searchable": false},
-            {"data": "major", "searchable": false},
             {"data": "phone", "searchable": false},
 			{"data": "role", "searchable": false},
 			{"data": "action", "searchable": false}
@@ -278,10 +277,6 @@ var loadDataTable = function (lineId, courseId) {
             },
             {
                 targets: [4],
-                class: 'text-center wd-150'
-            },
-            {
-                targets: [5],
                 class: 'text-center wd-150'
             },
             {
@@ -339,6 +334,8 @@ var UpdateUser = function(id, lang) {
                 $('#modal-user #id').val(response.data.id);
                 $('#modal-user #name').val(response.data.name);
                 $('#modal-user #email').val(response.data.email);
+                $('#modal-user #basic_salary').val(response.data.basic_salary);
+                $('#modal-user #hour_salary').val(response.data.hour_salary);
                 $('#modal-user #phone').val(response.data.phone);
                 $('#modal-user input[name="pass"][value="2"]:radio').prop( "checked", true );
                 $('.block-pass-word').removeClass('d-none');

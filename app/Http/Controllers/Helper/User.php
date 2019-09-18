@@ -81,6 +81,16 @@ class User extends Controller
 				$data['email'] = $request->email;
 			}
 
+			if(Auth::user()->hasRole(['hr', 'admin'])){
+				if($request->has('basic_salary') && !empty($request->basic_salary)) {
+					$data['basic_salary'] = $request->basic_salary;
+				}
+	
+				if($request->has('hour_salary') && !empty($request->hour_salary)) {
+					$data['hour_salary'] = $request->hour_salary;
+				}
+			}
+
 			if($request->pass == 1) {
             	$default_password = Models\MSetting::first()->default_password;
 					$data['password'] = Hash::make($default_password);
@@ -328,13 +338,6 @@ class User extends Controller
 					return '';
 				}
 			})
-			->editColumn('major', function ($v) {
-				if(!empty($v->major_id)) {
-					return $v->m_major->m_major_translations->name;
-				} else {
-					return '';
-				}
-			})
 			->editColumn('phone', function ($v) {
 				if(!empty($v->phone)) {
 					return $v->phone;
@@ -371,7 +374,7 @@ class User extends Controller
 				return $action;
 			})
 			->addIndexColumn()
-			->rawColumns(['action', 'role', 'email', 'major'])
+			->rawColumns(['action', 'role', 'email','name'])
 			->make(true);
         } catch (\Exception $e) {
 			return self::JsonExport(500, trans('app.error_500'));

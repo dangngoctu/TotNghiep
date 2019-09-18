@@ -23,6 +23,8 @@ class CreateUsersTable extends Migration
             $table->string('password', 128);
             $table->string('email')->unique();
             $table->string('name', 128)->nullable();
+            $table->string('basic_salary', 128)->nullable();
+            $table->string('hour_salary', 128)->nullable();
             $table->string('avatar', 255)->nullable();
             $table->string('fcm_token', 255)->nullable();
             $table->date('dob')->default('1980-01-01')->nullable();

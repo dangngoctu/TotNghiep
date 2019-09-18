@@ -32,6 +32,8 @@ class UsersTableSeeder extends Seeder
                 'password' => Hash::make('123456'),
                 'email' => 'member'.$i.'@gmail.com',
                 'name' => 'Member'.$i,
+                'basic_salary' => '4500000', 
+                'hour_salary' => '300000', 
                 'avatar' => null, 
                 'fcm_token' => null, 
                 'dob' => '1991-12-01', 
