@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 class ModalUI {
   constructor($node, options) {
     this.options = $.extend({}, {

@@ -1,5 +1,3 @@
-import $ from 'jquery';
-
 class PopoverUI {
   constructor($node, options) {
     this.$node = $node;

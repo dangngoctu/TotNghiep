@@ -84,7 +84,6 @@ export default class Toolbar {
         position: 'fixed',
         top: otherBarHeight,
         width: editorWidth,
-        zIndex: 1000,
       });
       this.$editable.css({
         marginTop: this.$toolbar.height() + 5,
@@ -96,7 +95,6 @@ export default class Toolbar {
         position: 'relative',
         top: 0,
         width: '100%',
-        zIndex: 'auto',
       });
       this.$editable.css({
         marginTop: '',

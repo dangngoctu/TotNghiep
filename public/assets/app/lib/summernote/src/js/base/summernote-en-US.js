@@ -56,7 +56,6 @@ $.extend($.summernote.lang, {
       textToDisplay: 'Text to display',
       url: 'To what URL should this link go?',
       openInNewWindow: 'Open in new window',
-      useProtocol: 'Use default protocol',
     },
     table: {
       table: 'Table',
@@ -105,7 +104,7 @@ $.extend($.summernote.lang, {
       recent: 'Recent Color',
       more: 'More Color',
       background: 'Background Color',
-      foreground: 'Text Color',
+      foreground: 'Foreground Color',
       transparent: 'Transparent',
       setTransparent: 'Set transparent',
       reset: 'Reset',

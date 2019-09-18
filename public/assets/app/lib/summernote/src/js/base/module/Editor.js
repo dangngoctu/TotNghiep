@@ -68,7 +68,7 @@ export default class Editor {
     }
 
     this.fontName = this.wrapCommand((value) => {
-      return this.fontStyling('font-family', env.validFontName(value));
+      return this.fontStyling('font-family', "\'" + value + "\'");
     });
 
     this.fontSize = this.wrapCommand((value) => {
@@ -190,7 +190,6 @@ export default class Editor {
       let linkUrl = linkInfo.url;
       const linkText = linkInfo.text;
       const isNewWindow = linkInfo.isNewWindow;
-      const checkProtocol = linkInfo.checkProtocol;
       let rng = linkInfo.range || this.getLastRange();
       const additionalTextLength = linkText.length - rng.toString().length;
       if (additionalTextLength > 0 && this.isLimited(additionalTextLength)) {
@@ -205,10 +204,10 @@ export default class Editor {
 
       if (this.options.onCreateLink) {
         linkUrl = this.options.onCreateLink(linkUrl);
-      } else if (checkProtocol) {
+      } else {
         // if url doesn't have any protocol and not even a relative or a label, use http:// as default
         linkUrl = /^([A-Za-z][A-Za-z0-9+-.]*\:|#|\/)/.test(linkUrl)
-          ? linkUrl : this.options.defaultProtocol + linkUrl;
+          ? linkUrl : 'http://' + linkUrl;
       }
 
       let anchors = [];
@@ -446,7 +445,7 @@ export default class Editor {
     }
 
     if (this.options.maxTextLength > 0) {
-      if ((this.$editable.text().length + pad) > this.options.maxTextLength) {
+      if ((this.$editable.text().length + pad) >= this.options.maxTextLength) {
         return true;
       }
     }

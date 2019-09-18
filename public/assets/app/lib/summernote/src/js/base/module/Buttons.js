@@ -58,12 +58,15 @@ export default class Buttons {
       this.fontInstalledMap[name] = env.isFontInstalled(name) ||
         lists.contains(this.options.fontNamesIgnoreCheck, name);
     }
+
     return this.fontInstalledMap[name];
   }
 
   isFontDeservedToAdd(name) {
+    const genericFamilies = ['sans-serif', 'serif', 'monospace', 'cursive', 'fantasy'];
     name = name.toLowerCase();
-    return (name !== '' && this.isFontInstalled(name) && env.genericFontFamilies.indexOf(name) === -1);
+
+    return (name !== '' && this.isFontInstalled(name) && genericFamilies.indexOf(name) === -1);
   }
 
   colorPalette(className, tooltip, backColor, foreColor) {
@@ -336,17 +339,15 @@ export default class Buttons {
     this.context.memo('button.fontname', () => {
       const styleInfo = this.context.invoke('editor.currentStyle');
 
-      if (this.options.addDefaultFonts) {
-        // Add 'default' fonts into the fontnames array if not exist
-        $.each(styleInfo['font-family'].split(','), (idx, fontname) => {
-          fontname = fontname.trim().replace(/['"]+/g, '');
-          if (this.isFontDeservedToAdd(fontname)) {
-            if (this.options.fontNames.indexOf(fontname) === -1) {
-              this.options.fontNames.push(fontname);
-            }
+      // Add 'default' fonts into the fontnames array if not exist
+      $.each(styleInfo['font-family'].split(','), (idx, fontname) => {
+        fontname = fontname.trim().replace(/['"]+/g, '');
+        if (this.isFontDeservedToAdd(fontname)) {
+          if (this.options.fontNames.indexOf(fontname) === -1) {
+            this.options.fontNames.push(fontname);
           }
-        });
-      }
+        }
+      });
 
       return this.ui.buttonGroup([
         this.button({
@@ -365,7 +366,7 @@ export default class Buttons {
           items: this.options.fontNames.filter(this.isFontInstalled.bind(this)),
           title: this.lang.font.name,
           template: (item) => {
-            return '<span style="font-family: ' + env.validFontName(item) + '">' + item + '</span>';
+            return '<span style="font-family: \'' + item + '\'">' + item + '</span>';
           },
           click: this.context.createInvokeHandlerAndUpdateState('editor.fontName'),
         }),
@@ -784,7 +785,7 @@ export default class Buttons {
       for (let idx = 0, len = buttons.length; idx < len; idx++) {
         const btn = this.context.memo('button.' + buttons[idx]);
         if (btn) {
-          $group.append(typeof btn === 'function' ? btn(this.context) : btn);
+          $group.append(typeof btn === 'function' ? btn() : btn);
         }
       }
       $group.appendTo($container);

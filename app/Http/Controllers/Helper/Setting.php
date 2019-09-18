@@ -106,4 +106,44 @@ class Setting extends Controller
             return false;
         }
     }
+
+    public function getDTLogtime()
+    {
+        self::__construct();
+        try {
+            $data = Models\Logtime::with('m_user');
+            return Datatables::of($data)
+            ->editColumn('name', function ($v) {
+                if(!empty($v->m_user->name)) {
+                    return $v->m_user->name;
+                } else {
+                    return '';
+                }
+            })
+            ->filterColumn('name', function ($query, $keyword) {
+                $query->whereHas('m_user', function ($rs) use($keyword) {
+                    $rs->where('name', 'LIKE', '%'.$keyword.'%');
+                });
+            })
+            ->editColumn('timein', function ($v) {
+                if(!empty($v->time_in)) {
+                    return $v->time_in;
+                } else {
+                    return '';
+                }
+            })
+            ->editColumn('timeout', function ($v) {
+                if(!empty($v->time_out)) {
+                    return $v->time_out;
+                } else {
+                    return '';
+                }
+            })
+            ->addIndexColumn()
+            ->rawColumns(['name', 'timein', 'timeout'])
+            ->make(true);
+        } catch (\Exception $e) {
+            return self::JsonExport(500, trans('app.error_500'));
+        }
+    }
 }

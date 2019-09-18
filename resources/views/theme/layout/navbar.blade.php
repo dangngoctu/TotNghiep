@@ -70,7 +70,7 @@
                 @if(Auth::user()->can('admin_user')) 
                   <li><a href="{{route('admin.user')}}">User</a></li>
                 @endif
-                @if(Auth::user()->can('admin_role') && Auth::user()->hasRole('admin')) 
+                @if(Auth::user()->can('admin_role')) 
                   <li><a href="{{route('admin.role')}}">Role</a></li>
                 @endif
               </ul>
@@ -94,11 +94,14 @@
             </a>
             <div class="sub-item">
               <ul>
-                @if(Auth::user()->can('admin_setting') && Auth::user()->hasRole('admin'))
+                @if(Auth::user()->can('admin_setting'))
                   <li><a href="{{route('admin.setting')}}">Setting</a></li>
                 @endif
+                @if(Auth::user()->can('admin_logtime'))
+                  <li><a href="{{route('admin.logtime')}}">Logtime</a></li>
+                @endif
               </ul>
-            </div><!-- dropdown-menu -->
+            </div>
           </li>
         @endif
       </ul>

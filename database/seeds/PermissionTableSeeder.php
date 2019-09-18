@@ -79,11 +79,17 @@ class PermissionTableSeeder extends Seeder
                 'display_name' => 'Role management in webpage',
                 'description' => 'Role management in webpage'
             ],
-            //Graduation
+            //Notification
             [
                 'name' => 'admin_notification',
                 'display_name' => 'Notification management in webpage',
                 'description' => 'Notification management in webpage'
+            ],
+            //Logtime
+            [
+                'name' => 'admin_logtime',
+                'display_name' => 'Logtime management in webpage',
+                'description' => 'Logtime management in webpage'
             ],
         ];
         DB::table('permissions')->insert($permission);

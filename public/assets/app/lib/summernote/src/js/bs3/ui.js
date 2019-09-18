@@ -9,7 +9,7 @@ const editable = renderer.create('<div class="note-editable" contentEditable="tr
 const statusbar = renderer.create([
   '<output class="note-status-output" aria-live="polite"/>',
   '<div class="note-statusbar" role="status">',
-  '  <div class="note-resizebar" role="separator" aria-orientation="horizontal" aria-label="Resize">',
+  '  <div class="note-resizebar" role="seperator" aria-orientation="horizontal" aria-label="Resize">',
   '    <div class="note-icon-bar"/>',
   '    <div class="note-icon-bar"/>',
   '    <div class="note-icon-bar"/>',
@@ -25,7 +25,7 @@ const airEditable = renderer.create([
 
 const buttonGroup = renderer.create('<div class="note-btn-group btn-group">');
 
-const dropdown = renderer.create('<ul class="note-dropdown-menu dropdown-menu" role="list">', function($node, options) {
+const dropdown = renderer.create('<ul class="dropdown-menu" role="list">', function($node, options) {
   const markup = Array.isArray(options.items) ? options.items.map(function(item) {
     const value = (typeof item === 'string') ? item : (item.value || '');
     const content = options.template ? options.template(item) : item;
@@ -43,7 +43,7 @@ const dropdownButtonContents = function(contents, options) {
   return contents + ' ' + icon(options.icons.caret, 'span');
 };
 
-const dropdownCheck = renderer.create('<ul class="note-dropdown-menu dropdown-menu note-check" role="list">', function($node, options) {
+const dropdownCheck = renderer.create('<ul class="dropdown-menu note-check" role="list">', function($node, options) {
   const markup = Array.isArray(options.items) ? options.items.map(function(item) {
     const value = (typeof item === 'string') ? item : (item.value || '');
     const content = options.template ? options.template(item) : item;

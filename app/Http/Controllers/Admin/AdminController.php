@@ -930,4 +930,30 @@ class AdminController extends Controller
 			}
 		}
 	}
+
+	public function admin_logtime(Request $request)
+	{
+		try {
+			if(Auth::user()) {
+				if(Auth::user()->can('admin_logtime')){
+					return view('theme.admin.page.logtime');
+				} else {
+					return redirect()->guest(route('admin.error'));
+				}
+			} else {
+				return redirect()->guest(route('home.login'));
+			}
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+		}
+	}
+
+	public function admin_logtime_ajax(Request $request){
+        try {
+            $instance = $this->instance(\App\Http\Controllers\Helper\Setting::class);
+            return $data = $instance->getDTLogtime();
+        } catch (\Exception $e) {
+			return self::JsonExport(500, trans('app.error_500'));
+        }
+	}
 }

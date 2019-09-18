@@ -1,20 +1,20 @@
 module.exports = function (config) {
   config.set({
-    frameworks: ['mocha', 'karma-typescript', 'detectBrowsers', ],
+    frameworks: ['mocha', 'karma-typescript'],
     colors: true,
     logLevel: config.LOG_INFO,
     files: [
       { pattern: 'src/js/**/*.js' },
       { pattern: 'test/**/*.spec.js' }
     ],
-    detectBrowsers: {
-      enabled: true,
-      usePhantomJS: false,
-      preferHeadless: true,
-      postDetection: function(availableBrowsers) {
-        return availableBrowsers.slice(0, 1);
+    customLaunchers: {
+      ChromeHeadlessNoSandbox: {
+        base: "ChromeHeadless",
+        flags: [ "--no-sandbox" ]
       }
     },
+    // Chrome, ChromeCanary, Firefox, Opera, Safari, IE
+    browsers: ['ChromeHeadlessNoSandbox'],
     preprocessors: {
       'src/js/**/*.js': ['karma-typescript'],
       'test/**/*.spec.js': ['karma-typescript']

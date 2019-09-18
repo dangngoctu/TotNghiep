@@ -1,7 +1,6 @@
 module.exports = function (config) {
   config.set({
     frameworks: ['mocha', 'karma-typescript'],
-    concurrency: 3,
     colors: true,
     logLevel: config.LOG_INFO,
     files: [
@@ -13,64 +12,33 @@ module.exports = function (config) {
         base: "ChromeHeadless",
         flags: [ "--no-sandbox" ]
       },
-      /*
-      'SL_WINDOWS_IE10': {
+      'SL_IE10': {
         base: 'SauceLabs',
-        browserName: 'Internet Explorer',
+        browserName: 'internet explorer',
         version: '10.0',
-        platform: 'Windows 8',
+        platform: 'windows 8',
       },
-      'SL_WINDOWS_IE11': {
+      'SL_IE11': {
         base: 'SauceLabs',
-        browserName: 'Internet Explorer',
+        browserName: 'internet explorer',
         version: '11.0',
-        platform: 'Windows 10',
+        platform: 'windows 8.1',
       },
-      */
-      'SL_WINDOWS_EDGE': {
+      'SL_CHROME': {
         base: 'SauceLabs',
-        browserName: 'MicrosoftEdge',
-        version: 'latest',
-        platform: 'Windows 10',
+        browserName: 'chrome',
+        version: '70',
+        platform: 'windows 8',
       },
-      'SL_WINDOWS_FIREFOX': {
+      'SL_FIREFOX': {
         base: 'SauceLabs',
-        browserName: 'Firefox',
+        browserName: 'firefox',
         version: 'latest',
-        platform: 'Windows 10',
+        platform: 'windows 8',
       },
-      'SL_WINDOWS_CHROME': {
-        base: 'SauceLabs',
-        browserName: 'Chrome',
-        version: 'latest',
-        platform: 'Windows 10',
-      },
-      'SL_LINUX_FIREFOX': {
-        base: 'SauceLabs',
-        browserName: 'Firefox',
-        version: 'latest',
-        platform: 'Linux',
-      },
-      'SL_MACOS_CHROME': {
-        base: 'SauceLabs',
-        browserName: 'Chrome',
-        version: 'latest',
-        platform: 'macOS 10.13',
-      },
-      /*
-      'SL_MACOS_SAFARI': {
-        base: 'SauceLabs',
-        browserName: 'Safari',
-        version: 'latest',
-        platform: 'macOS 10.13',
-      },
-      */
     },
     // Chrome, ChromeCanary, Firefox, Opera, Safari, IE
-    browsers: ['ChromeHeadlessNoSandbox',
-      'SL_WINDOWS_EDGE', 'SL_WINDOWS_FIREFOX', 'SL_WINDOWS_CHROME',
-      'SL_LINUX_FIREFOX', 'SL_MACOS_CHROME',
-    ],
+    browsers: ['ChromeHeadlessNoSandbox', 'SL_IE10', 'SL_IE11', 'SL_CHROME', 'SL_FIREFOX'],
     sauceLabs: {
       testName: 'unit tests for summernote',
       startConnect: false,
@@ -84,7 +52,7 @@ module.exports = function (config) {
       'src/js/**/*.js': ['karma-typescript'],
       'test/**/*.spec.js': ['karma-typescript']
     },
-    reporters: ['dots', 'karma-typescript', 'coverage', 'coveralls'],
+    reporters: ['dots', 'karma-typescript'],
     coverageReporter: {
       type: 'lcov',
       dir: 'coverage/',

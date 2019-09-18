@@ -60,6 +60,10 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('ajax_notification', 'Admin\AdminController@admin_notification_ajax')->name('admin.notification.ajax');
         Route::post('ajax_notification_add', 'Admin\AdminController@admin_post_notification_add_ajax')->name('admin.post.notification.add.ajax');
         Route::post('ajax_notification_update', 'Admin\AdminController@admin_post_notification_update_ajax')->name('admin.post.notification.update.ajax');
+
+        //Logtime
+        Route::get('ajax_logtime', 'Admin\AdminController@admin_logtime_ajax')->name('admin.logtime.ajax');
+
     });
     Route::group(['prefix' => 'action'], function () {
         // View
@@ -75,5 +79,6 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('notification','Admin\AdminController@admin_notification')->name('admin.notification')->middleware('permission:admin_notification');
         Route::get('role','Admin\AdminController@admin_role')->name('admin.role')->middleware('permission:admin_role');
         Route::get('setting','Admin\AdminController@admin_setting')->name('admin.setting')->middleware('permission:admin_setting');
+        Route::get('logtime','Admin\AdminController@admin_logtime')->name('admin.logtime')->middleware('permission:admin_logtime');
     });
 });

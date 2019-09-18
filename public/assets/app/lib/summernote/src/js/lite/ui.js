@@ -11,7 +11,7 @@ const editable = renderer.create('<div class="note-editable" contentEditable="tr
 const statusbar = renderer.create([
   '<output class="note-status-output" role="status" aria-live="polite"/>',
   '<div class="note-statusbar" role="resize">',
-  '  <div class="note-resizebar" role="separator" aria-orientation="horizontal" aria-label="resize">',
+  '  <div class="note-resizebar" role="seperator" aria-orientation="horizontal" aria-label="resize">',
   '    <div class="note-icon-bar"/>',
   '    <div class="note-icon-bar"/>',
   '    <div class="note-icon-bar"/>',
@@ -478,11 +478,7 @@ const linkDialog = function(opt) {
       ? '<div class="checkbox">' +
       '<label>' + '<input type="checkbox" checked> ' + opt.lang.link.openInNewWindow + '</label>' +
       '</div>' : ''
-    ) +
-    '<div class="checkbox">' +
-    '<label>' + '<input type="checkbox" checked> ' + opt.lang.link.useProtocol + '</label>' +
-    '</div>'
-    ;
+    );
   const footer = [
     '<button href="#" type="button" class="note-btn note-btn-primary note-link-btn disabled" disabled>',
     opt.lang.link.insert,
