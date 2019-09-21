@@ -63,7 +63,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
 
         //Logtime
         Route::get('ajax_logtime', 'Admin\AdminController@admin_logtime_ajax')->name('admin.logtime.ajax');
-
+        Route::get('exportlogtime', 'Admin\AdminController@exportlogtime')->name('admin.export.logtime');
     });
     Route::group(['prefix' => 'action'], function () {
         // View

@@ -12,6 +12,8 @@ use Validator;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Mcamara\LaravelLocalization\Facades\LaravelLocalization;
+use App\Exports\ExportLogtime;
+use Maatwebsite\Excel\Facades\Excel;
 
 class AdminController extends Controller
 {
@@ -955,5 +957,13 @@ class AdminController extends Controller
         } catch (\Exception $e) {
 			return self::JsonExport(500, trans('app.error_500'));
         }
+	}
+
+	public function exportlogtime(Request $request){
+		// try{
+			return Excel::download(new ExportLogtime($request->fromDate, $request->toDate),'Logtime-'.Carbon::parse($request->fromDate)->format('Ymd').'-'.Carbon::parse($request->toDate)->format('Ymd').'.xlsx');
+		// } catch (\Exception $e) {
+		// 	return self::JsonExport(500, trans('Error'));
+        // }
 	}
 }

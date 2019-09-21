@@ -21,13 +21,14 @@
 @section('page_content')
     <div class="section-wrapper">
         <div class="text-right">
-            <span class="btn btn-primary btn-icon" data-lang="{{LaravelLocalization::getSupportedLocales()[LaravelLocalization::getCurrentLocale()]['id']}}" id="addLocation">
+            <span class="btn btn-info btn-icon" id="exportLogtime">
                 <div>
-                    <i class="fa fa-plus"></i>
+                    <i class="fa fa-download"></i>
                 </div>
             </span>
         </div>
         @include('theme.admin.section.logtime.table_logtime')
+        @include('theme.admin.section.logtime.modal_export_logtime')
     </div><!-- section-wrapper -->
     @include('theme.layout.modal_confirm_delete')
 @endsection
