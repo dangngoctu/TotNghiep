@@ -11728,7 +11728,7 @@ textarea.parsley-success:focus {
         right: 77px; } }
   .slim-header-right .dropdown-c .dropdown-menu {
     width: 200px;
-    margin-top: 15px; }
+    margin-top: 28px; }
   .slim-header-right .dropdown-c.show > a {
     color: #005d1f; }
   .slim-header-right .dropdown-c .nav {
@@ -11807,12 +11807,12 @@ textarea.parsley-success:focus {
   .logged-user span {
     margin-left: 10px;
     margin-right: 5px;
-    display: none; }
+    display: block; }
     @media (min-width: 992px) {
       .logged-user span {
         display: block; } }
   .logged-user i {
-    display: none; }
+    display: block; }
     @media (min-width: 992px) {
       .logged-user i {
         display: block; } }
@@ -12230,9 +12230,6 @@ textarea.parsley-success:focus {
     font-weight: 400;
     z-index: 1000;
     display: none; }
-    @media (min-width: 992px) {
-      .slim-navbar .sub-item {
-        width: 200px; } }
     .slim-navbar .sub-item ul {
       list-style: none;
       padding: 0;
@@ -12588,12 +12585,14 @@ textarea.parsley-success:focus {
         overflow-y: inherit; } }
 
 .slim-sticky-header .slim-mainpanel {
-  margin-top: 152px; }
+  margin-top: 152px;
+  margin-bottom: 77px; }
 
 .slim-sticky-header .slim-body {
   margin-top: 75px; }
   .slim-sticky-header .slim-body .slim-mainpanel {
-    margin-top: 0; }
+    margin-top: 0;
+    margin-bottom: 77px; }
 
 .sticky-header .slim-header {
   position: fixed;
@@ -13562,8 +13561,8 @@ textarea.parsley-success:focus {
     display: flex;
     justify-content: space-between;
     flex-direction: column; }
-    .dashboard-chart-one .card-total h1 {
-      font-size: 64px;
+    .dashboard-chart-one .card-total h2 {
+      font-size: 20px;
       font-family: "Lato", "Helvetica Neue", Arial, sans-serif;
       font-weight: 700;
       color: #343a40;
@@ -13856,6 +13855,16 @@ textarea.parsley-success:focus {
     border-left: 0;
     border-right: 1px solid #dee2e6; }
 
+.social-three li {
+  margin: 0 -1px -1px 0; }
+
+.bg-metro {
+  border: 1px solid #ced4da;
+  background-color: #fff !important;
+  color: #000; }
+  .bg-metro .icon {
+    font-size: 40px; }
+
 /* --------------------------------------------- */
 /* ############### DROPDOWN PAGE ############### */
 /* --------------------------------------------- */
@@ -13916,7 +13925,6 @@ textarea.parsley-success:focus {
     font-weight: 700;
     line-height: 0.7;
     margin-bottom: 0;
-    border-bottom: 2px solid #adb5bd;
     padding: 0 50px;
     margin-bottom: 10px;
     color: #343a40; }
@@ -14717,10 +14725,6 @@ textarea.parsley-success:focus {
       margin-top: 0;
       margin-left: 30px; } }
 
-.card-profile img {
-  width: 180px;
-  border-radius: 100%; }
-
 .card-profile .card-footer {
   border-top: 1px solid #dee2e6;
   padding: 0;
@@ -15458,10 +15462,6 @@ textarea.parsley-success:focus {
 
 .card-profile .card-body {
   text-align: center; }
-
-.card-profile img {
-  width: 120px;
-  border-radius: 100%; }
 
 .card-profile .profile-name {
   font-weight: 400;
@@ -40820,6 +40820,21 @@ a.hover-white-8:hover, a.hover-white-8:focus {
 
 .mx-wd-1350 {
   max-width: 1350px; }
-.ck-editor__editable_inline {
-    min-height: 200px;
+
+html {
+  font-size: 100%; }
+
+.slim-navbar .sub-item ul a {
+  font-size: 110%; }
+
+.slim-navbar .nav-link {
+  font-size: 15px; }
+
+.slim-breadcrumb-custom{
+  font-size:100% !important;
+}
+
+.total_no_audit_table.dataTable.nowrap td, 
+total_no_audit_table.dataTable.nowrap th{
+    white-space: normal;
 }

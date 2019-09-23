@@ -23,7 +23,12 @@ class AdminController extends Controller
 	{
 		$this->instance = $this->instance(\App\Http\Controllers\Helper\Helper::class);
 		$this->lang = LaravelLocalization::getCurrentLocale();
-    }
+	}
+	
+	public function admin_error(Request $request)
+	{
+		return view('theme.admin.page.error');
+	}
     
     public function admin_login(){
         try {
@@ -960,10 +965,55 @@ class AdminController extends Controller
 	}
 
 	public function exportlogtime(Request $request){
-		// try{
+		try{
 			return Excel::download(new ExportLogtime($request->fromDate, $request->toDate),'Logtime-'.Carbon::parse($request->fromDate)->format('Ymd').'-'.Carbon::parse($request->toDate)->format('Ymd').'.xlsx');
-		// } catch (\Exception $e) {
-		// 	return self::JsonExport(500, trans('Error'));
-        // }
+		} catch (\Exception $e) {
+			return self::JsonExport(500, 'Error');
+        }
+	}
+
+	public function admin_report(Request $request){
+		try{
+			$data = self::getReport($request);
+			if($data === false){
+                return redirect()->guest(route('admin.error'));
+            } else {
+                return view('theme.admin.page.report',['data' => $data]);
+            }
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+        }
+	}
+
+	public function getReport($request){
+		try{
+			$logtime = self::getReportLogtime();
+			return [
+                'logtime' => $logtime,
+            ];
+		} catch (\Exception $e) {
+			return false;
+        }
+	}
+
+	public function getReportLogtime(){
+		try{
+			$logtimedate = Models\Logtime::where('user_id', '!=', 1)->get();
+			$late = 0;
+			$early = 0;
+			foreach($logtimedate as $key => $val){
+				if(Carbon::parse($val->time_in)->format('Hi') > 830){
+					$late++;
+				}
+				if(Carbon::parse($val->time_out)->format('Hi') < 1730){
+					$early++;
+				}
+			}
+			$logtime = ['late' => $late, 'early' => $early];
+			return $logtime;
+		} catch (\Exception $e) {
+			return false;
+        }
+		
 	}
 }
