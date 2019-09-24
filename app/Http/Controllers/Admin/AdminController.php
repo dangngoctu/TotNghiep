@@ -973,32 +973,34 @@ class AdminController extends Controller
 	}
 
 	public function admin_report(Request $request){
-		try{
+		// try{
 			$data = self::getReport($request);
 			if($data === false){
                 return redirect()->guest(route('admin.error'));
             } else {
                 return view('theme.admin.page.report',['data' => $data]);
             }
-		} catch (\Exception $e) {
-			return redirect()->guest(route('admin.error'));
-        }
+		// } catch (\Exception $e) {
+		// 	return redirect()->guest(route('admin.error'));
+        // }
 	}
 
 	public function getReport($request){
-		try{
+		// try{
 			$logtime = self::getReportLogtime();
-			return [
+			$userPerformance = self::getUserPerformance();
+			return json_decode(json_encode([
                 'logtime' => $logtime,
-            ];
-		} catch (\Exception $e) {
-			return false;
-        }
+				'performance' => $userPerformance,
+            ]));
+		// } catch (\Exception $e) {
+		// 	return false;
+        // }
 	}
 
 	public function getReportLogtime(){
 		try{
-			$logtimedate = Models\Logtime::where('user_id', '!=', 1)->get();
+			$logtimedate = Models\Logtime::where('user_id', '!=', 1)->where('created_at', '>=', Carbon::now()->startOfMonth()->startOfDay())->get();
 			$late = 0;
 			$early = 0;
 			foreach($logtimedate as $key => $val){
@@ -1014,6 +1016,35 @@ class AdminController extends Controller
 		} catch (\Exception $e) {
 			return false;
         }
-		
+	}
+
+	public function getUserPerformance(){
+		try{
+			$list_user = Models\MUser::where('status', 1)->where('id', '!=', 1)->whereHas('role_users', function($query){
+				$query->whereNotIn('role_id', [1,2]);
+			})->get();
+			$user_performance = [];
+			for($i = 1; $i < 3; $i++){
+				$user_performance[$i] = [];
+				if(count($list_user) > 0){
+					foreach($list_user as $key => $val){
+						$user = Models\MUser::where('status', 1)->where('id', $val->id)->first(); 
+						if($user->hasRole('owner')){
+							$area_management = Models\SystemManagement::where('user_id', $val->id)->pluck('area_id');
+							$list_device = Models\MDevice::where('status', 1)->whereIn('area_id', $area_management)->pluck('id');
+						} elseif($user->hasRole('manager')){
+							$line_management = Models\SystemManagement::where('user_id', $val->id)->pluck('line_id');
+							$area_management = Models\MArea::where('status', 1)->whereIn('line_id', $line_management)->pluck('id');
+							$list_device = Models\MDevice::where('status', 1)->whereIn('area_id', $area_management)->pluck('id');
+						}
+						$notification = Models\MNotificaiton::where('status', 2)->whereIn('device_id', $list_device)->pluck('failure_id');
+						array_push($user_performance[$i], ['id' => $val->id, 'name' => $val->name, 'performance' => 100-count($notification)]);
+					}
+				}
+			}
+			return $user_performance;
+		} catch (\Exception $e) {
+			return false;
+        }
 	}
 }

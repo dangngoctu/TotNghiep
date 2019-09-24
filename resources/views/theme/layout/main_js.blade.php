@@ -4,7 +4,7 @@
 <script src="{{asset('assets/app/lib/jquery.cookie/js/jquery.cookie.js')}}"></script>
 <script src="{{asset('assets/app/lib/chartist/js/chartist.js')}}"></script>
 <script src="{{asset('assets/app/lib/d3/js/d3.js')}}"></script>
-<!-- <script src="{{asset('assets/app/lib/rickshaw/js/rickshaw.min.js')}}"></script> -->
+<script src="{{asset('assets/app/lib/rickshaw/js/rickshaw.min.js')}}"></script> 
 <script src="{{asset('assets/app/lib/jquery.sparkline.bower/js/jquery.sparkline.min.js')}}"></script>
 <script src="{{asset('assets/app/lib/datatables/js/jquery.dataTables.js')}}"></script>
 <!-- <script src="{{asset('assets/app/lib/datatables-responsive/js/dataTables.responsive.js')}}"></script> -->
