@@ -989,9 +989,13 @@ class AdminController extends Controller
 		// try{
 			$logtime = self::getReportLogtime();
 			$userPerformance = self::getUserPerformance();
+			$totalNotification = self::getNotification();
+			$totalUser = self::getUser();
 			return json_decode(json_encode([
                 'logtime' => $logtime,
 				'performance' => $userPerformance,
+				'notification' => $totalNotification,
+				'total_user' => $totalUser,
             ]));
 		// } catch (\Exception $e) {
 		// 	return false;
@@ -1024,7 +1028,7 @@ class AdminController extends Controller
 				$query->whereNotIn('role_id', [1,2]);
 			})->get();
 			$user_performance = [];
-			for($i = 1; $i < 3; $i++){
+			for($i = 0; $i < 12; $i++){
 				$user_performance[$i] = [];
 				if(count($list_user) > 0){
 					foreach($list_user as $key => $val){
@@ -1037,8 +1041,11 @@ class AdminController extends Controller
 							$area_management = Models\MArea::where('status', 1)->whereIn('line_id', $line_management)->pluck('id');
 							$list_device = Models\MDevice::where('status', 1)->whereIn('area_id', $area_management)->pluck('id');
 						}
-						$notification = Models\MNotificaiton::where('status', 2)->whereIn('device_id', $list_device)->pluck('failure_id');
-						array_push($user_performance[$i], ['id' => $val->id, 'name' => $val->name, 'performance' => 100-count($notification)]);
+						$notification = Models\MNotificaiton::where('status', 2)->whereIn('device_id', $list_device)
+						->where('created_at', '>=', Carbon::now()->subMonths($i)->startOfMonth()->startOfDay())
+						->where('created_at', '<=', Carbon::now()->subMonths($i)->endOfMonth()->endofDay())
+						->count();
+						array_push($user_performance[$i], ['id' => $val->id, 'name' => $val->name, 'performance' => 100-$notification]);
 					}
 				}
 			}
@@ -1046,5 +1053,38 @@ class AdminController extends Controller
 		} catch (\Exception $e) {
 			return false;
         }
+	}
+
+	public function getNotification(){
+		try{
+			$num_noti = [];
+			for($i = 1; $i < 12; $i++){
+				$list_notification = Models\MNotificaiton::where('status', 2)
+				->where('created_at', '>=', Carbon::now()->subMonths($i)->startOfMonth()->startOfDay())
+				->where('created_at', '<=', Carbon::now()->subMonths($i)->endOfMonth()->endofDay())
+				->count();
+				$num_noti[$i] = $list_notification;
+			}
+			return $num_noti;
+		} catch (\Exception $e) {
+			return false;
+        }
+	}
+
+	public function getUser(){
+		// try{
+			$user = [];
+			for($i = 0; $i < 12; $i++){
+				$num_user = Models\MUser::where('status', 1)->where('id', '!=', 1)
+				->where('created_at', '<=', Carbon::now()->subMonths($i)->endOfMonth()->endofDay())
+				->count();
+				$user[$i] = ['time' => Carbon::now()->subMonths($i)->endOfMonth()->endofDay(),
+							 'count' => $num_user
+			];
+			}
+			return $user;
+		// } catch (\Exception $e) {
+		// 	return false;
+        // }
 	}
 }

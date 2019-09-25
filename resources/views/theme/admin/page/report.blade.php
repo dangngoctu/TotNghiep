@@ -54,19 +54,52 @@
             </span>
         </h6>
     </div>
-    <div id="collapse_summary_panel">
-        <div class="row">
-            <div class="col-md-12 col-lg-12">
-                <div class="card">
-                    <div class="card-body pd-b-0">
-                        <h6 class="slim-card-title tx-primary fsize-20">User Performance {{\Carbon\Carbon::now()->format('m/Y')}}</h6>
-                        <h2 class="tx-lato tx-inverse">99%</h2>
+    @if(!empty($data->performance))
+        <div id="collapse_summary_panel">
+            <div class="row">
+                <div class="col-md-12 col-lg-12">
+                    <div class="card">
+                        <div class="card-body pd-b-0">
+                            <h6 class="slim-card-title tx-primary fsize-20">User Performance {{\Carbon\Carbon::now()->format('m/Y')}}</h6>
+                            <?php
+                                $avg = array_sum(array_column(current($data->performance), 'performance'))/count(current($data->performance));  
+                            ?>
+                            <h2 class="tx-lato tx-inverse">{{$avg}}%</h2>
+                        </div>
+                        <div id="performance_score_rs" class="ht-50 ht-sm-70 mg-r--1 rickshaw_graph"></div>
                     </div>
-                    <div id="performance_score_rs" class="ht-50 ht-sm-70 mg-r--1 rickshaw_graph"></div>
                 </div>
             </div>
         </div>
-    </div>
+    @endif
+
+    @if(!empty($data->notification))
+        <div class="row mg-t-5">
+            <div class="col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body pd-b-0">
+                        <h6 class="slim-card-title tx-primary fsize-16">Total Notification {{\Carbon\Carbon::now()->format('m/Y')}}</h6>
+                        <h2 class="tx-lato tx-inverse">{{current($data->notification)}}</h2>
+                    </div>
+                    <div id="notification_count_rs" class="ht-50 ht-sm-70 mg-r--1 rickshaw_graph"></div>
+                </div>
+            </div>
+        </div>
+    @endif
+
+    @if(count($data->total_user) > 0)
+        <div class="row mg-t-5">
+            <div class="col-md-12 col-lg-12">
+                <div class="card">
+                    <div class="card-body pd-b-0">
+                        <h6 class="slim-card-title tx-primary fsize-20">Total User {{\Carbon\Carbon::now()->format('m/Y')}}</h6>
+                        <h2 class="tx-lato tx-inverse">{{current($data->total_user)->count}}</h2>
+                    </div>
+                    <div id="total_user_rs" class="ht-50 ht-sm-70 mg-r--1 rickshaw_graph"></div>
+                </div>
+            </div>
+        </div>
+    @endif
     
 @endsection
 
@@ -75,7 +108,6 @@
 <script>
     //Performance
     @if(isset($data->performance))
-        
         var performance_score_rs = new Rickshaw.Graph({
         element: document.querySelector('#performance_score_rs'),
         renderer: 'line',
@@ -119,6 +151,77 @@
             graph: performance_score_rs
         });
         user_per.render();
+    @endif
+
+    @if(!empty($data->notification))
+        // TOTAL NOTIFY
+        var notification_count_rs = new Rickshaw.Graph({
+            element: document.querySelector('#notification_count_rs'),
+            renderer: 'area',
+            //interpolation: 'basis',
+            min: 0,
+            series: [{
+            data: [
+                @foreach((array)$data->notification as $k => $v)
+                    { x: {{Carbon\Carbon::now()->startOfMonth()->subMonths($k)->timestamp}}, y: {{$v}} },
+                @endforeach
+            ],
+            color: '#00712e',
+            name: 'Notification'
+            }]
+        });
+        notification_count_rs.render();
+        
+
+        var hoverDetail_NC = new Rickshaw.Graph.HoverDetail( {
+            graph: notification_count_rs,
+            formatter: function(series, x, y) {
+                var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
+                var swatch = '<span class="detail_swatch"></span>';
+                var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
+                return content;
+            }
+        });
+
+        var axes_NC = new Rickshaw.Graph.Axis.Time( {
+            graph: notification_count_rs
+        });
+        axes_NC.render();
+    @endif
+
+    @if(count($data->total_user) > 0)
+        //TOTAL USER
+        var total_user_rs = new Rickshaw.Graph({
+            element: document.querySelector('#total_user_rs'),
+            renderer: 'area',
+            //interpolation: 'basis',
+            min: 0,
+            series: [{
+            data: [
+                @foreach($data->total_user as $k => $v)
+                    { x: {{Carbon\Carbon::now()->subMonths($k)->timestamp}}, y: {{$v->count}} },
+                @endforeach
+            ],
+            color: '#00712e',
+            name: 'User'
+            }]
+        });
+        total_user_rs.render();
+
+        var hoverDetail_U = new Rickshaw.Graph.HoverDetail( {
+        graph: total_user_rs,
+        formatter: function(series, x, y) {
+            var date = '<span class="date">' + new Date(x * 1000).toUTCString() + '</span>';
+            var swatch = '<span class="detail_swatch"></span>';
+            var content = swatch + series.name + ": " + parseInt(y) + '<br>' + date;
+            return content;
+        }
+        });
+
+        var axes_U = new Rickshaw.Graph.Axis.Time( {
+            graph: total_user_rs
+        });
+        axes_U.render();
     @endif
 </script>
 @endsection
