@@ -973,33 +973,37 @@ class AdminController extends Controller
 	}
 
 	public function admin_report(Request $request){
-		// try{
+		try{
 			$data = self::getReport($request);
 			if($data === false){
                 return redirect()->guest(route('admin.error'));
             } else {
                 return view('theme.admin.page.report',['data' => $data]);
             }
-		// } catch (\Exception $e) {
-		// 	return redirect()->guest(route('admin.error'));
-        // }
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+        }
 	}
 
 	public function getReport($request){
-		// try{
+		try{
 			$logtime = self::getReportLogtime();
 			$userPerformance = self::getUserPerformance();
 			$totalNotification = self::getNotification();
 			$totalUser = self::getUser();
+			$totalMachine = self::getMachine();
+			$machine_no_noti = self::getMachineNoNoti();
 			return json_decode(json_encode([
                 'logtime' => $logtime,
 				'performance' => $userPerformance,
 				'notification' => $totalNotification,
 				'total_user' => $totalUser,
+				'total_machine' => $totalMachine,
+				'machine_no_noti' => $machine_no_noti,
             ]));
-		// } catch (\Exception $e) {
-		// 	return false;
-        // }
+		} catch (\Exception $e) {
+			return false;
+        }
 	}
 
 	public function getReportLogtime(){
@@ -1030,6 +1034,7 @@ class AdminController extends Controller
 			$user_performance = [];
 			for($i = 0; $i < 12; $i++){
 				$user_performance[$i] = [];
+				$user_performance[$i]['time'] = Carbon::now()->subMonths($i)->startOfMonth()->startOfDay();
 				if(count($list_user) > 0){
 					foreach($list_user as $key => $val){
 						$user = Models\MUser::where('status', 1)->where('id', $val->id)->first(); 
@@ -1045,7 +1050,7 @@ class AdminController extends Controller
 						->where('created_at', '>=', Carbon::now()->subMonths($i)->startOfMonth()->startOfDay())
 						->where('created_at', '<=', Carbon::now()->subMonths($i)->endOfMonth()->endofDay())
 						->count();
-						array_push($user_performance[$i], ['id' => $val->id, 'name' => $val->name, 'performance' => 100-$notification]);
+						$user_performance[$i]['performance'][$key] = ['id' => $val->id, 'name' => $val->name, 'performance' => 100-$notification];
 					}
 				}
 			}
@@ -1059,11 +1064,11 @@ class AdminController extends Controller
 		try{
 			$num_noti = [];
 			for($i = 1; $i < 12; $i++){
-				$list_notification = Models\MNotificaiton::where('status', 2)
+				$list_notification = Models\MNotificaiton::where('status', 2)->whereNull('deleted_at')
 				->where('created_at', '>=', Carbon::now()->subMonths($i)->startOfMonth()->startOfDay())
 				->where('created_at', '<=', Carbon::now()->subMonths($i)->endOfMonth()->endofDay())
 				->count();
-				$num_noti[$i] = $list_notification;
+				$num_noti[$i] = ['count' => $list_notification, 'time' => Carbon::now()->subMonths($i)->startOfMonth()->startOfDay()];
 			}
 			return $num_noti;
 		} catch (\Exception $e) {
@@ -1072,19 +1077,48 @@ class AdminController extends Controller
 	}
 
 	public function getUser(){
-		// try{
+		try{
 			$user = [];
 			for($i = 0; $i < 12; $i++){
-				$num_user = Models\MUser::where('status', 1)->where('id', '!=', 1)
+				$num_user = Models\MUser::where('status', 1)->where('id', '!=', 1)->whereNull('deleted_at')
 				->where('created_at', '<=', Carbon::now()->subMonths($i)->endOfMonth()->endofDay())
 				->count();
 				$user[$i] = ['time' => Carbon::now()->subMonths($i)->endOfMonth()->endofDay(),
 							 'count' => $num_user
-			];
+							];
 			}
 			return $user;
-		// } catch (\Exception $e) {
-		// 	return false;
-        // }
+		} catch (\Exception $e) {
+			return false;
+        }
+	}
+
+	public function getMachine(){
+		try{
+			$machine = [];
+			for($i = 0; $i < 12; $i++){
+				$num_machine = Models\MDevice::where('status', 1)->whereNull('deleted_at')
+				->where('created_at', '<=', Carbon::now()->subMonths($i)->endOfMonth()->endofDay())
+				->count();
+				$machine[$i] = ['count' => $num_machine, 'time' => Carbon::now()->subMonths($i)->endOfMonth()->endofDay()];
+			}
+			return $machine;
+		} catch (\Exception $e) {
+			return false;
+        }
+	}
+
+	public function getMachineNoNoti(){
+		try{
+			$list_notification = Models\MNotificaiton::where('status', 2)->whereNull('deleted_at')
+			->where('created_at', '>=', Carbon::now()->subMonth()->startOfMonth()->startOfDay())
+			->where('created_at', '<=', Carbon::now()->subMonth()->endOfMonth()->endofDay())->pluck('device_id');
+			$list_device = Models\MDevice::with('m_device_translations','m_area.m_area_translations','m_area.m_line.m_line_translations')
+			->where('status', 1)->whereNull('deleted_at')
+			->whereNotIn('id',$list_notification )->get();
+			return $list_device;
+		} catch (\Exception $e) {
+			return false;
+        }
 	}
 }
