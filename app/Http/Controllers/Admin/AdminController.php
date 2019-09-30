@@ -1121,4 +1121,51 @@ class AdminController extends Controller
 			return false;
         }
 	}
+
+	public function admin_report_new(Request $request){
+		try {
+			switch ($request->type) {
+				case 'late':
+				case 'early':
+					return view('theme.admin.page.comelate');
+				case 'performance':
+					return view('theme.admin.page.performance');
+				case 'machine':
+					return view('theme.admin.page.machine');
+			}
+		} catch (\Exception $e) {
+			return redirect()->guest(route('admin.error'));
+        }
+	}
+
+	public function report_user(Request $request){
+		$rules = array(
+            'month' => 'required|numeric',
+            'tag' => 'required|in:early,late'
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return self::JsonExport(403, trans('app.error_403'));
+        } else {
+			try {
+				$result = [];
+				$list_user = Models\MUser::where('id', '!=', 1)->where('status', 1)->whereNull('deleted_at')->get();
+				foreach($list_user as $key => $val){
+					$count_logtime = Models\Logtime::where('user_id', '!=', 1)->where('user_id', $val->id)
+					->where('created_at', '>=', Carbon::now()->subMonths($request->month)->startOfMonth()->startOfDay())
+					->where('created_at', '<=', Carbon::now()->subMonths($request->month)->endOfMonth()->endOfDay());
+					if($request->tag == 'early'){
+						$count_logtime->where('time_out', '<' , date('Y-m-d').' 17:30:00');
+					} else {
+						$count_logtime->where('time_in', '>' , date('Y-m-d').' 08:30:00');
+					}
+					$count_logtime = $count_logtime->count();
+					array_push($result, ['id' => $val->id, 'name' => $val->name, 'time' => $count_logtime]);
+				}
+			return self::JsonExport(200, trans('app.success'), $result);
+			} catch (\Exception $e) {
+				return redirect()->guest(route('admin.error'));
+			}
+		}
+	}
 }

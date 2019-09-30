@@ -65,6 +65,9 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         //Logtime
         Route::get('ajax_logtime', 'Admin\AdminController@admin_logtime_ajax')->name('admin.logtime.ajax');
         Route::get('exportlogtime', 'Admin\AdminController@exportlogtime')->name('admin.export.logtime');
+
+        //Report
+        Route::get('ajax_report_user', 'Admin\AdminController@report_user')->name('admin.report.user');
     });
     Route::group(['prefix' => 'action'], function () {
         // View
@@ -81,5 +84,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
         Route::get('role','Admin\AdminController@admin_role')->name('admin.role')->middleware('permission:admin_role');
         Route::get('setting','Admin\AdminController@admin_setting')->name('admin.setting')->middleware('permission:admin_setting');
         Route::get('logtime','Admin\AdminController@admin_logtime')->name('admin.logtime')->middleware('permission:admin_logtime');
+
+        Route::get('reportnew','Admin\AdminController@admin_report_new')->name('admin.page.report.new')->middleware('permission:admin_report');
     });
 });

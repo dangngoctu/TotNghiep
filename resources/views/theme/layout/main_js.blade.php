@@ -2,7 +2,7 @@
 <script src="{{asset('assets/app/lib/popper.js/js/popper.js')}}"></script>
 <script src="{{asset('assets/app/lib/bootstrap/js/bootstrap.js')}}"></script>
 <script src="{{asset('assets/app/lib/jquery.cookie/js/jquery.cookie.js')}}"></script>
-<script src="{{asset('assets/app/lib/chartist/js/chartist.js')}}"></script>
+<script src="{{asset('assets/app/lib/chartjs/Chart.min.js')}}"></script>
 <script src="{{asset('assets/app/lib/d3/js/d3.js')}}"></script>
 <script src="{{asset('assets/app/lib/rickshaw/js/rickshaw.min.js')}}"></script> 
 <script src="{{asset('assets/app/lib/jquery.sparkline.bower/js/jquery.sparkline.min.js')}}"></script>
@@ -22,7 +22,7 @@
 <script src="{{asset('assets/app/lib/fileuploader/js/jquery.slick.min.js')}}"></script>
 <script src="{{asset('assets/app/lib/fileuploader/js/main.js')}}"></script>
 <script src="{{asset('assets/app/lib/lobibox/js/lobibox.js')}}"></script>
-<!-- <script src="http://cdnjs.cloudflare.com/ajax/libs/summernote/0.8.12/summernote.js"></script> -->
+
 @yield('js')
 <script src="{{asset('assets/app/js/ResizeSensor.js')}}"></script>
 <script src="{{asset('assets/app/js/slim.js')}}"></script>

@@ -30,14 +30,14 @@
                     </a>
                 </li>
                 <li class="col-6 col-sm-6 col-md-6 py-3 bg-metro col-lg-3">
-                <a class="d-block" href="{{route('home.index')}}?type=late">
+                <a class="d-block" href="{{route('admin.page.report.new')}}?type=late">
                     <i class="icon ion-android-contact"></i>
                     <small class="notification-badge"><span class="badge badge-pill badge-dark">{{$data->logtime->late}}</span></small>
                     <span class="d-block">Come Late</span>
                 </a>
                 </li>
                 <li class="col-6 col-sm-6 col-md-6 py-3 bg-metro col-lg-3">
-                <a class="d-block" href="{{route('home.index')}}?type=early">
+                <a class="d-block" href="{{route('admin.page.report.new')}}?type=early">
                     <i class="icon ion-android-contact"></i>
                     <small class="notification-badge"><span class="badge badge-pill badge-dark">{{$data->logtime->early}}</span></small>
                     <span class="d-block">Leave Early</span>
