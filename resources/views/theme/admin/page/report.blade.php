@@ -24,7 +24,7 @@
                     </a>
                 </li>
                 <li class="col-6 col-sm-6 col-md-6 py-3 bg-metro col-lg-3">
-                    <a class="d-block" href="{{route('home.index')}}?type=performance">
+                    <a class="d-block" href="{{route('admin.page.report.new')}}?type=performance">
                         <i class="icon ion-ios-pulse"></i>
                         <span class="d-block">User Performance</span>
                     </a>

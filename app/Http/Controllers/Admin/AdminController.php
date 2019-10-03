@@ -1168,4 +1168,40 @@ class AdminController extends Controller
 			}
 		}
 	}
+
+	public function report_performance(Request $request){
+		$rules = array(
+            'month' => 'required|numeric',
+        );
+        $validator = Validator::make(Input::all(), $rules);
+        if ($validator->fails()) {
+            return self::JsonExport(403, 'False');
+        } else {
+			try {
+				$result = [];
+				$user = Models\MUser::with('role_users')->where('status', 1)->whereNull('deleted_at')->where('id', '!=', 1)->whereHas('role_users', function($query){
+					$query->whereNotIn('role_id', [1,2]);
+				})->get();
+				foreach($user as $key => $val) {
+					$user = Models\MUser::where('status', 1)->where('id', $val->id)->first(); 
+					if($user->hasRole('owner')){
+						$area_management = Models\SystemManagement::where('user_id', $val->id)->pluck('area_id');
+						$list_device = Models\MDevice::where('status', 1)->whereIn('area_id', $area_management)->pluck('id');
+					} elseif($user->hasRole('manager')){
+						$line_management = Models\SystemManagement::where('user_id', $val->id)->pluck('line_id');
+						$area_management = Models\MArea::where('status', 1)->whereIn('line_id', $line_management)->pluck('id');
+						$list_device = Models\MDevice::where('status', 1)->whereIn('area_id', $area_management)->pluck('id');
+					}
+					$notification = Models\MNotificaiton::where('status', 2)->whereIn('device_id', $list_device)
+						->where('created_at', '>=', Carbon::now()->subMonths($request->month)->startOfMonth()->startOfDay())
+						->where('created_at', '<=', Carbon::now()->subMonths($request->month)->endOfMonth()->endofDay())
+						->count();
+					array_push($result, ['id' => $val->id, 'name' => $val->name, 'performance' => 100-$notification]);
+				}
+				return self::JsonExport(200, trans('app.success'), $result);
+			} catch (\Exception $e) {
+				return redirect()->guest(route('admin.error'));
+			}
+		}
+	}
 }

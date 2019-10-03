@@ -68,6 +68,7 @@ Route::group(['prefix' => 'home', 'middleware' => 'auth.api'], function () {
 
         //Report
         Route::get('ajax_report_user', 'Admin\AdminController@report_user')->name('admin.report.user');
+        Route::get('ajax_report_performance', 'Admin\AdminController@report_performance')->name('admin.report.performance');
     });
     Route::group(['prefix' => 'action'], function () {
         // View

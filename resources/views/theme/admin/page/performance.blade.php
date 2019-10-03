@@ -1,7 +1,7 @@
 @extends('theme.layout.main')
 
 @section('page_title')
-    Report Logtime
+    Report User Performance
 @endsection
 
 @section('css')
@@ -14,15 +14,14 @@
             <li class="breadcrumb-item"><a href="{{route('home.index')}}">Home</a></li>
             <li class="breadcrumb-item active" aria-current="page">Report</li>
         </ol>
-        <h6 class="slim-pagetitle">Come late</h6>
+        <h6 class="slim-pagetitle">User Performance</h6>
     </div><!-- slim-pageheader -->
 @endsection
-
 @section('page_content')
     <div class="section-wrapper">
-        @include('theme.admin.section.report.report_comelate')
+        @include('theme.admin.section.report.report_performance')
     </div><!-- section-wrapper -->
 @endsection
 @section('js')
-<script src="{{asset('assets/build/admin/js/report_comelate.js')}}"></script>
+<script src="{{asset('assets/build/admin/js/report_performance.js')}}"></script>
 @endsection
