@@ -17,12 +17,12 @@
         <div class="col-sm-12 col-md-12 col-lg-12">
             <!--widget area-->
             <ul class="row mx-0 list-unstyled social-three text-center">
-                <li class="col-6 col-sm-6 col-md-6 py-3 bg-metro col-lg-3">
+                <!-- <li class="col-6 col-sm-6 col-md-6 py-3 bg-metro col-lg-3">
                     <a class="d-block" href="{{route('home.index')}}?type=machine">
                     <i class="icon ion-cube"></i>
                     <span class="d-block">MACHINE</span>
                     </a>
-                </li>
+                </li> -->
                 <li class="col-6 col-sm-6 col-md-6 py-3 bg-metro col-lg-3">
                     <a class="d-block" href="{{route('admin.page.report.new')}}?type=performance">
                         <i class="icon ion-ios-pulse"></i>
